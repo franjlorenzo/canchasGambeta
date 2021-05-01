@@ -1,0 +1,60 @@
+﻿@using CanchasGambeta.Models;
+@{var sesion = (Usuario)HttpContext.Current.Session["User"];}
+@{
+    ViewBag.Title = "PerfilCliente";
+}
+
+<div class="container">
+    <div class="row" style="transform: translateY(60px);">
+        <div class="col-md-6">
+            <div>
+                <h3 class="text-center" style="color:white">Mi perfil</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" style="transform: translateY(60px); color:white">
+        <div class="col-md-6">
+            <table class="table table-border">
+                <tr>
+                    <th class="text-center">
+                        Nombre
+                    </th>
+                    <td>
+                        @sesion.nombreCompleto
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-center">
+                        Correo Electrónico
+                    </th>
+                    <td>
+                        @sesion.email
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-center">
+                        Teléfono
+                    </th>
+                    <td>
+                        @sesion.telefono
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-center">
+                        Contraseña
+                    </th>
+                    <td>
+                        @sesion.password
+                    </td>
+                </tr>
+            </table>
+            <div>
+                @Html.ActionLink("Modificar perfil", "ModificarCliente", "ModificarCliente", null, new { @class = "text-center btn btn-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+

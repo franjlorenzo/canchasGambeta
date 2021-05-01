@@ -1,0 +1,83 @@
+﻿@model IEnumerable<CanchasGambeta.ViewModels.MailEquipoVM>
+@using CanchasGambeta.Models;
+@{var sesion = (Usuario)HttpContext.Current.Session["User"];}
+@{
+    ViewBag.Title = "MiEquipo";
+}
+
+<div class="container">
+    <div class="row" style="transform: translateY(60px);">
+        <div class="col-md-6">
+            <div>
+                <h3 class="text-center" style="color:white">Mi equipo: @ViewBag.nombreEquipo </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" style="transform: translateY(60px); color:white">
+        <div class="col-md-6">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Integrantes
+                        </th>
+                        <th class="text-center acciones" style="display:none">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model)
+                    {
+                        <tr class="text-center">
+                            <td class="miembro">
+                                @Html.HiddenFor(Model => listado.IdEmail)
+                                @listado.Email
+                            </td>
+                            <td class="text-center acciones" style="display:none">
+                                <div class="btn-group">
+                                    <a href="@Url.Action("ModificarIntegrante", "Equipo", new {@idEmail = listado.IdEmail, @email1 = listado.Email})" class="btn btn-warning m-1">Modificar</a>
+                                    <a href="@Url.Action("EliminarIntegrante", "Equipo", new { @idEmail = listado.idEmail, @email1 = listado.Email})" class="btn btn-danger m-1">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            <div class="form-label-group text-danger">
+                @ViewBag.ErrorEliminar
+            </div>
+        </div>
+        <div class="col-md-6 text-center">
+            <div class="container" id="divNuevoIntegrante" style="color:white; display:block;">
+                <h4 class="p-3">Ingrese el correo electrónico de un nuevo integrante</h4>
+                @using (Html.BeginForm("MiEquipo", "Equipo", FormMethod.Post, new { onsubmit = "return validacionNuevoIntegrante();" }))
+                {
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div>
+                                        <input type="email" class="form-control" id="txtEmail" name="email" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" id="btnNuevoIntegrante" class="btn btn-success">Agregar</button>
+                    <div class="form-label-group text-danger" style="margin-left:10px">
+                        @ViewBag.ErrorInsertIntegrante
+                    </div>
+                }
+                <div class="p-3">
+                    <button id="btnModificarEquipo" class="btn btn-info" onclick="botones()">Modificar equipo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/scriptEquipo.js"></script>

@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Canchas_GambetaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Rol">
+    <Key>
+      <PropertyRef Name="idRol" />
+    </Key>
+    <Property Name="idRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="rol1" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Usuario" Relationship="Self.FK_Usuario_Rol" FromRole="Rol" ToRole="Usuario" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="idUsuario" />
+    </Key>
+    <Property Name="idUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombreCompleto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="telefono" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="equipo" Type="Int32" />
+    <Property Name="rol" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Rol1" Relationship="Self.FK_Usuario_Rol" FromRole="Usuario" ToRole="Rol" />
+    <NavigationProperty Name="Equipo1" Relationship="Canchas_GambetaModel.FK_Cliente_Equipo" FromRole="Usuario" ToRole="Equipo" />
+    <NavigationProperty Name="Reserva" Relationship="Canchas_GambetaModel.FK_Reserva_Cliente" FromRole="Usuario" ToRole="Reserva" />
+  </EntityType>
+  <Association Name="FK_Usuario_Rol">
+    <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rol">
+        <PropertyRef Name="idRol" />
+      </Principal>
+      <Dependent Role="Usuario">
+        <PropertyRef Name="rol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Canchas_GambetaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Rol" EntityType="Self.Rol" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+    <AssociationSet Name="FK_Usuario_Rol" Association="Self.FK_Usuario_Rol">
+      <End Role="Rol" EntitySet="Rol" />
+      <End Role="Usuario" EntitySet="Usuario" />
+    </AssociationSet>
+    <EntitySet Name="Cancha" EntityType="Canchas_GambetaModel.Cancha" />
+    <EntitySet Name="ElementoRoto" EntityType="Canchas_GambetaModel.ElementoRoto" />
+    <EntitySet Name="Email" EntityType="Canchas_GambetaModel.Email" />
+    <EntitySet Name="Equipo" EntityType="Canchas_GambetaModel.Equipo" />
+    <EntitySet Name="EquipoMails" EntityType="Canchas_GambetaModel.EquipoMails" />
+    <EntitySet Name="Horario" EntityType="Canchas_GambetaModel.Horario" />
+    <EntitySet Name="HorarioReservas" EntityType="Canchas_GambetaModel.HorarioReservas" />
+    <EntitySet Name="Insumo" EntityType="Canchas_GambetaModel.Insumo" />
+    <EntitySet Name="Pedido" EntityType="Canchas_GambetaModel.Pedido" />
+    <EntitySet Name="Proveedor" EntityType="Canchas_GambetaModel.Proveedor" />
+    <EntitySet Name="Reserva" EntityType="Canchas_GambetaModel.Reserva" />
+    <EntitySet Name="ReservaInsumos" EntityType="Canchas_GambetaModel.ReservaInsumos" />
+    <EntitySet Name="sysdiagrams" EntityType="Canchas_GambetaModel.sysdiagrams" />
+    <AssociationSet Name="FK_Reserva_Cancha" Association="Canchas_GambetaModel.FK_Reserva_Cancha">
+      <End Role="Cancha" EntitySet="Cancha" />
+      <End Role="Reserva" EntitySet="Reserva" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EquipoMails_Email" Association="Canchas_GambetaModel.FK_EquipoMails_Email">
+      <End Role="Email" EntitySet="Email" />
+      <End Role="EquipoMails" EntitySet="EquipoMails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cliente_Equipo" Association="Canchas_GambetaModel.FK_Cliente_Equipo">
+      <End Role="Equipo" EntitySet="Equipo" />
+      <End Role="Usuario" EntitySet="Usuario" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EquipoMails_Equipo" Association="Canchas_GambetaModel.FK_EquipoMails_Equipo">
+      <End Role="Equipo" EntitySet="Equipo" />
+      <End Role="EquipoMails" EntitySet="EquipoMails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HorarioReservas_Horario" Association="Canchas_GambetaModel.FK_HorarioReservas_Horario">
+      <End Role="Horario" EntitySet="Horario" />
+      <End Role="HorarioReservas" EntitySet="HorarioReservas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HorarioReservas_Reserva" Association="Canchas_GambetaModel.FK_HorarioReservas_Reserva">
+      <End Role="Reserva" EntitySet="Reserva" />
+      <End Role="HorarioReservas" EntitySet="HorarioReservas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReservaInsumos_Insumo" Association="Canchas_GambetaModel.FK_ReservaInsumos_Insumo">
+      <End Role="Insumo" EntitySet="Insumo" />
+      <End Role="ReservaInsumos" EntitySet="ReservaInsumos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pedido_Proveedor" Association="Canchas_GambetaModel.FK_Pedido_Proveedor">
+      <End Role="Proveedor" EntitySet="Proveedor" />
+      <End Role="Pedido" EntitySet="Pedido" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reserva_Cliente" Association="Canchas_GambetaModel.FK_Reserva_Cliente">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="Reserva" EntitySet="Reserva" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReservaInsumos_Reserva" Association="Canchas_GambetaModel.FK_ReservaInsumos_Reserva">
+      <End Role="Reserva" EntitySet="Reserva" />
+      <End Role="ReservaInsumos" EntitySet="ReservaInsumos" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Cancha">
+    <Key>
+      <PropertyRef Name="idCancha" />
+    </Key>
+    <Property Name="idCancha" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tipoCancha" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Reserva" Relationship="Canchas_GambetaModel.FK_Reserva_Cancha" FromRole="Cancha" ToRole="Reserva" />
+  </EntityType>
+  <EntityType Name="ElementoRoto">
+    <Key>
+      <PropertyRef Name="idElementoRoto" />
+    </Key>
+    <Property Name="idElementoRoto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="elemento" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <EntityType Name="Email">
+    <Key>
+      <PropertyRef Name="idEmail" />
+    </Key>
+    <Property Name="idEmail" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="email1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="EquipoMails" Relationship="Canchas_GambetaModel.FK_EquipoMails_Email" FromRole="Email" ToRole="EquipoMails" />
+  </EntityType>
+  <EntityType Name="Equipo">
+    <Key>
+      <PropertyRef Name="idEquipo" />
+    </Key>
+    <Property Name="idEquipo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombreEquipo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Usuario" Relationship="Canchas_GambetaModel.FK_Cliente_Equipo" FromRole="Equipo" ToRole="Usuario" />
+    <NavigationProperty Name="EquipoMails" Relationship="Canchas_GambetaModel.FK_EquipoMails_Equipo" FromRole="Equipo" ToRole="EquipoMails" />
+  </EntityType>
+  <EntityType Name="EquipoMails">
+    <Key>
+      <PropertyRef Name="idEquipoMails" />
+    </Key>
+    <Property Name="idEquipoMails" Type="Int32" Nullable="false" />
+    <Property Name="email" Type="Int32" Nullable="false" />
+    <Property Name="equipo" Type="Int32" Nullable="false" />
+    <Property Name="nombreEquipo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Email1" Relationship="Canchas_GambetaModel.FK_EquipoMails_Email" FromRole="EquipoMails" ToRole="Email" />
+    <NavigationProperty Name="Equipo1" Relationship="Canchas_GambetaModel.FK_EquipoMails_Equipo" FromRole="EquipoMails" ToRole="Equipo" />
+  </EntityType>
+  <EntityType Name="Horario">
+    <Key>
+      <PropertyRef Name="idHorario" />
+    </Key>
+    <Property Name="idHorario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="horario1" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="HorarioReservas" Relationship="Canchas_GambetaModel.FK_HorarioReservas_Horario" FromRole="Horario" ToRole="HorarioReservas" />
+  </EntityType>
+  <EntityType Name="HorarioReservas">
+    <Key>
+      <PropertyRef Name="idHorarioReserva" />
+    </Key>
+    <Property Name="idHorarioReserva" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="horario" Type="Int32" Nullable="false" />
+    <Property Name="reserva" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Horario1" Relationship="Canchas_GambetaModel.FK_HorarioReservas_Horario" FromRole="HorarioReservas" ToRole="Horario" />
+    <NavigationProperty Name="Reserva1" Relationship="Canchas_GambetaModel.FK_HorarioReservas_Reserva" FromRole="HorarioReservas" ToRole="Reserva" />
+  </EntityType>
+  <EntityType Name="Insumo">
+    <Key>
+      <PropertyRef Name="idInsumo" />
+    </Key>
+    <Property Name="idInsumo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="insumo1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="precio" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="stock" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ReservaInsumos" Relationship="Canchas_GambetaModel.FK_ReservaInsumos_Insumo" FromRole="Insumo" ToRole="ReservaInsumos" />
+  </EntityType>
+  <EntityType Name="Pedido">
+    <Key>
+      <PropertyRef Name="idPedido" />
+    </Key>
+    <Property Name="idPedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="proveedor" Type="Int32" Nullable="false" />
+    <Property Name="descripcion" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Proveedor1" Relationship="Canchas_GambetaModel.FK_Pedido_Proveedor" FromRole="Pedido" ToRole="Proveedor" />
+  </EntityType>
+  <EntityType Name="Proveedor">
+    <Key>
+      <PropertyRef Name="idProveedor" />
+    </Key>
+    <Property Name="idProveedor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombreCompleto" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="empresa" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Pedido" Relationship="Canchas_GambetaModel.FK_Pedido_Proveedor" FromRole="Proveedor" ToRole="Pedido" />
+  </EntityType>
+  <EntityType Name="Reserva">
+    <Key>
+      <PropertyRef Name="idReserva" />
+    </Key>
+    <Property Name="idReserva" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="cliente" Type="Int32" Nullable="false" />
+    <Property Name="cancha" Type="Int32" Nullable="false" />
+    <Property Name="horario" Type="Int32" Nullable="false" />
+    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="servicioAsador" Type="Boolean" Nullable="false" />
+    <Property Name="servicioInstrumentos" Type="Boolean" Nullable="false" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Cancha1" Relationship="Canchas_GambetaModel.FK_Reserva_Cancha" FromRole="Reserva" ToRole="Cancha" />
+    <NavigationProperty Name="HorarioReservas" Relationship="Canchas_GambetaModel.FK_HorarioReservas_Reserva" FromRole="Reserva" ToRole="HorarioReservas" />
+    <NavigationProperty Name="Usuario" Relationship="Canchas_GambetaModel.FK_Reserva_Cliente" FromRole="Reserva" ToRole="Usuario" />
+    <NavigationProperty Name="ReservaInsumos" Relationship="Canchas_GambetaModel.FK_ReservaInsumos_Reserva" FromRole="Reserva" ToRole="ReservaInsumos" />
+  </EntityType>
+  <EntityType Name="ReservaInsumos">
+    <Key>
+      <PropertyRef Name="idReservaInsumos" />
+    </Key>
+    <Property Name="idReservaInsumos" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="reserva" Type="Int32" Nullable="false" />
+    <Property Name="insumo" Type="Int32" Nullable="false" />
+    <Property Name="cantidad" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Insumo1" Relationship="Canchas_GambetaModel.FK_ReservaInsumos_Insumo" FromRole="ReservaInsumos" ToRole="Insumo" />
+    <NavigationProperty Name="Reserva1" Relationship="Canchas_GambetaModel.FK_ReservaInsumos_Reserva" FromRole="ReservaInsumos" ToRole="Reserva" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Reserva_Cancha">
+    <End Type="Canchas_GambetaModel.Cancha" Role="Cancha" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel.Reserva" Role="Reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cancha">
+        <PropertyRef Name="idCancha" />
+      </Principal>
+      <Dependent Role="Reserva">
+        <PropertyRef Name="cancha" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EquipoMails_Email">
+    <End Type="Canchas_GambetaModel.Email" Role="Email" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel.EquipoMails" Role="EquipoMails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Email">
+        <PropertyRef Name="idEmail" />
+      </Principal>
+      <Dependent Role="EquipoMails">
+        <PropertyRef Name="email" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cliente_Equipo">
+    <End Type="Canchas_GambetaModel.Equipo" Role="Equipo" Multiplicity="0..1" />
+    <End Type="Canchas_GambetaModel.Usuario" Role="Usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Equipo">
+        <PropertyRef Name="idEquipo" />
+      </Principal>
+      <Dependent Role="Usuario">
+        <PropertyRef Name="equipo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EquipoMails_Equipo">
+    <End Type="Canchas_GambetaModel.Equipo" Role="Equipo" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel.EquipoMails" Role="EquipoMails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Equipo">
+        <PropertyRef Name="idEquipo" />
+      </Principal>
+      <Dependent Role="EquipoMails">
+        <PropertyRef Name="equipo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HorarioReservas_Horario">
+    <End Type="Canchas_GambetaModel.Horario" Role="Horario" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel.HorarioReservas" Role="HorarioReservas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Horario">
+        <PropertyRef Name="idHorario" />
+      </Principal>
+      <Dependent Role="HorarioReservas">
+        <PropertyRef Name="horario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HorarioReservas_Reserva">
+    <End Type="Canchas_GambetaModel.Reserva" Role="Reserva" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel.HorarioReservas" Role="HorarioReservas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reserva">
+        <PropertyRef Name="idReserva" />
+      </Principal>
+      <Dependent Role="HorarioReservas">
+        <PropertyRef Name="reserva" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReservaInsumos_Insumo">
+    <End Type="Canchas_GambetaModel.Insumo" Role="Insumo" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel.ReservaInsumos" Role="ReservaInsumos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Insumo">
+        <PropertyRef Name="idInsumo" />
+      </Principal>
+      <Dependent Role="ReservaInsumos">
+        <PropertyRef Name="insumo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pedido_Proveedor">
+    <End Type="Canchas_GambetaModel.Proveedor" Role="Proveedor" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel.Pedido" Role="Pedido" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="idProveedor" />
+      </Principal>
+      <Dependent Role="Pedido">
+        <PropertyRef Name="proveedor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reserva_Cliente">
+    <End Type="Canchas_GambetaModel.Usuario" Role="Usuario" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel.Reserva" Role="Reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="idUsuario" />
+      </Principal>
+      <Dependent Role="Reserva">
+        <PropertyRef Name="cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReservaInsumos_Reserva">
+    <End Type="Canchas_GambetaModel.Reserva" Role="Reserva" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel.ReservaInsumos" Role="ReservaInsumos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reserva">
+        <PropertyRef Name="idReserva" />
+      </Principal>
+      <Dependent Role="ReservaInsumos">
+        <PropertyRef Name="reserva" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

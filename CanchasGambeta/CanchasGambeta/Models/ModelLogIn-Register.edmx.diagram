@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="93fa4caae53d4138b6cab4da233eaaef" Name="Diagram1">
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Rol" Width="1.5" PointX="5.875" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Usuario" Width="1.5" PointX="6" PointY="3.25" IsExpanded="true" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_Usuario_Rol" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Cancha" Width="1.5" PointX="6" PointY="6.5" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.ElementoRoto" Width="1.5" PointX="13" PointY="5.25" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Email" Width="1.5" PointX="2.25" PointY="2" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Equipo" Width="1.5" PointX="4" PointY="4.5" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.EquipoMails" Width="1.5" PointX="4" PointY="2" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Horario" Width="1.5" PointX="10.125" PointY="0.875" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.HorarioReservas" Width="1.5" PointX="8.125" PointY="0.625" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Insumo" Width="1.5" PointX="12.25" PointY="2.875" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Pedido" Width="1.5" PointX="11.125" PointY="6.75" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Proveedor" Width="1.5" PointX="9.25" PointY="6.75" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Reserva" Width="1.5" PointX="8.125" PointY="2.875" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.ReservaInsumos" Width="1.5" PointX="10.375" PointY="2.875" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.sysdiagrams" Width="1.5" PointX="3.5" PointY="7.625" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_Reserva_Cancha" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_EquipoMails_Email" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_Cliente_Equipo" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_EquipoMails_Equipo" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_HorarioReservas_Horario" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_HorarioReservas_Reserva" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_ReservaInsumos_Insumo" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_Pedido_Proveedor" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_Reserva_Cliente" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_ReservaInsumos_Reserva" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

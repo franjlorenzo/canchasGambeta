@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Canchas_GambetaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cancha">
+    <Key>
+      <PropertyRef Name="idCancha" />
+    </Key>
+    <Property Name="idCancha" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tipoCancha" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ElementoRoto">
+    <Key>
+      <PropertyRef Name="idElementoRoto" />
+    </Key>
+    <Property Name="idElementoRoto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="elemento" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="fecha" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Email">
+    <Key>
+      <PropertyRef Name="idEmail" />
+    </Key>
+    <Property Name="idEmail" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Equipo">
+    <Key>
+      <PropertyRef Name="idEquipo" />
+    </Key>
+    <Property Name="idEquipo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombreEquipo" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="EquipoMails">
+    <Key>
+      <PropertyRef Name="idEquipoMails" />
+    </Key>
+    <Property Name="idEquipoMails" Type="int" Nullable="false" />
+    <Property Name="email" Type="int" Nullable="false" />
+    <Property Name="equipo" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Horario">
+    <Key>
+      <PropertyRef Name="idHorario" />
+    </Key>
+    <Property Name="idHorario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="horario" Type="nvarchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HorarioReservas">
+    <Key>
+      <PropertyRef Name="idHorarioReserva" />
+    </Key>
+    <Property Name="idHorarioReserva" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="horario" Type="int" Nullable="false" />
+    <Property Name="reserva" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Insumo">
+    <Key>
+      <PropertyRef Name="idInsumo" />
+    </Key>
+    <Property Name="idInsumo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="insumo" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="precio" Type="money" Nullable="false" />
+    <Property Name="stock" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Pedido">
+    <Key>
+      <PropertyRef Name="idPedido" />
+    </Key>
+    <Property Name="idPedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="proveedor" Type="int" Nullable="false" />
+    <Property Name="descripcion" Type="nvarchar" MaxLength="150" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Proveedor">
+    <Key>
+      <PropertyRef Name="idProveedor" />
+    </Key>
+    <Property Name="idProveedor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombreCompleto" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="empresa" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Reserva">
+    <Key>
+      <PropertyRef Name="idReserva" />
+    </Key>
+    <Property Name="idReserva" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="cliente" Type="int" Nullable="false" />
+    <Property Name="cancha" Type="int" Nullable="false" />
+    <Property Name="horario" Type="int" Nullable="false" />
+    <Property Name="fecha" Type="date" Nullable="false" />
+    <Property Name="servicioAsador" Type="bit" Nullable="false" />
+    <Property Name="servicioInstrumentos" Type="bit" Nullable="false" />
+    <Property Name="estado" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ReservaInsumos">
+    <Key>
+      <PropertyRef Name="idReservaInsumos" />
+    </Key>
+    <Property Name="idReservaInsumos" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="reserva" Type="int" Nullable="false" />
+    <Property Name="insumo" Type="int" Nullable="false" />
+    <Property Name="cantidad" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rol">
+    <Key>
+      <PropertyRef Name="idRol" />
+    </Key>
+    <Property Name="idRol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="rol" Type="nvarchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="idUsuario" />
+    </Key>
+    <Property Name="idUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombreCompleto" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="telefono" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="equipo" Type="int" />
+    <Property Name="rol" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Cliente_Equipo">
+    <End Role="Equipo" Type="Self.Equipo" Multiplicity="0..1" />
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Equipo">
+        <PropertyRef Name="idEquipo" />
+      </Principal>
+      <Dependent Role="Usuario">
+        <PropertyRef Name="equipo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EquipoMails_Email">
+    <End Role="Email" Type="Self.Email" Multiplicity="1" />
+    <End Role="EquipoMails" Type="Self.EquipoMails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Email">
+        <PropertyRef Name="idEmail" />
+      </Principal>
+      <Dependent Role="EquipoMails">
+        <PropertyRef Name="email" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EquipoMails_Equipo">
+    <End Role="Equipo" Type="Self.Equipo" Multiplicity="1" />
+    <End Role="EquipoMails" Type="Self.EquipoMails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Equipo">
+        <PropertyRef Name="idEquipo" />
+      </Principal>
+      <Dependent Role="EquipoMails">
+        <PropertyRef Name="equipo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HorarioReservas_Horario">
+    <End Role="Horario" Type="Self.Horario" Multiplicity="1" />
+    <End Role="HorarioReservas" Type="Self.HorarioReservas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Horario">
+        <PropertyRef Name="idHorario" />
+      </Principal>
+      <Dependent Role="HorarioReservas">
+        <PropertyRef Name="horario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HorarioReservas_Reserva">
+    <End Role="Reserva" Type="Self.Reserva" Multiplicity="1" />
+    <End Role="HorarioReservas" Type="Self.HorarioReservas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reserva">
+        <PropertyRef Name="idReserva" />
+      </Principal>
+      <Dependent Role="HorarioReservas">
+        <PropertyRef Name="reserva" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pedido_Proveedor">
+    <End Role="Proveedor" Type="Self.Proveedor" Multiplicity="1" />
+    <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="idProveedor" />
+      </Principal>
+      <Dependent Role="Pedido">
+        <PropertyRef Name="proveedor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reserva_Cancha">
+    <End Role="Cancha" Type="Self.Cancha" Multiplicity="1" />
+    <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cancha">
+        <PropertyRef Name="idCancha" />
+      </Principal>
+      <Dependent Role="Reserva">
+        <PropertyRef Name="cancha" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reserva_Cliente">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+    <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="idUsuario" />
+      </Principal>
+      <Dependent Role="Reserva">
+        <PropertyRef Name="cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReservaInsumos_Insumo">
+    <End Role="Insumo" Type="Self.Insumo" Multiplicity="1" />
+    <End Role="ReservaInsumos" Type="Self.ReservaInsumos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Insumo">
+        <PropertyRef Name="idInsumo" />
+      </Principal>
+      <Dependent Role="ReservaInsumos">
+        <PropertyRef Name="insumo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReservaInsumos_Reserva">
+    <End Role="Reserva" Type="Self.Reserva" Multiplicity="1" />
+    <End Role="ReservaInsumos" Type="Self.ReservaInsumos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reserva">
+        <PropertyRef Name="idReserva" />
+      </Principal>
+      <Dependent Role="ReservaInsumos">
+        <PropertyRef Name="reserva" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Usuario_Rol">
+    <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rol">
+        <PropertyRef Name="idRol" />
+      </Principal>
+      <Dependent Role="Usuario">
+        <PropertyRef Name="rol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Canchas_GambetaModelStoreContainer">
+    <EntitySet Name="Cancha" EntityType="Self.Cancha" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ElementoRoto" EntityType="Self.ElementoRoto" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Email" EntityType="Self.Email" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Equipo" EntityType="Self.Equipo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EquipoMails" EntityType="Self.EquipoMails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Horario" EntityType="Self.Horario" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HorarioReservas" EntityType="Self.HorarioReservas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Insumo" EntityType="Self.Insumo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Proveedor" EntityType="Self.Proveedor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Reserva" EntityType="Self.Reserva" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ReservaInsumos" EntityType="Self.ReservaInsumos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Cliente_Equipo" Association="Self.FK_Cliente_Equipo">
+      <End Role="Equipo" EntitySet="Equipo" />
+      <End Role="Usuario" EntitySet="Usuario" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EquipoMails_Email" Association="Self.FK_EquipoMails_Email">
+      <End Role="Email" EntitySet="Email" />
+      <End Role="EquipoMails" EntitySet="EquipoMails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EquipoMails_Equipo" Association="Self.FK_EquipoMails_Equipo">
+      <End Role="Equipo" EntitySet="Equipo" />
+      <End Role="EquipoMails" EntitySet="EquipoMails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HorarioReservas_Horario" Association="Self.FK_HorarioReservas_Horario">
+      <End Role="Horario" EntitySet="Horario" />
+      <End Role="HorarioReservas" EntitySet="HorarioReservas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HorarioReservas_Reserva" Association="Self.FK_HorarioReservas_Reserva">
+      <End Role="Reserva" EntitySet="Reserva" />
+      <End Role="HorarioReservas" EntitySet="HorarioReservas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pedido_Proveedor" Association="Self.FK_Pedido_Proveedor">
+      <End Role="Proveedor" EntitySet="Proveedor" />
+      <End Role="Pedido" EntitySet="Pedido" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reserva_Cancha" Association="Self.FK_Reserva_Cancha">
+      <End Role="Cancha" EntitySet="Cancha" />
+      <End Role="Reserva" EntitySet="Reserva" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reserva_Cliente" Association="Self.FK_Reserva_Cliente">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="Reserva" EntitySet="Reserva" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReservaInsumos_Insumo" Association="Self.FK_ReservaInsumos_Insumo">
+      <End Role="Insumo" EntitySet="Insumo" />
+      <End Role="ReservaInsumos" EntitySet="ReservaInsumos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReservaInsumos_Reserva" Association="Self.FK_ReservaInsumos_Reserva">
+      <End Role="Reserva" EntitySet="Reserva" />
+      <End Role="ReservaInsumos" EntitySet="ReservaInsumos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usuario_Rol" Association="Self.FK_Usuario_Rol">
+      <End Role="Rol" EntitySet="Rol" />
+      <End Role="Usuario" EntitySet="Usuario" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

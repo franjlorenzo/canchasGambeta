@@ -1,0 +1,63 @@
+﻿@model CanchasGambeta.Models.Usuario
+@{
+    ViewBag.Title = "Register";
+}
+<link rel="stylesheet" href="@Url.Content("~/Content/styles-register.css")"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto" style="transform: translateY(30px);">
+            <div class="card card-signin flex-row my-5">
+                <div class="card-img-left d-none d-md-flex">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">Registrese una vez y reserve todas las veces que desee</h5>
+
+                    @using (Html.BeginForm("Register", "Register", FormMethod.Post, new { onsubmit = "return validacionRegistro();" }))
+                    {
+                        <div class="form-label-group">
+                            @Html.TextBoxFor(model => model.nombreCompleto, htmlAttributes: new { autofocus = "", placeholder = "Nombre de usuario", @class = "form-control", id = "txtUsuario" })
+                            <label for="txtUsuario">Nombre de Usuario</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            @Html.TextBoxFor(model => model.email, htmlAttributes: new { placeholder = "Correo Electrónico", @class = "form-control", id = "txtEmail" })
+                            <label for="txtEmail">Correo electrónico</label>
+                        </div>
+
+                        <div class="form-label-group" style="margin-bottom:2px">
+                            @Html.TextBoxFor(model => model.telefono, htmlAttributes: new { maxlength = 10, placeholder = "Teléfono", @class = "form-control", id = "txtTelefono" })
+                            <label for="txtTelefono">Teléfono</label>
+                        </div>
+                        <div style="margin-left:20px">
+                            <small class="form-label-group">Código de área + número sin el 15</small>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-label-group">
+                            @Html.PasswordFor(model => model.password, htmlAttributes: new { placeholder = "Contraseña", @class = "form-control", id = "txtPassword" })
+                            <label for="txtPassword">Contraseña</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            @Html.PasswordFor(model => model.password, htmlAttributes: new { placeholder = "Confirme la contraseña", @class = "form-control", id = "txtConfirmaPassword" })
+                            <label for="txtConfirmaPassword">Confirme la contraseña</label>
+                        </div>
+
+                        <div class="form-label-group text-danger" style="margin-left:10px">
+                            @ViewBag.Error
+                        </div>
+
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Registrarse</button>
+
+                        @Html.ActionLink("Iniciar Sesión", "LogIn", "LogIn", null, new { @class = "d-block text-center mt-2 small" })
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/validacionRegistro-LogIn.js"></script>
+

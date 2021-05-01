@@ -1,0 +1,36 @@
+﻿@model CanchasGambeta.Models.Usuario
+@{
+    ViewBag.Title = "LogIn";
+}
+<link rel="stylesheet" href="@Url.Content("~/Content/styles-login.css")"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto" style="transform: translateY(30px);">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Iniciar sesión</h5>
+                    @using (Html.BeginForm("LogIn", "LogIn", FormMethod.Post, new { onsubmit = "return validacionLogIn();" }))
+                    {
+                        <div class="form-label-group">
+                            @Html.TextBoxFor(model => model.email, htmlAttributes: new { autofocus = "", placeholder = "Correo Electrónico", @class = "form-control", id = "txtEmail" })
+                            <label for="txtEmail">Correo electrónico</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            @Html.PasswordFor(model => model.password, htmlAttributes: new { placeholder = "Contraseña", @class = "form-control", id = "txtPassword" })
+                            <label for="txtPassword">Contraseña</label>
+                        </div>
+                        <div class="form-label-group text-danger" style="margin-left:10px">
+                            @ViewBag.Error
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Entrar</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/validacionRegistro-LogIn.js"></script>
+
