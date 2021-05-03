@@ -23,7 +23,7 @@ namespace CanchasGambeta.Controllers
                 bool resultado = AccesoBD.AD_Usuario.nuevoUsuario(usuario);
                 if (resultado)
                 {
-                    using (Models.Canchas_GambetaEntities3 db = new Models.Canchas_GambetaEntities3())
+                    using (Models.Canchas_GambetaEntities2 db = new Models.Canchas_GambetaEntities2())
                     {
                         var oUser = (from data in db.Usuario
                                      where data.email == Email.Trim() && data.password == Password.Trim()
@@ -34,7 +34,7 @@ namespace CanchasGambeta.Controllers
 
                         if (oUser != null)
                         {
-                            return RedirectToAction("IndexCliente", "IndexCliente");
+                            return RedirectToAction("IndexCliente", "Cliente");
                         }
                         else
                         {

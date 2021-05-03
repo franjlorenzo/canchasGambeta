@@ -130,13 +130,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdministradorController.cs" />
     <Compile Include="Controllers\CerrarSesionController.cs" />
+    <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\EquipoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\IndexClienteController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
-    <Compile Include="Controllers\ModificarClienteController.cs" />
-    <Compile Include="Controllers\PerfilClienteController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Filters\VerificarSesion.cs" />
     <Compile Include="Global.asax.cs">
@@ -334,13 +333,15 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\LogIn\LogIn.cshtml" />
     <Content Include="Views\Register\Register.cshtml" />
-    <Content Include="Views\IndexCliente\IndexCliente.cshtml" />
-    <Content Include="Views\PerfilCliente\PerfilCliente.cshtml" />
-    <Content Include="Views\ModificarCliente\ModificarCliente.cshtml" />
+    <Content Include="Views\Cliente\IndexCliente.cshtml" />
+    <Content Include="Views\Cliente\PerfilCliente.cshtml" />
+    <Content Include="Views\Cliente\ModificarCliente.cshtml" />
     <Content Include="Views\Equipo\NuevoEquipo.cshtml" />
     <Content Include="Views\Equipo\MiEquipo.cshtml" />
     <Content Include="Views\Equipo\ModificarIntegrante.cshtml" />
     <Content Include="Views\Equipo\EliminarIntegrante.cshtml" />
+    <Content Include="Views\Equipo\EliminarEquipo.cshtml" />
+    <Content Include="Views\Administrador\IndexAdministrador.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

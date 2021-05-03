@@ -513,5 +513,124 @@ namespace CanchasGambeta.AccesoBD
             }
             return resultado;
         }
+
+        public static bool eliminarEquipo(Equipo equipo)
+        {
+            bool resultado = false;
+            Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
+            List<Email> listaEmail = new List<Email>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consultaObtenerEquipo = @"select e.idEquipo, eqma.email
+                                                 from Usuario u join Equipo e on u.equipo = e.idEquipo join EquipoMails eqma on e.idEquipo = eqma.equipo
+                                                 where idEquipo = @idEquipo";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idEquipo", equipo.idEquipo);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consultaObtenerEquipo;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                SqlDataReader lector = comando.ExecuteReader();
+
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        Email auxilliar = new Email();
+                        auxilliar.idEmail = int.Parse(lector["email"].ToString());
+                        listaEmail.Add(auxilliar);
+                    }
+                }
+
+                lector.Close();
+
+                for (int i = 0; i < listaEmail.Count; i++)
+                {
+                    string consultaEliminarEquipoDeEquipoMails = "delete from EquipoMails where email = @email and equipo = @idEquipo";
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@email", listaEmail[i].idEmail);
+                    comando.Parameters.AddWithValue("@idEquipo", equipo.idEquipo);
+
+                    comando.CommandText = consultaEliminarEquipoDeEquipoMails;
+                    comando.ExecuteNonQuery();
+
+                    string consultaEliminarEmails = "delete from Email where idEmail = @idEmail";
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@idEmail", listaEmail[i].idEmail);
+
+                    comando.CommandText = consultaEliminarEmails;
+                    comando.ExecuteNonQuery();
+                }
+
+                string consultaEliminarEquipoDeUsuario = "update Usuario set equipo = NULL where idUsuario = @idUsuario";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idUsuario", sesion.idUsuario);
+
+                comando.CommandText = consultaEliminarEquipoDeUsuario;
+                comando.ExecuteNonQuery();
+
+                string consultaEliminarEquipo = "delete from Equipo where idEquipo = @idEquipo";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idEquipo", equipo.idEquipo);
+
+                comando.CommandText = consultaEliminarEquipo;
+                comando.ExecuteNonQuery();
+                resultado = true;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static Equipo obtenerEquipoUsuario(int idEquipo)
+        {
+            Equipo nuevo = new Equipo();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = "SELECT nombreEquipo from Equipo where idEquipo = @idEquipo";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idEquipo", idEquipo);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        nuevo.idEquipo = idEquipo;
+                        nuevo.nombreEquipo = lector["nombreEquipo"].ToString();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return nuevo;
+        }
     }
 }

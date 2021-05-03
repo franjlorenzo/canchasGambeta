@@ -1,0 +1,45 @@
+﻿@using CanchasGambeta.Models;
+@{var sesion = (Usuario)HttpContext.Current.Session["User"];}
+@{
+    ViewBag.Title = "IndexCliente";
+}
+
+<header class="masthead text-center text-white">
+    <div class="masthead-content">
+        <div class="container">
+            <h1 class="masthead-heading mb-0">Canchas Gambeta</h1>
+            <h2 class="masthead-subheading mb-0">Bienvenido @sesion.nombreCompleto</h2>
+            <a href="#" class="btn btn-primary btn-xl rounded-pill mt-5">Reservar</a>
+        </div>
+    </div>
+    <div class="bg-circle-1 bg-circle"></div>
+    <div class="bg-circle-2 bg-circle"></div>
+    <div class="bg-circle-3 bg-circle"></div>
+    <div class="bg-circle-4 bg-circle"></div>
+</header>
+
+<div class="container">
+    <hr />
+    <div class="row aling-items-center">
+        <div class="col-lg-4 text-center">
+            @if (sesion.equipo == null || sesion.equipo == 0)
+            {
+                @Html.ActionLink("Nuevo equipo", "NuevoEquipo", "Equipo", null, new { @class = "text-center btn btn-danger" })
+            }
+            else
+            {
+                @Html.ActionLink("Mi equipo", "MiEquipo", "Equipo", null, new { @class = "text-center btn btn-danger" })
+            }
+            <hr />
+        </div>
+        <div class="col-lg-4 text-center">
+            <button class="btn btn-danger">
+                Mis reservas
+            </button>
+        </div>
+        <div class="col-lg-4 text-center">
+
+        </div>
+    </div>
+</div>
+

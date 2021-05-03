@@ -19,7 +19,7 @@ namespace CanchasGambeta.Controllers
         {
             try
             {
-                using (Models.Canchas_GambetaEntities3 db = new Models.Canchas_GambetaEntities3())
+                using (Models.Canchas_GambetaEntities2 db = new Models.Canchas_GambetaEntities2())
                 {
                     var oUser = (from data in db.Usuario
                                  where data.email == Email.Trim() && data.password == Password.Trim()
@@ -36,11 +36,11 @@ namespace CanchasGambeta.Controllers
 
                     if(oUser.rol == 2)
                     {
-                        return RedirectToAction("IndexCliente", "IndexCliente");
+                        return RedirectToAction("IndexCliente", "Cliente");
                     }
                     else
                     {
-                        return RedirectToAction("IndexAdministrador", "IndexAdministrador");
+                        return RedirectToAction("IndexAdministrador", "Administrador");
                     }
                 } 
             }

@@ -108,6 +108,12 @@ namespace CanchasGambeta.Controllers
        [HttpPost]
         public ActionResult ModificarIntegrante(Email email, int idEmail)
         {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
             try
             {
                 if (ModelState.IsValid)
@@ -134,12 +140,24 @@ namespace CanchasGambeta.Controllers
 
         public ActionResult EliminarIntegrante(Email email)
         {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
             return View(email);
         }
 
         [HttpPost]
         public ActionResult EliminarIntegrante(Email email, int idEmail)
         {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Equipo.eliminarIntegrante(email);
@@ -154,6 +172,55 @@ namespace CanchasGambeta.Controllers
                 }
             }
             return View();
+        }
+
+        public ActionResult EliminarEquipo(int idEquipo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
+            Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(idEquipo);
+            return View(equipo);
+        }
+
+        [HttpPost]
+        public ActionResult EliminarEquipo(Equipo equipo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(equipo);
+                    if (resultado)
+                    {
+                        using (Models.Canchas_GambetaEntities2 db = new Canchas_GambetaEntities2())
+                        {
+                            var oUser = (from data in db.Usuario
+                                         where data.idUsuario == sesion.idUsuario
+                                         select data).FirstOrDefault();
+
+                            Session["User"] = oUser;
+                        }
+                        return RedirectToAction("IndexCliente", "Cliente");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorEliminar = ex;
+                return View(equipo);
+            }
+
+            return View(equipo);
         }
     }
 }

@@ -1,0 +1,39 @@
+﻿@model CanchasGambeta.Models.Equipo
+@{
+    ViewBag.Title = "EliminarEquipo";
+}
+
+<div class="container" style="color: white; transform: translateY(60px);">
+    <div class="row">
+        <div class="col-sm-12">
+            <div>
+                <h3>¿Esta seguro de que desea eliminar el equipo "@Model.nombreEquipo" de su cuenta?</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="color: white; transform: translateY(60px);">
+    @using (Html.BeginForm("EliminarEquipo", "Equipo", FormMethod.Post))
+    {
+        @Html.HiddenFor(Model => Model.idEquipo)
+        @Html.HiddenFor(Model => Model.nombreEquipo)
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-horizontal">
+                    <div class="form-group text-left">
+                        <div class="col-sm-12">
+                            <button class="btn btn-danger" type="submit">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-label-group text-danger">
+                        @ViewBag.ErrorEliminar
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
