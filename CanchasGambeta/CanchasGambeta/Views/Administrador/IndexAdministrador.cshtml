@@ -1,7 +1,52 @@
-﻿
+﻿@using CanchasGambeta.Models;
+@{var sesion = (Usuario)HttpContext.Current.Session["User"];}
 @{
     ViewBag.Title = "IndexAdministrador";
 }
 
-<h2>IndexAdministrador</h2>
+<header class="masthead text-center text-white">
+    <div class="masthead-content">
+        <div class="container">
+            <h1 class="masthead-heading mb-0">Canchas Gambeta</h1>
+            <h2 class="masthead-subheading mb-0">Bienvenido @sesion.nombreCompleto</h2>
+        </div>
+    </div>
+    <div class="bg-circle-1 bg-circle"></div>
+    <div class="bg-circle-2 bg-circle"></div>
+    <div class="bg-circle-3 bg-circle"></div>
+    <div class="bg-circle-4 bg-circle"></div>
+</header>
+
+<div class="container">
+    <hr />
+    <div class="row aling-items-center">
+        <div class="col-lg-4 text-center">
+
+            @Html.ActionLink("Nuevo pedido", "NuevoPedido", "Administrador", null, new { @class = "text-center btn btn-danger" })
+            <hr />
+            @Html.ActionLink("Pedidos pendientes", "PedidosPendientes", "Administrador", null, new { @class = "text-center btn btn-danger" })
+            <hr />
+            @Html.ActionLink("Historial de pedidos", "HistorialPedidos", "Administrador", null, new { @class = "text-center btn btn-danger" })
+
+        </div>
+        <div class="col-lg-4 text-center">
+
+            @Html.ActionLink("Reservas activas", "ReservasActivas", "Administrador", null, new { @class = "text-center btn btn-primary" })
+            <hr />
+            @Html.ActionLink("Reservas canceladas", "ReservasCanceladas", "Administrador", null, new { @class = "text-center btn btn-primary" })
+            <hr />
+            @Html.ActionLink("Canchas más utilizadas", "CanchasMasUtilizadas", "Administrador", null, new { @class = "text-center btn btn-primary" })
+
+        </div>
+        <div class="col-lg-4 text-center">
+
+            @Html.ActionLink("Clientes con más reservas", "ClientesMasReservas", "Administrador", null, new { @class = "text-center btn btn-success" })
+            <hr />
+            @Html.ActionLink("Elementos rotos del mes", "ElementosRotos", "Administrador", null, new { @class = "text-center btn btn-success" })
+            <hr />
+            @Html.ActionLink("Horarios más reservados", "HorariosMasReservados", "Administrador", null, new { @class = "text-center btn btn-success" })
+
+        </div>
+    </div>
+</div>
 

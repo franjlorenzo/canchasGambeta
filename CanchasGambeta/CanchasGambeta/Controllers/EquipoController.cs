@@ -202,7 +202,7 @@ namespace CanchasGambeta.Controllers
                     bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(equipo);
                     if (resultado)
                     {
-                        using (Models.Canchas_GambetaEntities2 db = new Canchas_GambetaEntities2())
+                        using (Models.Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3())
                         {
                             var oUser = (from data in db.Usuario
                                          where data.idUsuario == sesion.idUsuario
