@@ -1,15 +1,13 @@
-﻿@model IEnumerable<CanchasGambeta.ViewModels.MailEquipoVM>
-@using CanchasGambeta.Models;
-@{var sesion = (Usuario)HttpContext.Current.Session["User"];}
+﻿
 @{
-    ViewBag.Title = "MiEquipo";
+    ViewBag.Title = "MisReservas";
 }
 
 <div class="container">
     <div class="row" style="transform: translateY(60px);">
         <div class="col-md-6">
             <div>
-                <h3 class="text-center" style="color:white">Mi equipo: @ViewBag.nombreEquipo </h3>
+                <h3 class="text-center" style="color:white">Mis reservas</h3>
             </div>
         </div>
     </div>
@@ -22,7 +20,7 @@
                 <thead>
                     <tr>
                         <th class="text-center">
-                            Integrantes
+                            Reserva
                         </th>
                         <th class="text-center acciones" style="display:none">
                             Acciones
@@ -39,8 +37,8 @@
                             </td>
                             <td class="text-center acciones" style="display:none">
                                 <div class="btn-group">
-                                    <a href="@Url.Action("ModificarIntegrante", "Equipo", new {@idEmail = listado.IdEmail, @email1 = listado.Email})" class="btn btn-warning m-1">Modificar</a>
-                                    <a href="@Url.Action("EliminarIntegrante", "Equipo", new { @idEmail = listado.idEmail, @email1 = listado.Email})" class="btn btn-danger m-1">Eliminar</a>
+                                    <a href="@Url.Action("ModificarReserva", "Reserva", new {@idEmail = listado.IdEmail, @email1 = listado.Email})" class="btn btn-warning m-1">Modificar</a>
+                                    <a href="@Url.Action("EliminarReserva", "Reserva", new { @idEmail = listado.idEmail, @email1 = listado.Email})" class="btn btn-danger m-1">Eliminar</a>
                                 </div>
                             </td>
                         </tr>
@@ -48,9 +46,6 @@
                     }
                 </tbody>
             </table>
-            <div class="form-label-group text-danger">
-                @ViewBag.ErrorEliminar
-            </div>
         </div>
         <div class="col-md-6 text-center">
             <div class="container" id="divNuevoIntegrante" style="color:white; display:block;">
@@ -82,4 +77,3 @@
     </div>
 </div>
 
-<script src="~/Scripts/scriptEquipo.js"></script>

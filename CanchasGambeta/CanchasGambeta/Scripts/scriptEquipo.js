@@ -1,5 +1,4 @@
-﻿
-var btnNuevoIntegrante = document.getElementById("btnNuevoIntegrante");
+﻿var btnNuevoIntegrante = document.getElementById("btnNuevoIntegrante");
 var divNuevoIntegrante = document.getElementById("divNuevoIntegrante");
 var cantmiembros = document.getElementsByClassName("miembro");
 
@@ -28,7 +27,6 @@ function validacionModificarIntegrante() {
 
 const botones = () => {
     var acciones = document.getElementsByClassName("text-center acciones");
-    console.log(acciones);
 
     if (acciones[0].style.display == "none") {
         for (var i = 0; i < acciones.length; i++) {

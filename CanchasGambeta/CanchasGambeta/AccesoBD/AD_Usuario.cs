@@ -12,16 +12,14 @@ namespace CanchasGambeta.AccesoBD
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
 
-        public static bool nuevoUsuario(Models.Usuario usuario)
+        public static bool nuevoUsuario(Usuario usuario)
         {
-
             bool resultado = false;
-
             SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
 
             try
             {
-                SqlCommand comando = new SqlCommand();
                 string consulta = "insert into Usuario(nombreCompleto, email, telefono, password, rol) values (@nombreCompleto, @email, @telefono, @password, @rol)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@nombreCompleto", usuario.nombreCompleto);
@@ -53,13 +51,12 @@ namespace CanchasGambeta.AccesoBD
         public static Usuario obtenerUsuario(int idUsuario)
         {
             Usuario resultado = new Usuario();
-
             SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
 
             try
             {
-                SqlCommand comando = new SqlCommand();
-                string consulta = "SELECT idUsuario, nombreCompleto, email, telefono, password, equipo FROM Usuario WHERE idUsuario = @idUsuario";
+                string consulta = "SELECT idUsuario, nombreCompleto, email, telefono, password, equipo, rol FROM Usuario WHERE idUsuario = @idUsuario";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idUsuario", idUsuario);
 
@@ -84,6 +81,7 @@ namespace CanchasGambeta.AccesoBD
                         {
                             resultado.equipo = int.Parse(lector["equipo"].ToString());
                         }
+                        resultado.rol = int.Parse(lector["rol"].ToString());
                     }
                 }
             }
@@ -102,12 +100,11 @@ namespace CanchasGambeta.AccesoBD
         public static bool actualizarUsuario(Usuario usuario)
         {
             bool resultado = false;
-
             SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
 
             try
             {
-                SqlCommand comando = new SqlCommand();
                 string consulta = @"update Usuario SET nombreCompleto = @nombreCompleto,
                                                        email = @email,
                                                        telefono = @telefono,

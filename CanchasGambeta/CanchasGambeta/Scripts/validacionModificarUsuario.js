@@ -1,4 +1,4 @@
-﻿const validacionModificarCliente = () => {
+﻿const validacionModificarUsuario = () => {
     let txtNombreCompleto = document.getElementById("txtNombre").value;
     let txtEmail = document.getElementById("txtEmail").value;
     let txtTelefono = document.getElementById("txtTelefono").value;

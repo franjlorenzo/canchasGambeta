@@ -31,12 +31,6 @@ namespace CanchasGambeta.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult PerfilCliente(Usuario usuario)
-        {
-            return View();
-        }
-
         public ActionResult ModificarCliente()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -50,8 +44,14 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult ModificarCliente(Usuario usuario, int idUsuario)
+        public ActionResult ModificarCliente(Usuario usuario)
         {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
             try
             {
                 if (ModelState.IsValid)
@@ -59,7 +59,7 @@ namespace CanchasGambeta.Controllers
                     bool resultado = AccesoBD.AD_Usuario.actualizarUsuario(usuario);
                     if (resultado)
                     {
-                        var oUser = AccesoBD.AD_Usuario.obtenerUsuario(idUsuario);
+                        var oUser = AccesoBD.AD_Usuario.obtenerUsuario(sesion.idUsuario);
                         Session["User"] = oUser;
 
                         return RedirectToAction("PerfilCliente", "Cliente");

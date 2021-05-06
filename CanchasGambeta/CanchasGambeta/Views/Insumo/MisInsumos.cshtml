@@ -1,0 +1,103 @@
+﻿@model IEnumerable<CanchasGambeta.Models.Insumo>
+@using CanchasGambeta.Models;
+@{var sesion = (Usuario)HttpContext.Current.Session["User"];}
+@{
+    ViewBag.Title = "MisInsumos";
+}
+
+<div class="container">
+    <div class="row" style="transform: translateY(60px);">
+        <div class="col-md-6">
+            <div>
+                <h3 class="text-center" style="color:white">Mis Insumos </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" style="transform: translateY(60px); color:white">
+        <div class="col-md-6">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                        <th class="text-center">
+                            Precio
+                        </th>
+                        <th class="text-center">
+                            Stock
+                        </th>
+                        <th class="text-center acciones" style="display:none">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model)
+                    {
+                        <tr class="text-center">
+                            <td class="text-center">
+                                @Html.HiddenFor(Model => listado.idInsumo)
+                                @listado.insumo1
+                            </td>
+                            <td class="text-center">
+                                $@listado.precio
+                            </td>
+                            <td class="text-center">
+                                @listado.stock
+                            </td>
+                            <td class="text-center acciones" style="display:none">
+                                <div class="btn-group">
+                                    <a href="@Url.Action("ModificarInsumo", "Insumo", new {idInsumo = listado.idInsumo})" class="btn btn-warning m-1">Modificar</a>
+                                    <a href="@Url.Action("EliminarInsumo", "Insumo", new { idInsumo = listado.idInsumo})" class="btn btn-danger m-1">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <div class="container" id="divNuevoIntegrante" style="color:white; display:block;">
+                <h4 class="p-1">Ingrese los valores del nuevo insumo</h4>
+                @using (Html.BeginForm("MisInsumos", "Insumo", FormMethod.Post, new { onsubmit = "return validacionNuevoInsumo();" }))
+                {
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-horizontal">
+                                <div class="form-group">                                   
+                                    <div>
+                                        <label class="control-label">Nombre</label>
+                                        <input type="text" class="form-control" id="txtInsumo" name="insumo" />
+                                    </div>                                    
+                                    <div>
+                                        <label class="col-sm-6 control-label">Precio</label>
+                                        <input type="text" class="form-control" id="txtPrecio" name="precio" />
+                                    </div>                                 
+                                    <div>
+                                        <label class="col-sm-6 control-label">Stock</label>
+                                        <input type="text" class="form-control" id="txtStock" name="stock" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" id="btnNuevoInsumo" class="btn btn-success">Agregar</button>
+                    <div class="form-label-group text-danger" style="margin-left:10px">
+                        @ViewBag.ErrorInsertInsumo
+                    </div>
+                }
+                <div class="p-3">
+                    <button id="btnModificarInsumos" class="btn btn-info" onclick="botones()">Modificar insumos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/scriptInsumos.js"></script>
+

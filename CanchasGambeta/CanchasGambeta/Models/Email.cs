@@ -19,12 +19,6 @@ namespace CanchasGambeta.Models
         {
             this.EquipoMails = new HashSet<EquipoMails>();
         }
-
-        public Email(int idEmail, string email)
-        {
-            this.idEmail = idEmail;
-            this.email1 = email;
-        }
     
         public int idEmail { get; set; }
         public string email1 { get; set; }

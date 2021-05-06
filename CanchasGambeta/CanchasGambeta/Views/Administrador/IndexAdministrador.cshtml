@@ -22,30 +22,23 @@
     <div class="row aling-items-center">
         <div class="col-lg-4 text-center">
 
-            @Html.ActionLink("Nuevo pedido", "NuevoPedido", "Administrador", null, new { @class = "text-center btn btn-danger" })
-            <hr />
-            @Html.ActionLink("Pedidos pendientes", "PedidosPendientes", "Administrador", null, new { @class = "text-center btn btn-danger" })
-            <hr />
-            @Html.ActionLink("Historial de pedidos", "HistorialPedidos", "Administrador", null, new { @class = "text-center btn btn-danger" })
-
-        </div>
-        <div class="col-lg-4 text-center">
-
             @Html.ActionLink("Reservas activas", "ReservasActivas", "Administrador", null, new { @class = "text-center btn btn-primary" })
             <hr />
             @Html.ActionLink("Reservas canceladas", "ReservasCanceladas", "Administrador", null, new { @class = "text-center btn btn-primary" })
             <hr />
-            @Html.ActionLink("Canchas más utilizadas", "CanchasMasUtilizadas", "Administrador", null, new { @class = "text-center btn btn-primary" })
-
         </div>
         <div class="col-lg-4 text-center">
 
-            @Html.ActionLink("Clientes con más reservas", "ClientesMasReservas", "Administrador", null, new { @class = "text-center btn btn-success" })
+            @Html.ActionLink("Canchas más utilizadas", "CanchasMasUtilizadas", "Administrador", null, new { @class = "text-center btn btn-warning" })
             <hr />
+            @Html.ActionLink("Clientes con más reservas", "ClientesMasReservas", "Administrador", null, new { @class = "text-center btn btn-warning" })
+            <hr />
+        </div>
+        <div class="col-lg-4 text-center">
             @Html.ActionLink("Elementos rotos del mes", "ElementosRotos", "Administrador", null, new { @class = "text-center btn btn-success" })
             <hr />
             @Html.ActionLink("Horarios más reservados", "HorariosMasReservados", "Administrador", null, new { @class = "text-center btn btn-success" })
-
+            <hr />
         </div>
     </div>
 </div>

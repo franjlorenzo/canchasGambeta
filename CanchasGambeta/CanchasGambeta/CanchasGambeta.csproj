@@ -125,7 +125,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccesoBD\AD_Administrador.cs" />
     <Compile Include="AccesoBD\AD_Equipo.cs" />
+    <Compile Include="AccesoBD\AD_Insumo.cs" />
     <Compile Include="AccesoBD\AD_Usuario.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -135,35 +137,37 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\EquipoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InsumoController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
+    <Compile Include="Controllers\ReservaController.cs" />
     <Compile Include="Filters\VerificarSesion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cancha.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ElementoRoto.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Email.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Equipo.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EquipoMails.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Horario.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\HorarioReservas.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Insumo.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ModelBDNotebook.Context.cs">
       <AutoGen>True</AutoGen>
@@ -211,25 +215,25 @@
       <DependentUpon>ModelPC.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Pedido.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Proveedor.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Reserva.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ReservaInsumos.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Rol.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>ModelPC.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Usuario.cs">
-      <DependentUpon>ModelPC.tt</DependentUpon>
+      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\MailEquipoVM.cs" />
@@ -317,6 +321,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\scriptEquipo.js" />
+    <Content Include="Scripts\scriptInsumos.js" />
     <Content Include="Scripts\validacionModificarUsuario.js" />
     <Content Include="Scripts\validacionRegistro-LogIn.js" />
     <Content Include="Web.config" />
@@ -343,6 +348,11 @@
     <Content Include="Views\Equipo\EliminarEquipo.cshtml" />
     <Content Include="Views\Administrador\IndexAdministrador.cshtml" />
     <Content Include="Views\Administrador\PerfilAdministrador.cshtml" />
+    <Content Include="Views\Administrador\ModificarPerfilAdministrador.cshtml" />
+    <Content Include="Views\Insumo\MisInsumos.cshtml" />
+    <Content Include="Views\Insumo\ModificarInsumo.cshtml" />
+    <Content Include="Views\Insumo\EliminarInsumo.cshtml" />
+    <Content Include="Views\Reserva\MisReservas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
