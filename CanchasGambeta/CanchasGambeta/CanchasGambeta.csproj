@@ -128,6 +128,7 @@
     <Compile Include="AccesoBD\AD_Administrador.cs" />
     <Compile Include="AccesoBD\AD_Equipo.cs" />
     <Compile Include="AccesoBD\AD_Insumo.cs" />
+    <Compile Include="AccesoBD\AD_Reserva.cs" />
     <Compile Include="AccesoBD\AD_Usuario.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -237,6 +238,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\MailEquipoVM.cs" />
+    <Compile Include="ViewModels\ReservaVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
