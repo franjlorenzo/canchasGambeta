@@ -129,5 +129,56 @@ namespace CanchasGambeta.AccesoBD
             }
             return resultado;
         }
+
+        public static List<TablaReservaVM> obtenerReservasDelCliente()
+        {
+            List<TablaReservaVM> lista = new List<TablaReservaVM>();
+            Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select fecha, ho.horario, tipoCancha, servicioAsador, servicioInstrumentos, ho.idHorario, idCancha
+                                    from Reserva r join Horario ho on ho.idHorario = r.horario
+                                         join Cancha c on c.idCancha = r.cancha
+                                    where cliente = @idUsuario and day(fecha) >= day(getdate())";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idUsuario", sesion.idUsuario);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        TablaReservaVM auxiliar = new TablaReservaVM();
+                        auxiliar.Fecha = DateTime.Parse(lector["fecha"].ToString());
+                        //auxiliar.Fecha = auxiliar.Fecha.Date;
+                        auxiliar.Horario = lector["horario"].ToString();
+                        auxiliar.Cancha = lector["tipoCancha"].ToString();
+                        auxiliar.ServicioAsador = bool.Parse(lector["servicioAsador"].ToString());
+                        auxiliar.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
+                        auxiliar.IdHorario = int.Parse(lector["idHorario"].ToString());
+                        auxiliar.IdCancha = int.Parse(lector["idCancha"].ToString());
+                        lista.Add(auxiliar);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return lista;
+        }
     }
 }

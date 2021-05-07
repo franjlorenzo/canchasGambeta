@@ -1,4 +1,4 @@
-﻿@model CanchasGambeta.ViewModels.NuevaReservaVM
+﻿@model CanchasGambeta.ViewModels.VistaReserva
 @{
     ViewBag.Title = "MisReservas";
     List<SelectListItem> canchas = (List<SelectListItem>)ViewBag.canchas;
@@ -18,36 +18,54 @@
 
 <div class="row" style="transform: translateY(60px); color:white">
     <div class="col-md-6">
-        <!--<table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th class="text-center">
-                    Integrantes
-                </th>
-                <th class="text-center acciones" style="display:none">
-                    Acciones
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            foreach (var listado in Model)
-            {
-                <tr class="text-center">
-                    <td class="miembro">
-                        Html.HiddenFor(Model => listado.IdEmail)
-                        listado.Email
-                    </td>
-                    <td class="text-center acciones" style="display:none">
-                        <div class="btn-group">
-                            <a href="Url.Action("ModificarIntegrante", "Equipo", new {idEmail = listado.IdEmail, email1 = listado.Email})" class="btn btn-warning m-1">Modificar</a>
-                            <a href="Url.Action("EliminarIntegrante", "Equipo", new { idEmail = listado.idEmail, email1 = listado.Email})" class="btn btn-danger m-1">Eliminar</a>
-                        </div>
-                    </td>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        Reserva
+                    </th>
+                    <th class="text-center acciones" style="display:none">
+                        Acciones
+                    </th>
                 </tr>
+            </thead>
+            <tbody>
+                @foreach (var listado in Model.TablaReservaVM)
+                {
+                    <tr class="text-center">
+                        @{
+                            if (listado.ServicioAsador && listado.ServicioInstrumento)
+                            {
+                                <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: Si)</td>
+                            }
+                            else if (listado.ServicioAsador && !listado.ServicioInstrumento)
+                            {
+                                <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: No)</td>
+                            }
+                            else if (!listado.ServicioAsador && listado.ServicioInstrumento)
+                            {
+                                <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: Si)</td>
 
-            }
-        </tbody>
-    </table>-->
+                            }
+                            else
+                            {
+                                <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: No)</td>
+                            }
+                        }
+                        <td class="text-center acciones" style="display:none">
+                            <div class="btn-group">
+                                <a href="@Url.Action("ModificarReserva", "Reserva", new {@idReserva = listado.IdReserva})" class="btn btn-warning m-1">Modificar</a>
+                                <a href="@Url.Action("EliminarReserva", "Reserva", new {@idReserva = listado.IdReserva})" class="btn btn-danger m-1">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+        <div class="p-3">
+            <button id="btnAccionesReserva" class="btn btn-info" onclick="botonAcciones()">Editar reservas</button>
+        </div>
     </div>
     <div class="col-md-6">
         <h4 class="p-1">Llene los siguientes campos para concretar una reserva:</h4>
@@ -59,7 +77,7 @@
                         <div class="form-group">
                             <label class="col-sm-6 control-label">Fecha</label>
                             <div class="col-sm-6">
-                                @Html.TextBoxFor(model => model.Fecha, new { @type = "date", @class = "form-control datepicker" })
+                                @Html.TextBoxFor(Model => Model.NuevaReservaVM.Fecha, new { @type = "date", @class = "form-control datepicker" })
                             </div>
                         </div>
                         <div class="form-group">
@@ -77,13 +95,13 @@
                         <div class="form-group">
                             <div class="col-sm-6">
                                 <label class="control-label">Servicio asador</label>
-                                @Html.CheckBoxFor(Model => Model.ServicioAsador, false)
+                                @Html.CheckBoxFor(Model => Model.NuevaReservaVM.ServicioAsador)
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-6">
                                 <label class="control-label">Servicio instrumentos</label>
-                                @Html.CheckBoxFor(Model => Model.ServicioInstrumento, false)
+                                @Html.CheckBoxFor(Model => Model.NuevaReservaVM.ServicioInstrumento)
                             </div>
                         </div>
                         <div class="form-group text-center">
@@ -103,4 +121,6 @@
         }
     </div>
 </div>
+
+<script src="~/Scripts/scriptReservas.js"></script>
 

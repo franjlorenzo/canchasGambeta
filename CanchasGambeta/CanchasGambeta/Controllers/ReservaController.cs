@@ -12,7 +12,7 @@ namespace CanchasGambeta.Controllers
     {
         // GET: Reserva
         public ActionResult MisReservas()
-        {
+        { 
             List<Cancha> canchas = AccesoBD.AD_Reserva.obtenerCanchas();
             List<SelectListItem> listaCanchas = canchas.ConvertAll(d =>
             {
@@ -49,7 +49,7 @@ namespace CanchasGambeta.Controllers
             ViewBag.canchas = listaCanchas;
             ViewBag.horarios = listaHorarios;
             ViewBag.insumos = listaInsumos;
-            return View();
+            return View( new VistaReserva {NuevaReservaVM = new NuevaReservaVM(), TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente()});
         }
 
         [HttpPost]
@@ -60,6 +60,10 @@ namespace CanchasGambeta.Controllers
             {
                 return RedirectToAction("LogIn", "LogIn");
             }
+
+            nuevaReserva.Fecha = DateTime.Parse(Request["NuevaReservaVM.Fecha"]);
+            nuevaReserva.ServicioAsador = bool.Parse(Request["NuevaReservaVM.ServicioAsador"].Contains("true").ToString());
+            nuevaReserva.ServicioInstrumento  = bool.Parse(Request.Form["NuevaReservaVM.ServicioInstrumento"].Contains("true").ToString());
 
             if (ModelState.IsValid)
             {
