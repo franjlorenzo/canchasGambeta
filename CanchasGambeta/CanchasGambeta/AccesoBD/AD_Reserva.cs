@@ -1,4 +1,5 @@
 ﻿using CanchasGambeta.Models;
+using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -89,5 +90,44 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
+        public static bool nuevaReserva(NuevaReservaVM reservaVM)
+        {
+            bool resultado = false;
+            Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"insert into Reserva(cliente, cancha, horario, fecha, servicioAsador, servicioInstrumentos, estado)
+                                    values (@cliente, @cancha, @horario, @fecha, @servicioAsador, @servicioInstrumentos, @estado)";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@cliente", sesion.idUsuario);
+                comando.Parameters.AddWithValue("@cancha", reservaVM.IdCancha);
+                comando.Parameters.AddWithValue("@horario", reservaVM.IdHorario);
+                comando.Parameters.AddWithValue("@fecha", reservaVM.Fecha);
+                comando.Parameters.AddWithValue("@servicioAsador", reservaVM.ServicioAsador);
+                comando.Parameters.AddWithValue("@servicioInstrumentos", reservaVM.ServicioInstrumento);
+                comando.Parameters.AddWithValue("@estado", true);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+                resultado = true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
     }
 }

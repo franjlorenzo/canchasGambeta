@@ -6,37 +6,41 @@ using System.Web;
 
 namespace CanchasGambeta.ViewModels
 {
-    public class ReservaVM
+    public class NuevaReservaVM
     {
         private int idReserva;
-        private List<Cancha> listaCanchas;
-        private List<Horario> listaHorarios;
-        private DateTime? fecha;
+        private int idCancha;
+        private int idHorario;
+        private DateTime fecha;
         private bool servicioAsador;
         private bool servicioInstrumento;
         private List<Insumo> listaInsumos;
 
         public int IdReserva { get => idReserva; set => idReserva = value; }
-        public List<Cancha> ListaCanchas { get => listaCanchas; set => listaCanchas = value; }
-        public List<Horario> ListaHorarios { get => listaHorarios; set => listaHorarios = value; }
-        public DateTime? Fecha { get => fecha; set => fecha = value; }
+        public int IdCancha { get => idCancha; set => idCancha = value; }
+        public int IdHorario { get => idHorario; set => idHorario = value; }
+        public DateTime Fecha { get => fecha; set => fecha = value; }
         public bool ServicioAsador { get => servicioAsador; set => servicioAsador = value; }
         public bool ServicioInstrumento { get => servicioInstrumento; set => servicioInstrumento = value; }
         public List<Insumo> ListaInsumos { get => listaInsumos; set => listaInsumos = value; }
+    }
 
-        public ReservaVM()
-        {
-            listaCanchas = new List<Cancha>();
-            listaHorarios = new List<Horario>();
-            listaInsumos = new List<Insumo>();
-            cargarListas();
-        }
+    public class TablaReservaVM
+    {
+        private int idReserva;
+        private int idHorario;
+        private string horario;
+        private int idCancha;
+        private string cancha;
+        private bool servicioAsador;
+        private bool servicioInstrumento;
 
-        private void cargarListas()
-        {
-            listaCanchas = AccesoBD.AD_Reserva.obtenerCanchas();
-            listaHorarios = AccesoBD.AD_Reserva.obtenerHorarios();
-            listaInsumos = AccesoBD.AD_Insumo.obtenerInsumos();
-        }
+        public int IdReserva { get => idReserva; set => idReserva = value; }
+        public int IdHorario { get => idHorario; set => idHorario = value; }
+        public string Horario { get => horario; set => horario = value; }
+        public int IdCancha { get => idCancha; set => idCancha = value; }
+        public string Cancha { get => cancha; set => cancha = value; }
+        public bool ServicioAsador { get => servicioAsador; set => servicioAsador = value; }
+        public bool ServicioInstrumento { get => servicioInstrumento; set => servicioInstrumento = value; }
     }
 }

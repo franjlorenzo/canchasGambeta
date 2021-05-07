@@ -1,4 +1,5 @@
-﻿using CanchasGambeta.ViewModels;
+﻿using CanchasGambeta.Models;
+using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace CanchasGambeta.Controllers
         // GET: Reserva
         public ActionResult MisReservas()
         {
-            ReservaVM reserva = new ReservaVM();
-            List<SelectListItem> canchas = reserva.ListaCanchas.ConvertAll(d =>
+            List<Cancha> canchas = AccesoBD.AD_Reserva.obtenerCanchas();
+            List<SelectListItem> listaCanchas = canchas.ConvertAll(d =>
             {
                 return new SelectListItem()
                 {
@@ -23,7 +24,8 @@ namespace CanchasGambeta.Controllers
                 };
             });
 
-            List<SelectListItem> horarios = reserva.ListaHorarios.ConvertAll(d =>
+            List<Horario> horarios = AccesoBD.AD_Reserva.obtenerHorarios();
+            List<SelectListItem> listaHorarios = horarios.ConvertAll(d =>
             {
                 return new SelectListItem()
                 {
@@ -33,7 +35,8 @@ namespace CanchasGambeta.Controllers
                 };
             });
 
-            List<SelectListItem> insumos = reserva.ListaInsumos.ConvertAll(d =>
+            List<Insumo> insumos = AccesoBD.AD_Insumo.obtenerInsumos();
+            List<SelectListItem> listaInsumos = insumos.ConvertAll(d =>
             {
                 return new SelectListItem()
                 {
@@ -43,10 +46,35 @@ namespace CanchasGambeta.Controllers
                 };
             });
 
-            ViewBag.canchas = canchas;
-            ViewBag.horarios = horarios;
-            ViewBag.insumos = insumos;
-            return View(reserva);
+            ViewBag.canchas = listaCanchas;
+            ViewBag.horarios = listaHorarios;
+            ViewBag.insumos = listaInsumos;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult NuevaReserva(NuevaReservaVM nuevaReserva)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Reserva.nuevaReserva(nuevaReserva);
+                if (resultado)
+                {
+                    return RedirectToAction("MisReservas", "Reserva");
+                }
+                else
+                {
+                    ViewBag.ErrorInsertReserva = "Ocurrió un error al registrar la reserva. Intenteló nuevamente.";
+                    return View(nuevaReserva);
+                }
+            }
+            return View(nuevaReserva);
         }
     }
 }

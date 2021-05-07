@@ -92,5 +92,11 @@ namespace CanchasGambeta.Controllers
             Session.Clear();
             return RedirectToAction("Index", "Home");
         }
+
+        public ActionResult MisReservas()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
