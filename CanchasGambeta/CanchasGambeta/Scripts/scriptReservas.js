@@ -3,7 +3,7 @@
     let cboHorario = document.getElementById("idHorario").value;
     let fecha = document.getElementById("NuevaReservaVM_Fecha").value;
 
-    if (cboCancha == "" | cboHorario == "") {
+    if (cboCancha == "" | cboHorario == "" | fecha == "") {
         alert("Debe seleccionar una fecha/cancha/horario para registrar la reserva.");
         return false;
     }
@@ -24,4 +24,19 @@ const botonAcciones = () => {
             acciones[i].style.display = "none";
         }
     }
+}
+
+const botonInsumos = () => {
+    let tablaInsumos = document.getElementById("tablaInsumos");
+
+    if (tablaInsumos.style.display == "none") {
+        tablaInsumos.style.display = "inline-table";
+    }
+    else {
+        tablaInsumos.style.display = "none"
+    }
+}
+
+function buscarHorarios() {
+    console.log("prueba");
 }

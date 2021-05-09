@@ -180,5 +180,86 @@ namespace CanchasGambeta.AccesoBD
             }
             return lista;
         }
+
+        public static int obtenerReservaPorAtributos(int cancha, int horario, DateTime fecha)
+        {
+            int idReserva = 0;
+            Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idReserva
+                                    from Reserva r join Horario h on r.horario = h.idHorario
+                                         join Cancha c on c.idCancha = r.cancha
+	                                where h.idHorario = @horario and c.idCancha = @cancha and cliente = @idCliente and fecha = @fecha";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@horario", horario);
+                comando.Parameters.AddWithValue("@cancha", cancha);
+                comando.Parameters.AddWithValue("@idCliente", sesion.idUsuario);
+                comando.Parameters.AddWithValue("@fecha", fecha);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        idReserva = int.Parse(lector["idReserva"].ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return idReserva;
+        }
+
+        public static bool insertReservaInsumo(NuevaReservaVM reservaVM, int idReserva, List<int> insumosSeleccionados)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"insert into ReservaInsumos (reserva, insumo, cantidad) values (@idReserva, @insumo, @cantidad)";
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+                conexion.Open();
+                comando.Connection = conexion;
+
+                for (int i = 0; i < insumosSeleccionados.Count; i++)
+                {                  
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@idReserva", idReserva);
+                    comando.Parameters.AddWithValue("@insumo", reservaVM.ListaInsumos[i].idInsumo);
+                    comando.Parameters.AddWithValue("@cantidad", insumosSeleccionados[i]);
+
+                    comando.ExecuteNonQuery();
+                }                
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
     }
 }

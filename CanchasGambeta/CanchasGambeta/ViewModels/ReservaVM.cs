@@ -12,10 +12,10 @@ namespace CanchasGambeta.ViewModels
         private int idReserva;
         private int idCancha;
         private int idHorario;
-        private DateTime? fecha;
+        private DateTime fecha;
         private bool servicioAsador;
         private bool servicioInstrumento;
-        private List<Insumo> listaInsumos;
+        private List<Insumo> listaInsumos = AccesoBD.AD_Insumo.obtenerInsumos();
 
         public int IdReserva { get => idReserva; set => idReserva = value; }
         public int IdCancha { get => idCancha; set => idCancha = value; }
@@ -23,7 +23,7 @@ namespace CanchasGambeta.ViewModels
         public bool ServicioAsador { get => servicioAsador; set => servicioAsador = value; }
         public bool ServicioInstrumento { get => servicioInstrumento; set => servicioInstrumento = value; }
         public List<Insumo> ListaInsumos { get => listaInsumos; set => listaInsumos = value; }
-        public DateTime? Fecha { get => fecha; set => fecha = value; }
+        public DateTime Fecha { get => fecha; set => fecha = value; }
     }
 
     public class TablaReservaVM
