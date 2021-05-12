@@ -1,5 +1,8 @@
-﻿using System;
+﻿using CanchasGambeta.Models;
+using CanchasGambeta.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -7,5 +10,265 @@ namespace CanchasGambeta.AccesoBD
 {
     public class AD_Administrador
     {
+        public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
+
+        public static List<TablaPedido> obtenerTodosLosPedidos()
+        {
+            List<TablaPedido> lista = new List<TablaPedido>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idPedido, descripcion, fecha, idProveedor, nombreCompleto, telefono, empresa, estado
+                                    from Pedido ped join Proveedor prov on ped.proveedor = prov.idProveedor";
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        TablaPedido auxiliar = new TablaPedido();
+                        auxiliar.IdPedido = int.Parse(lector["idPedido"].ToString());
+                        auxiliar.DescripcionPedido = lector["descripcion"].ToString();
+                        auxiliar.Fecha = DateTime.Parse(lector["fecha"].ToString());
+                        auxiliar.IdProveedor = int.Parse(lector["idProveedor"].ToString());
+                        auxiliar.NombreProveedor = lector["nombreCompleto"].ToString();
+                        auxiliar.Telefono = lector["telefono"].ToString();
+                        auxiliar.Empresa = lector["empresa"].ToString();
+                        auxiliar.Estado = bool.Parse(lector["estado"].ToString());
+                        lista.Add(auxiliar);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return lista;
+        }
+
+        public static List<Proveedor> obtenerTodosLosProveedores()
+        {
+            List<Proveedor> lista = new List<Proveedor>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idProveedor, nombreCompleto, empresa, telefono from Proveedor";
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        Proveedor auxiliar = new Proveedor();
+                        auxiliar.idProveedor = int.Parse(lector["idProveedor"].ToString());
+                        auxiliar.nombreCompleto = lector["nombreCompleto"].ToString();
+                        auxiliar.empresa = lector["empresa"].ToString();
+                        auxiliar.telefono = lector["telefono"].ToString();
+                        lista.Add(auxiliar);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return lista;
+        }
+
+        public static bool nuevoPedido(NuevoPedido nuevoPedido)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"insert into Pedido (proveedor, descripcion, fecha, estado) values (@proveedor, @descripcion, @fecha, @estado)";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@proveedor", nuevoPedido.IdProveedor);
+                comando.Parameters.AddWithValue("@descripcion", nuevoPedido.Descripcion);
+                comando.Parameters.AddWithValue("@fecha", nuevoPedido.Fecha);
+                comando.Parameters.AddWithValue("@estado", 1);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static bool concretarUnPedido(int idPedido)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"update Pedido set estado = 0 where idPedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static Pedido obtenerPedidoPorId(int idPedido)
+        {
+            Pedido pedido = new Pedido();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idPedido, proveedor, descripcion, fecha from Pedido where idPedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        pedido.idPedido = int.Parse(lector["idPedido"].ToString());
+                        pedido.proveedor = int.Parse(lector["proveedor"].ToString());
+                        pedido.descripcion = lector["descripcion"].ToString();
+                        pedido.fecha = DateTime.Parse(lector["fecha"].ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return pedido;
+        }
+
+        public static bool modificarPedido(Pedido pedido)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"update Pedido set proveedor = @proveedor,
+                                                      descripcion = @descripcion
+                                    where idPedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@proveedor", pedido.proveedor);
+                comando.Parameters.AddWithValue("@descripcion", pedido.descripcion);
+                comando.Parameters.AddWithValue("@idPedido", pedido.idPedido);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static bool eliminarPedido(int idPedido)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"delete from Pedido where idPedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
     }
 }

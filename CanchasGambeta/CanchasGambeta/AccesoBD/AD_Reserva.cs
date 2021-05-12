@@ -228,6 +228,7 @@ namespace CanchasGambeta.AccesoBD
 
         public static bool insertReservaInsumo(NuevaReservaVM reservaVM, int idReserva, List<int> insumosSeleccionados)
         {
+            bool updateStock = false;
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
@@ -241,14 +242,31 @@ namespace CanchasGambeta.AccesoBD
                 comando.Connection = conexion;
 
                 for (int i = 0; i < insumosSeleccionados.Count; i++)
-                {                  
+                {
+                    if (insumosSeleccionados[i] != 0) { updateStock = true; }
                     comando.Parameters.Clear();
                     comando.Parameters.AddWithValue("@idReserva", idReserva);
                     comando.Parameters.AddWithValue("@insumo", reservaVM.ListaInsumos[i].idInsumo);
                     comando.Parameters.AddWithValue("@cantidad", insumosSeleccionados[i]);
 
                     comando.ExecuteNonQuery();
-                }                
+                }
+
+                if (updateStock)
+                {
+                    string consultaUpdateStock = @"update Insumo set stock = stock - @cantidad
+                                                   where idInsumo = @idInsumo";
+                    comando.CommandText = consultaUpdateStock;
+                    for (int i = 0; i < insumosSeleccionados.Count; i++)
+                    {
+                        comando.Parameters.Clear();
+                        comando.Parameters.AddWithValue("@cantidad", insumosSeleccionados[i]);
+                        comando.Parameters.AddWithValue("@idInsumo", reservaVM.ListaInsumos[i].idInsumo);
+
+                        comando.ExecuteNonQuery();
+                    }
+                }
+
                 resultado = true;
             }
             catch (Exception)

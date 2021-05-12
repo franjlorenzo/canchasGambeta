@@ -17,6 +17,8 @@ namespace CanchasGambeta.Models
         public int idPedido { get; set; }
         public int proveedor { get; set; }
         public string descripcion { get; set; }
+        public System.DateTime fecha { get; set; }
+        public bool estado { get; set; }
     
         public virtual Proveedor Proveedor1 { get; set; }
     }

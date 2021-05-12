@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Canchas_GambetaModel2.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Canchas_GambetaModel2.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Cancha">
           <Key>
             <PropertyRef Name="idCancha" />
@@ -38,7 +38,7 @@
           <Key>
             <PropertyRef Name="idEquipoMails" />
           </Key>
-          <Property Name="idEquipoMails" Type="int" Nullable="false" />
+          <Property Name="idEquipoMails" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="email" Type="int" Nullable="false" />
           <Property Name="equipo" Type="int" Nullable="false" />
         </EntityType>
@@ -73,6 +73,8 @@
           <Property Name="idPedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="proveedor" Type="int" Nullable="false" />
           <Property Name="descripcion" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="fecha" Type="date" Nullable="false" />
+          <Property Name="estado" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Proveedor">
           <Key>
@@ -81,6 +83,7 @@
           <Property Name="idProveedor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="nombreCompleto" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="empresa" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="telefono" Type="nchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="Reserva">
           <Key>
@@ -315,8 +318,7 @@
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Canchas_GambetaModel2" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -399,6 +401,8 @@
           <Property Name="proveedor" Type="Int32" Nullable="false" />
           <Property Name="descripcion" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Proveedor1" Relationship="Self.FK_Pedido_Proveedor" FromRole="Pedido" ToRole="Proveedor" />
+          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="estado" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Proveedor">
           <Key>
@@ -408,6 +412,7 @@
           <Property Name="nombreCompleto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="empresa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Proveedor" FromRole="Proveedor" ToRole="Pedido" />
+          <Property Name="telefono" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="Reserva">
           <Key>
@@ -730,6 +735,8 @@
           <EntitySetMapping Name="Pedido">
             <EntityTypeMapping TypeName="Canchas_GambetaModel2.Pedido">
               <MappingFragment StoreEntitySet="Pedido">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
                 <ScalarProperty Name="idPedido" ColumnName="idPedido" />
                 <ScalarProperty Name="proveedor" ColumnName="proveedor" />
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />
@@ -739,6 +746,7 @@
           <EntitySetMapping Name="Proveedor">
             <EntityTypeMapping TypeName="Canchas_GambetaModel2.Proveedor">
               <MappingFragment StoreEntitySet="Proveedor">
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
                 <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
                 <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
                 <ScalarProperty Name="empresa" ColumnName="empresa" />

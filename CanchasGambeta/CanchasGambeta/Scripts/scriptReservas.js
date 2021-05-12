@@ -1,4 +1,6 @@
-﻿function validacionNuevaReserva() {
+﻿'use strict';
+
+function validacionNuevaReserva() {
     let cboCancha = document.getElementById("idCancha").value;
     let cboHorario = document.getElementById("idHorario").value;
     let fecha = document.getElementById("NuevaReservaVM_Fecha").value;

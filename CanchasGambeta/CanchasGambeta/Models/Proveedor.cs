@@ -23,6 +23,7 @@ namespace CanchasGambeta.Models
         public int idProveedor { get; set; }
         public string nombreCompleto { get; set; }
         public string empresa { get; set; }
+        public string telefono { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Pedido> Pedido { get; set; }

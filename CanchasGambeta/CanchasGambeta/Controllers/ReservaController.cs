@@ -49,7 +49,7 @@ namespace CanchasGambeta.Controllers
             ViewBag.canchas = listaCanchas;
             ViewBag.horarios = listaHorarios;
             ViewBag.insumos = listaInsumos;
-            return View( new VistaReserva {NuevaReservaVM = new NuevaReservaVM(), TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente(),});
+            return View( new VistaReserva {NuevaReservaVM = new NuevaReservaVM(), TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente()});
         }
 
         [HttpPost]
@@ -68,15 +68,37 @@ namespace CanchasGambeta.Controllers
             if (ModelState.IsValid)
             {
                 bool insertExitoso = AccesoBD.AD_Reserva.nuevaReserva(nuevaReserva);
-                bool insertReservaInsumo = AccesoBD.AD_Reserva.insertReservaInsumo(nuevaReserva, AccesoBD.AD_Reserva.obtenerReservaPorAtributos(nuevaReserva.IdCancha, nuevaReserva.IdHorario, nuevaReserva.Fecha), cantidad);
                 if (insertExitoso)
                 {
-                    return RedirectToAction("MisReservas", "Reserva");
+                    bool insertReservaInsumo = AccesoBD.AD_Reserva.insertReservaInsumo(nuevaReserva, AccesoBD.AD_Reserva.obtenerReservaPorAtributos(nuevaReserva.IdCancha, nuevaReserva.IdHorario, nuevaReserva.Fecha), cantidad);
+                    if (insertReservaInsumo)
+                    {
+                        return RedirectToAction("MisReservas", "Reserva");
+                    }
+
+                    /*bool hayInsumo = false;
+                    for (int i = 0; i < cantidad.Count; i++)
+                    {
+                        if (cantidad[i] != 0)
+                        {
+                            hayInsumo = true;
+                            break;
+                        }
+                    }
+
+                    if (hayInsumo)
+                    {
+                        
+                    }
+                    else
+                    {
+                        return RedirectToAction("MisReservas", "Reserva");
+                    }*/
                 }
                 else
                 {
                     ViewBag.ErrorInsertReserva = "Ocurrió un error al registrar la reserva. Intenteló nuevamente.";
-                    return View(nuevaReserva);
+                    return RedirectToAction("MisReservas", "Reserva");
                 }
             }
             return View(nuevaReserva);

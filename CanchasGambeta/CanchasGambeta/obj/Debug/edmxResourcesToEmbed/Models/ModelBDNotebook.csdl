@@ -79,6 +79,8 @@
     <Property Name="proveedor" Type="Int32" Nullable="false" />
     <Property Name="descripcion" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Proveedor1" Relationship="Self.FK_Pedido_Proveedor" FromRole="Pedido" ToRole="Proveedor" />
+    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="Proveedor">
     <Key>
@@ -88,6 +90,7 @@
     <Property Name="nombreCompleto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="empresa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Proveedor" FromRole="Proveedor" ToRole="Pedido" />
+    <Property Name="telefono" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
   </EntityType>
   <EntityType Name="Reserva">
     <Key>

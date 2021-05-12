@@ -73,6 +73,8 @@
     <EntitySetMapping Name="Pedido">
       <EntityTypeMapping TypeName="Canchas_GambetaModel2.Pedido">
         <MappingFragment StoreEntitySet="Pedido">
+          <ScalarProperty Name="estado" ColumnName="estado" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
           <ScalarProperty Name="idPedido" ColumnName="idPedido" />
           <ScalarProperty Name="proveedor" ColumnName="proveedor" />
           <ScalarProperty Name="descripcion" ColumnName="descripcion" />
@@ -82,6 +84,7 @@
     <EntitySetMapping Name="Proveedor">
       <EntityTypeMapping TypeName="Canchas_GambetaModel2.Proveedor">
         <MappingFragment StoreEntitySet="Proveedor">
+          <ScalarProperty Name="telefono" ColumnName="telefono" />
           <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
           <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
           <ScalarProperty Name="empresa" ColumnName="empresa" />

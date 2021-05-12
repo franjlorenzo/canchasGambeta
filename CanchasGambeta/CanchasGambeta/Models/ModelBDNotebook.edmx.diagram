@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="280891fca0414faeaae8bb0da7b202e3" Name="Diagram1">
         <EntityTypeShape EntityType="Canchas_GambetaModel2.Cancha" Width="1.5" PointX="6" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel2.ElementoRoto" Width="1.5" PointX="0.75" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel2.ElementoRoto" Width="1.5" PointX="5.625" PointY="8.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel2.Email" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel2.Equipo" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel2.EquipoMails" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />

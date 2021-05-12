@@ -33,7 +33,7 @@
     <Key>
       <PropertyRef Name="idEquipoMails" />
     </Key>
-    <Property Name="idEquipoMails" Type="int" Nullable="false" />
+    <Property Name="idEquipoMails" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="email" Type="int" Nullable="false" />
     <Property Name="equipo" Type="int" Nullable="false" />
   </EntityType>
@@ -68,6 +68,8 @@
     <Property Name="idPedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="proveedor" Type="int" Nullable="false" />
     <Property Name="descripcion" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="fecha" Type="date" Nullable="false" />
+    <Property Name="estado" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Proveedor">
     <Key>
@@ -76,6 +78,7 @@
     <Property Name="idProveedor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="nombreCompleto" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="empresa" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="telefono" Type="nchar" MaxLength="10" Nullable="false" />
   </EntityType>
   <EntityType Name="Reserva">
     <Key>
