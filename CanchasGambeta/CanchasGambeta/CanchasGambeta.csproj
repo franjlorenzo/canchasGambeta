@@ -360,6 +360,7 @@
     <Content Include="Views\Reserva\MisReservas.cshtml" />
     <Content Include="Views\Administrador\MisPedidos.cshtml" />
     <Content Include="Views\Administrador\ModificarPedido.cshtml" />
+    <Content Include="Views\Reserva\ModificarReserva.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -139,7 +139,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select fecha, ho.horario, tipoCancha, servicioAsador, servicioInstrumentos, ho.idHorario, idCancha
+                string consulta = @"select idReserva, fecha, ho.horario, tipoCancha, servicioAsador, servicioInstrumentos, ho.idHorario, idCancha
                                     from Reserva r join Horario ho on ho.idHorario = r.horario
                                          join Cancha c on c.idCancha = r.cancha
                                     where cliente = @idUsuario and day(fecha) >= day(getdate())";
@@ -158,6 +158,7 @@ namespace CanchasGambeta.AccesoBD
                     while (lector.Read())
                     {
                         TablaReservaVM auxiliar = new TablaReservaVM();
+                        auxiliar.IdReserva = int.Parse(lector["idReserva"].ToString());
                         auxiliar.Fecha = DateTime.Parse(lector["fecha"].ToString());
                         //auxiliar.Fecha = auxiliar.Fecha.Date;
                         auxiliar.Horario = lector["horario"].ToString();
@@ -278,6 +279,175 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return resultado;
+        }
+
+        public static Cancha obtenerCanchaPorId(int idReserva)
+        {
+            Cancha cancha = new Cancha();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idCancha, tipoCancha from Cancha c join Reserva r on c.idCancha = r.cancha
+                                    where idReserva = @idReserva";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idReserva", idReserva);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        cancha.idCancha = int.Parse(lector["idCancha"].ToString());
+                        cancha.tipoCancha = lector["tipoCancha"].ToString();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return cancha;
+        }
+
+        public static Horario obtenerHorarioPorId(int idReserva)
+        {
+            Horario horario = new Horario();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idHorario, h.horario from Horario h join Reserva r on h.idHorario = r.horario
+                                    where idReserva = @idReserva";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idReserva", idReserva);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        horario.idHorario = int.Parse(lector["idHorario"].ToString());
+                        horario.horario1 = lector["horario"].ToString();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return horario;
+        }
+
+        public static List<Insumo> obtenerInsumosDeLaReserva(int idReserva)
+        {
+            List<Insumo> listaInsumosEnReserva = new List<Insumo>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idInsumo, i.insumo, precio, stock, cantidad 
+                                    from Insumo i join ReservaInsumos ri on i.idInsumo = ri.insumo
+	                                     join Reserva r on r.idReserva = ri.reserva
+                                    where idReserva = @idReserva";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idReserva", idReserva);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        Insumo insumo = new Insumo();
+                        insumo.idInsumo = int.Parse(lector["idInsumo"].ToString());
+                        insumo.insumo1 = lector["insumo"].ToString();
+                        insumo.precio = decimal.Parse(lector["precio"].ToString());
+                        insumo.stock = int.Parse(lector["stock"].ToString());
+                        insumo.cantidad = int.Parse(lector["cantidad"].ToString());
+                        listaInsumosEnReserva.Add(insumo);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return listaInsumosEnReserva;
+        }
+
+        public static ActualizarReservaVM obtenerReservaPorId(int idReserva)
+        {
+            ActualizarReservaVM datosReserva = new ActualizarReservaVM();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select fecha, servicioAsador, servicioInstrumentos
+                                    from Reserva r
+                                    where idReserva = @idReserva";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idReserva", idReserva);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        datosReserva.Fecha = DateTime.Parse(lector["fecha"].ToString());
+                        datosReserva.ServicioAsador = bool.Parse(lector["servicioAsador"].ToString());
+                        datosReserva.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return datosReserva;
         }
     }
 }

@@ -47,6 +47,29 @@ namespace CanchasGambeta.ViewModels
         public DateTime? Fecha { get => fecha; set => fecha = value; }
     }
 
+    public class ActualizarReservaVM
+    {
+        private int idReserva;
+        private int idCancha;
+        private string cancha;
+        private int idHorario;
+        private string horario;
+        private DateTime fecha;
+        private bool servicioAsador;
+        private bool servicioInstrumento;
+        private List<Insumo> listaInsumosEnLaReserva;
+
+        public int IdReserva { get => idReserva; set => idReserva = value; }
+        public int IdCancha { get => idCancha; set => idCancha = value; }
+        public string Cancha { get => cancha; set => cancha = value; }
+        public int IdHorario { get => idHorario; set => idHorario = value; }
+        public string Horario { get => horario; set => horario = value; }
+        public DateTime Fecha { get => fecha; set => fecha = value; }
+        public bool ServicioAsador { get => servicioAsador; set => servicioAsador = value; }
+        public bool ServicioInstrumento { get => servicioInstrumento; set => servicioInstrumento = value; }
+        public List<Insumo> ListaInsumosEnLaReserva { get => listaInsumosEnLaReserva; set => listaInsumosEnLaReserva = value; }
+    }
+
     public class VistaReserva
     {
         public NuevaReservaVM NuevaReservaVM { get; set; }
