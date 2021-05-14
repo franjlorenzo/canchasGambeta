@@ -39,6 +39,15 @@ const botonInsumos = () => {
     }
 }
 
-function buscarHorarios() {
-    console.log("prueba");
+function confirmacionEliminar() {
+    var eliminar = confirm("¿Esta seguro de que quiere eliminar este pedido?");
+    if (eliminar) return true;
+    return false;
 }
+
+/*function buscarHorarios() {
+    console.log("prueba");
+}*/
+
+var fechaNueva = document.getElementById("Fecha");
+fechaNueva.removeAttribute("data-val-required");

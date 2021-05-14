@@ -54,11 +54,7 @@ namespace CanchasGambeta.Controllers
 
                         return RedirectToAction("PerfilAdministrador", "Administrador");
                     }
-                    else
-                    {
-                        return View(usuario);
-                    }
-
+                    else return View(usuario);
                 }
             }
             catch (Exception ex)
@@ -66,7 +62,6 @@ namespace CanchasGambeta.Controllers
                 ViewBag.Error = ex.Message;
                 return View();
             }
-
             return View(usuario);
         }
 
@@ -103,10 +98,7 @@ namespace CanchasGambeta.Controllers
                 if (ModelState.IsValid)
                 {
                     bool resultado = AccesoBD.AD_Administrador.nuevoPedido(nuevoPedido);
-                    if (resultado)
-                    {
-                        return RedirectToAction("MisPedidos", "Administrador");
-                    }
+                    if (resultado) return RedirectToAction("MisPedidos", "Administrador");
                 }
             }
             catch (Exception ex)

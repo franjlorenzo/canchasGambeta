@@ -38,20 +38,8 @@ namespace CanchasGambeta.Controllers
                 };
             });
 
-            /*List<Insumo> insumos = AccesoBD.AD_Insumo.obtenerInsumos();
-            List<SelectListItem> listaInsumos = insumos.ConvertAll(d =>
-            {
-                return new SelectListItem()
-                {
-                    Text = d.insumo1 + " - ($" + d.precio + ")",
-                    Value = d.idInsumo.ToString(),
-                    Selected = false
-                };
-            });*/
-
             ViewBag.canchas = listaCanchas;
             ViewBag.horarios = listaHorarios;
-            //ViewBag.insumos = listaInsumos;
             return View( new VistaReserva {NuevaReservaVM = new NuevaReservaVM(), TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente()});
         }
 
@@ -71,29 +59,7 @@ namespace CanchasGambeta.Controllers
                 if (insertExitoso)
                 {
                     bool insertReservaInsumo = AccesoBD.AD_Reserva.insertReservaInsumo(nuevaReserva, AccesoBD.AD_Reserva.obtenerReservaPorAtributos(nuevaReserva.IdCancha, nuevaReserva.IdHorario, nuevaReserva.Fecha), cantidad);
-                    if (insertReservaInsumo)
-                    {
-                        return RedirectToAction("MisReservas", "Reserva");
-                    }
-
-                    /*bool hayInsumo = false;
-                    for (int i = 0; i < cantidad.Count; i++)
-                    {
-                        if (cantidad[i] != 0)
-                        {
-                            hayInsumo = true;
-                            break;
-                        }
-                    }
-
-                    if (hayInsumo)
-                    {
-                        
-                    }
-                    else
-                    {
-                        return RedirectToAction("MisReservas", "Reserva");
-                    }*/
+                    if (insertReservaInsumo) return RedirectToAction("MisReservas", "Reserva");
                 }
                 else
                 {
@@ -156,21 +122,62 @@ namespace CanchasGambeta.Controllers
                 }
             }
 
-            /*List<Insumo> insumos = AccesoBD.AD_Insumo.obtenerInsumos();
-            List<SelectListItem> listaInsumos = insumos.ConvertAll(d =>
-            {
-                return new SelectListItem()
-                {
-                    Text = d.insumo1 + " - ($" + d.precio + ")",
-                    Value = d.idInsumo.ToString(),
-                    Selected = false
-                };
-            });
-            ViewBag.insumos = listaInsumos;*/
-
             ViewBag.canchas = listaCanchas;
             ViewBag.horarios = listaHorarios;
             return View(actualizarReserva);
+        }
+
+        [HttpPost]
+        public ActionResult ModificarReserva(ActualizarReservaVM actualizarReservaVM, List<int> cantidad, List<int> idInsumo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            actualizarReservaVM.ListaInsumosEnLaReserva = AccesoBD.AD_Reserva.obtenerInsumosDeLaReserva(actualizarReservaVM.IdReserva);
+            DateTime fechaNull = new DateTime(0001, 01, 01);
+            DateTime fechaReserva = DateTime.Parse(Request["fechaReserva"]);
+            if (actualizarReservaVM.Fecha.Equals(fechaNull)) actualizarReservaVM.Fecha = fechaReserva;
+           
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    bool resultado = AccesoBD.AD_Reserva.modificarReserva(actualizarReservaVM, cantidad, idInsumo);
+                    if (resultado) return RedirectToAction("MisReservas", "Reserva");
+                    else
+                    {
+                        ViewBag.ErrorModificarReserva = "Ocurrió un error al actualizar la reserva, por favor intenteló nuevamente más tarde.";
+                        return View(actualizarReservaVM);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            
+            return View(actualizarReservaVM);
+        }
+
+        [HttpPost]
+        public ActionResult EliminarReserva()
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            int idReserva = int.Parse(Request["listado.IdReserva"]);
+
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Reserva.eliminarReserva(idReserva);
+                if (resultado) return RedirectToAction("MisReservas", "Reserva");
+                else
+                {
+                    ViewBag.ErrorEliminarReserva = "Ocurrió un error al eliminar la reserva. Intenteló nuevamente.";
+                    return RedirectToAction("MisReservas", "Reserva");
+                }
+            }
+            return View();
         }
     }
 }

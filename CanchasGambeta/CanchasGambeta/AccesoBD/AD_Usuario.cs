@@ -38,7 +38,6 @@ namespace CanchasGambeta.AccesoBD
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -71,23 +70,18 @@ namespace CanchasGambeta.AccesoBD
                 {
                     while (lector.Read())
                     {
-
                         resultado.idUsuario = int.Parse(lector["idUsuario"].ToString());
                         resultado.nombreCompleto = lector["nombreCompleto"].ToString();
                         resultado.email = lector["email"].ToString();
                         resultado.telefono = lector["telefono"].ToString();
                         resultado.password = lector["password"].ToString();
-                        if (!string.IsNullOrEmpty(lector["equipo"].ToString()))
-                        {
-                            resultado.equipo = int.Parse(lector["equipo"].ToString());
-                        }
+                        if (!string.IsNullOrEmpty(lector["equipo"].ToString())) resultado.equipo = int.Parse(lector["equipo"].ToString());
                         resultado.rol = int.Parse(lector["rol"].ToString());
                     }
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -127,7 +121,6 @@ namespace CanchasGambeta.AccesoBD
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally

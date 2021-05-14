@@ -8,27 +8,55 @@
 <div class="row" style="transform: translateY(60px); color:white">
     <div class="col-md-6">
         <h4 class="p-1">Llene los siguientes campos para concretar una reserva:</h4>
-        @using (Html.BeginForm("ModificarReserva", "Reserva", FormMethod.Post, new { onsubmit = "return validacionNuevaReserva();" }))
+        @using (Html.BeginForm("ModificarReserva", "Reserva", FormMethod.Post, new { onsubmit = "" }))
         {
+            @Html.HiddenFor(Model => Model.IdReserva)
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-horizontal">
                         <div class="form-group">
                             <label class="col-sm-6 control-label">Fecha</label>
                             <div class="col-sm-6">
-                                @Html.TextBoxFor(Model => Model.Fecha, new { @type = "date", @class = "form-control datepicker" })
+                                <input hidden type="datetime" id="fechaReserva" name="fechaReserva" value="@Model.Fecha" class="form-control datepicker" />
+                                <input type="date" id="fechaNuevaReserva" name="fechaNuevaReserva" value="@Model.Fecha" class="form-control datepicker" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-6 control-label">Cancha</label>
                             <div class="col-sm-6">
-                                @Html.DropDownList("idCancha", canchas, "Seleccione una cancha", htmlAttributes: new { @class = "form-control" })
+                                <select name="idCancha" id="idCancha" data-val="true" class="form-control">
+                                    <option value="">Seleccione una cancha</option>
+                                    @foreach (var item in canchas)
+                                    {
+                                        if (item.Selected)
+                                        {
+                                            <option value="@item.Value" selected="selected">@item.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    }
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-6 control-label">Horario</label>
                             <div class="col-sm-6">
-                                @Html.DropDownList("idHorario", horarios, "Seleccione el horario", htmlAttributes: new { @class = "form-control" })
+                                <select name="idHorario" id="idHorario" data-val="true" class="form-control">
+                                    <option value="">Seleccione un horario</option>
+                                    @foreach (var item in horarios)
+                                    {
+                                        if (item.Selected)
+                                        {
+                                            <option value="@item.Value" selected="selected">@item.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    }
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -48,15 +76,33 @@
                             <tbody>
                                 @foreach (var insumo in Model.ListaInsumosEnLaReserva)
                                 {
-                                    <tr class="text-center">
-                                        <td>
-                                            @Html.HiddenFor(Model => insumo.idInsumo)
-                                            @insumo.insumo1 ($@insumo.precio)
-                                        </td>
-                                        <td>
-                                            <input type="number" name="cantidad" class="form-control txtCantInsumo" max="5" min="0" placeholder="@insumo.cantidad" style="width:70px;" />
-                                        </td>
-                                    </tr>
+                                    if (insumo.stock < 5)
+                                    {
+                                        <tr class="text-center">
+                                            <td>
+                                                @insumo.insumo1 ($@insumo.precio)
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <input type="hidden" name="idInsumo" id="idInsumo" value="@insumo.idInsumo" />
+                                                    <input  type="number" name="cantidad" class="form-control txtCantInsumo" max="@insumo.cantidad" min="0" placeholder="@insumo.cantidad" value="@insumo.cantidad" style="width:70px;" />
+                                                    <bold>No hay stock disponible para agregar más de este insumo</bold>
+                                                </div>                                      
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr class="text-center">
+                                            <td>
+                                                @insumo.insumo1 ($@insumo.precio)
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="idInsumo" id="idInsumo" value="@insumo.idInsumo" />
+                                                <input type="number" name="cantidad" class="form-control txtCantInsumo" max="5" min="0" placeholder="@insumo.cantidad" value="@insumo.cantidad" style="width:70px;" />
+                                            </td>
+                                        </tr>
+                                    }
                                 }
                             </tbody>
                         </table>
@@ -66,15 +112,16 @@
                                 <button class="btn btn-success" type="submit">Actualizar reserva</button>
                             </div>
                         </div>
-
+                        <div class="form-label-group text-danger" style="margin-left:10px">
+                            @ViewBag.ErrorModificarReserva
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-label-group text-danger" style="margin-left:10px">
-                @ViewBag.ErrorModificarReserva
-            </div>
         }
     </div>
-</div>    
+</div>
+
+<script src="~/Scripts/scriptReservas.js"></script>
 
 

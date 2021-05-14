@@ -16,7 +16,7 @@
 </div>
 
 <div class="row" style="transform: translateY(60px); color:white">
-    <div class="col-md-6">
+    <div class="col-lg-6">
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -32,7 +32,8 @@
                 @foreach (var listado in Model.TablaReservaVM)
                 {
                     <tr class="text-center">
-                        @{
+                        @if (listado.Estado == true)
+                        {
                             if (listado.ServicioAsador && listado.ServicioInstrumento)
                             {
                                 <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: Si)</td>
@@ -50,23 +51,27 @@
                             {
                                 <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: No)</td>
                             }
+                            <td class="text-center acciones" style="display:none">
+                                <div class="btn-group">
+                                    <a href="@Url.Action("ModificarReserva", "Reserva", new {@idReserva = listado.IdReserva})" class="btn btn-warning m-1">Modificar</a>
+                                    @using (Html.BeginForm("EliminarReserva", "Reserva", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
+                                    {
+                                        @Html.HiddenFor(Model => listado.IdReserva)
+                                        <button type="submit" class="btn btn-danger m-1">Eliminar</button>
+                                    }
+                                </div>
+                            </td>
                         }
-                        <td class="text-center acciones" style="display:none">
-                            <div class="btn-group">
-                                <a href="@Url.Action("ModificarReserva", "Reserva", new {@idReserva = listado.IdReserva})" class="btn btn-warning m-1">Modificar</a>
-                                <a href="@Url.Action("EliminarReserva", "Reserva", new {@idReserva = listado.IdReserva})" class="btn btn-danger m-1">Eliminar</a>
-                            </div>
-                        </td>
                     </tr>
-
                 }
             </tbody>
         </table>
         <div class="p-3 text-center">
             <button id="btnAccionesReserva" class="btn btn-info" onclick="botonAcciones()">Editar reservas</button>
+            @ViewBag.ErrorEliminarReserva
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-lg-6">
         <h4 class="p-1">Llene los siguientes campos para concretar una reserva:</h4>
         @using (Html.BeginForm("NuevaReserva", "Reserva", FormMethod.Post, new { onsubmit = "return validacionNuevaReserva();" }))
         {
@@ -74,49 +79,65 @@
                 <div class="col-lg-12">
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-sm-6 control-label">Fecha</label>
-                            <div class="col-sm-6">
+                            <label class="col-lg-12 control-label">Fecha</label>
+                            <div class="col-lg-12">
                                 @Html.TextBoxFor(Model => Model.NuevaReservaVM.Fecha, new { @type = "date", @class = "form-control datepicker" })
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-6 control-label">Cancha</label>
-                            <div class="col-sm-6">
+                            <label class="col-lg-12 control-label">Cancha</label>
+                            <div class="col-lg-12">
                                 @Html.DropDownList("idCancha", canchas, "Seleccione una cancha", htmlAttributes: new {@onchange="", @class = "form-control" })
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-6 control-label">Horario</label>
-                            <div class="col-sm-6">
+                            <label class="col-lg-12 control-label">Horario</label>
+                            <div class="col-lg-12">
                                 @Html.DropDownList("idHorario", horarios, "Seleccione el horario", htmlAttributes: new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-6">
+                            <div class="col-lg-12">
                                 <label class="control-label">Servicio asador</label>
                                 @Html.CheckBoxFor(Model => Model.NuevaReservaVM.ServicioAsador)
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-6">
+                            <div class="col-lg-12">
                                 <label class="control-label">Servicio instrumentos</label>
                                 @Html.CheckBoxFor(Model => Model.NuevaReservaVM.ServicioInstrumento)
                             </div>
                         </div>
 
-                        <table class="table table-bordered table-striped" id="tablaInsumos" style="width:60%; display:none">
+                        <table class="table table-bordered table-striped" id="tablaInsumos" style="display:none">
                             <tbody>
                                 @foreach (var insumo in Model.NuevaReservaVM.ListaInsumos)
                                 {
-                                    <tr class="text-center">
-                                        <td>
-                                            @Html.HiddenFor(Model => insumo.idInsumo)
-                                            @insumo.insumo1 ($@insumo.precio)
-                                        </td>
-                                        <td>
-                                            <input type="number" name="cantidad" class="form-control txtCantInsumo" max="5" min="0" placeholder="0" style="width:70px;"/>                                            
-                                        </td>
-                                    </tr>
+                                    if (insumo.stock > 5)
+                                    {
+                                        <tr class="text-center">
+                                            <td>
+                                                @Html.HiddenFor(Model => insumo.idInsumo)
+                                                @insumo.insumo1 ($@insumo.precio)
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="number" name="cantidad" class="txtCantInsumo" max="5" min="0" placeholder="0" style="width:70px;" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr class="text-center">
+                                            <td>
+                                                @Html.HiddenFor(Model => insumo.idInsumo)
+                                                @insumo.insumo1 ($@insumo.precio)
+                                            </td>
+                                            <td class="text-center">
+                                                <bold>No disponible en este momento</bold>
+                                                <input hidden type="number" name="cantidad" class="txtCantInsumo" max="0" min="0" placeholder="0" style="width:70px;" />
+                                            </td>
+                                        </tr>
+                                    }
                                 }
                             </tbody>
                         </table>

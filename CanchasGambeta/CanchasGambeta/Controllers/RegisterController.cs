@@ -23,7 +23,7 @@ namespace CanchasGambeta.Controllers
                 bool resultado = AccesoBD.AD_Usuario.nuevoUsuario(usuario);
                 if (resultado)
                 {
-                    using (Models.Canchas_GambetaEntities2 db = new Models.Canchas_GambetaEntities2())
+                    using (Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3())
                     {
                         var oUser = (from data in db.Usuario
                                      where data.email == Email.Trim() && data.password == Password.Trim()
@@ -32,10 +32,7 @@ namespace CanchasGambeta.Controllers
                         Session["User"] = oUser;
                         Session.Timeout = 10;
 
-                        if (oUser != null)
-                        {
-                            return RedirectToAction("IndexCliente", "Cliente");
-                        }
+                        if (oUser != null) return RedirectToAction("IndexCliente", "Cliente");
                         else
                         {
                             ViewBag.Error = "Error al crear su cuenta. Por favor intentelo de nuevo";
@@ -49,10 +46,7 @@ namespace CanchasGambeta.Controllers
                     return View(usuario);
                 }
             }
-            else
-            {
-                return View(usuario);
-            }
+            return View(usuario);
         }
     }
 }

@@ -14,10 +14,7 @@ namespace CanchasGambeta.Controllers
         public ActionResult NuevoEquipo()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             return View();
         }
@@ -26,10 +23,7 @@ namespace CanchasGambeta.Controllers
         public ActionResult NuevoEquipo(string nombreEquipo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             if (ModelState.IsValid)
             {
@@ -58,14 +52,12 @@ namespace CanchasGambeta.Controllers
         public ActionResult MiEquipo()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
             List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
             ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
+
             return View(listaEquipoMails);
         }
 
@@ -73,18 +65,12 @@ namespace CanchasGambeta.Controllers
         public ActionResult MiEquipo(string email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Equipo.agregarNuevoIntegrante(email);
-                if (resultado)
-                {
-                    return RedirectToAction("MiEquipo", "Equipo");
-                }
+                if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                 else
                 {
                     ViewBag.ErrorInsertIntegrante = "Ocurrió un error al cargar el nuevo integrante. Intenteló nuevamente.";
@@ -97,10 +83,7 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarIntegrante(Email email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             return View(email);
         }
@@ -109,24 +92,15 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarIntegrante(Email email, int idEmail)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             try
             {
                 if (ModelState.IsValid)
                 {
                     bool resultado = AccesoBD.AD_Equipo.modificarIntegrante(email);
-                    if (resultado)
-                    {
-                        return RedirectToAction("MiEquipo", "Equipo");
-                    }
-                    else
-                    {
-                        return View(email);
-                    }
+                    if (resultado) return RedirectToAction("MiEquipo", "Equipo");
+                    else return View(email);
                 }
             }
             catch(Exception ex)
@@ -141,10 +115,7 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarIntegrante(Email email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             return View(email);
         }
@@ -153,18 +124,12 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarIntegrante(Email email, int idEmail)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Equipo.eliminarIntegrante(email);
-                if (resultado)
-                {
-                    return RedirectToAction("MiEquipo", "Equipo");
-                }
+                if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                 else
                 {
                     ViewBag.ErrorEliminar = "Error al eliminar al integrante, por favor intentelo nuevamente.";
@@ -177,12 +142,10 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarEquipo(int idEquipo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(idEquipo);
+
             return View(equipo);
         }
 
@@ -190,10 +153,7 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarEquipo(Equipo equipo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             try
             {
@@ -202,7 +162,7 @@ namespace CanchasGambeta.Controllers
                     bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(equipo);
                     if (resultado)
                     {
-                        using (Models.Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3())
+                        using (Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3())
                         {
                             var oUser = (from data in db.Usuario
                                          where data.idUsuario == sesion.idUsuario
@@ -219,7 +179,6 @@ namespace CanchasGambeta.Controllers
                 ViewBag.ErrorEliminar = ex;
                 return View(equipo);
             }
-
             return View(equipo);
         }
     }

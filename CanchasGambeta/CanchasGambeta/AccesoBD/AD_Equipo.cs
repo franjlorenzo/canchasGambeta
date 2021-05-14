@@ -74,7 +74,6 @@ namespace CanchasGambeta.AccesoBD
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -123,7 +122,6 @@ namespace CanchasGambeta.AccesoBD
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -158,7 +156,6 @@ namespace CanchasGambeta.AccesoBD
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -205,7 +202,6 @@ namespace CanchasGambeta.AccesoBD
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -235,17 +231,10 @@ namespace CanchasGambeta.AccesoBD
                 comando.Connection = conexion;
 
                 SqlDataReader lector = comando.ExecuteReader();
-                if (lector != null)
-                {
-                    while (lector.Read())
-                    {
-                        idEquipo = int.Parse(lector["equipo"].ToString());
-                    }
-                }
+                if (lector != null) while (lector.Read()) idEquipo = int.Parse(lector["equipo"].ToString());
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -276,17 +265,10 @@ namespace CanchasGambeta.AccesoBD
                 comando.Connection = conexion;
 
                 SqlDataReader lector = comando.ExecuteReader();
-                if (lector != null)
-                {
-                    while (lector.Read())
-                    {
-                        nombreEquipo = lector["nombreEquipo"].ToString();
-                    }
-                }
+                if (lector != null) while (lector.Read()) nombreEquipo = lector["nombreEquipo"].ToString();
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -365,7 +347,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = "SELECT email from Email";
+                string consulta = "select email from Email";
                 comando.Parameters.Clear();
 
                 comando.CommandType = System.Data.CommandType.Text;
@@ -384,18 +366,10 @@ namespace CanchasGambeta.AccesoBD
                     }
                 }
 
-                foreach (string nombreEnLista in listaEmails)
-                {
-                    if (nombreEnLista == email)
-                    {
-                        resultado = true;
-                        return resultado;
-                    }
-                }
+                foreach (string nombreEnLista in listaEmails) if (nombreEnLista == email) return resultado = true;
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -403,6 +377,18 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return resultado;
+        }
+
+        public static bool existeIntegranteEnEquipo(string email)
+        {
+            bool existe = false;
+            
+            
+            
+            
+            
+            
+            return existe;
         }
 
         public static int obtenerIdEmail(string email)
@@ -424,13 +410,7 @@ namespace CanchasGambeta.AccesoBD
                 comando.Connection = conexion;
 
                 SqlDataReader lector = comando.ExecuteReader();
-                if (lector != null)
-                {
-                    while (lector.Read())
-                    {
-                        idEmail = int.Parse(lector["idEmail"].ToString());
-                    }
-                }
+                if (lector != null) while (lector.Read()) idEmail = int.Parse(lector["idEmail"].ToString());
             }
             catch (Exception)
             {
@@ -549,11 +529,11 @@ namespace CanchasGambeta.AccesoBD
 
                 lector.Close();
 
-                for (int i = 0; i < listaEmail.Count; i++)
+                foreach (var email in listaEmail)
                 {
                     string consultaEliminarEquipoDeEquipoMails = "delete from EquipoMails where email = @email and equipo = @idEquipo";
                     comando.Parameters.Clear();
-                    comando.Parameters.AddWithValue("@email", listaEmail[i].idEmail);
+                    comando.Parameters.AddWithValue("@email", email.idEmail);
                     comando.Parameters.AddWithValue("@idEquipo", equipo.idEquipo);
 
                     comando.CommandText = consultaEliminarEquipoDeEquipoMails;
@@ -561,11 +541,12 @@ namespace CanchasGambeta.AccesoBD
 
                     string consultaEliminarEmails = "delete from Email where idEmail = @idEmail";
                     comando.Parameters.Clear();
-                    comando.Parameters.AddWithValue("@idEmail", listaEmail[i].idEmail);
+                    comando.Parameters.AddWithValue("@idEmail", email.idEmail);
 
                     comando.CommandText = consultaEliminarEmails;
                     comando.ExecuteNonQuery();
                 }
+
 
                 string consultaEliminarEquipoDeUsuario = "update Usuario set equipo = NULL where idUsuario = @idUsuario";
                 comando.Parameters.Clear();
@@ -623,7 +604,6 @@ namespace CanchasGambeta.AccesoBD
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally

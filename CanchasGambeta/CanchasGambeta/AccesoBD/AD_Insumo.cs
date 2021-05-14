@@ -37,7 +37,6 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.insumo1 = lector["insumo"].ToString();
                         auxiliar.precio = Math.Round(decimal.Parse(lector["precio"].ToString()),2);
                         auxiliar.stock = int.Parse(lector["stock"].ToString());
-
                         lista.Add(auxiliar);
                     }
                 }
@@ -120,7 +119,6 @@ namespace CanchasGambeta.AccesoBD
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally

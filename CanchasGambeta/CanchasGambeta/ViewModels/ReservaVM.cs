@@ -36,6 +36,7 @@ namespace CanchasGambeta.ViewModels
         private string cancha;
         private bool servicioAsador;
         private bool servicioInstrumento;
+        private bool estado;
 
         public int IdReserva { get => idReserva; set => idReserva = value; }
         public int IdHorario { get => idHorario; set => idHorario = value; }
@@ -45,6 +46,7 @@ namespace CanchasGambeta.ViewModels
         public bool ServicioAsador { get => servicioAsador; set => servicioAsador = value; }
         public bool ServicioInstrumento { get => servicioInstrumento; set => servicioInstrumento = value; }
         public DateTime? Fecha { get => fecha; set => fecha = value; }
+        public bool Estado { get => estado; set => estado = value; }
     }
 
     public class ActualizarReservaVM

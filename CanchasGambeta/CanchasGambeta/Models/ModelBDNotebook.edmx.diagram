@@ -8,8 +8,8 @@
         <EntityTypeShape EntityType="Canchas_GambetaModel2.Cancha" Width="1.5" PointX="6" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel2.ElementoRoto" Width="1.5" PointX="5.625" PointY="8.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel2.Email" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel2.Equipo" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel2.EquipoMails" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel2.Equipo" Width="1.5" PointX="3.375" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel2.EquipoMails" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel2.Horario" Width="1.5" PointX="8.25" PointY="9" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel2.HorarioReservas" Width="1.5" PointX="10.5" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel2.Insumo" Width="1.5" PointX="8.25" PointY="0.75" IsExpanded="true" />
@@ -29,7 +29,11 @@
         <AssociationConnector Association="Canchas_GambetaModel2.FK_Pedido_Proveedor" ManuallyRouted="false" />
         <AssociationConnector Association="Canchas_GambetaModel2.FK_Reserva_Cliente" ManuallyRouted="false" />
         <AssociationConnector Association="Canchas_GambetaModel2.FK_ReservaInsumos_Reserva" ManuallyRouted="false" />
-        <AssociationConnector Association="Canchas_GambetaModel2.FK_Usuario_Rol" ManuallyRouted="false" />
+        <AssociationConnector Association="Canchas_GambetaModel2.FK_Usuario_Rol" ManuallyRouted="true" >
+          <ConnectorPoint PointX="5.25" PointY="3.3259978328339042" />
+          <ConnectorPoint PointX="6.75" PointY="3.3259978328339042" />
+          <ConnectorPoint PointX="6.75" PointY="4.25" />
+        </AssociationConnector>
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

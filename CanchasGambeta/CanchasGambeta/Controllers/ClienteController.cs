@@ -13,10 +13,7 @@ namespace CanchasGambeta.Controllers
         public ActionResult IndexCliente()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             return View();
         }
@@ -24,20 +21,15 @@ namespace CanchasGambeta.Controllers
         public ActionResult PerfilCliente()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
             return View();
         }
 
         public ActionResult ModificarCliente()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             Usuario usuario = AccesoBD.AD_Usuario.obtenerUsuario(sesion.idUsuario);
             return View(usuario);
@@ -47,10 +39,7 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarCliente(Usuario usuario)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null)
-            {
-                return RedirectToAction("LogIn", "LogIn");
-            }
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             try
             {
@@ -64,11 +53,7 @@ namespace CanchasGambeta.Controllers
 
                         return RedirectToAction("PerfilCliente", "Cliente");
                     }
-                    else
-                    {
-                        return View(usuario);
-                    }
-
+                    else return View(usuario);
                 }
             }
             catch (Exception ex)
