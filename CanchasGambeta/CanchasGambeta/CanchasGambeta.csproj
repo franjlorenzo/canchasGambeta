@@ -251,6 +251,8 @@
     <Content Include="Content\styles-login.css" />
     <Content Include="Content\styles-register.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\font.family-Catamaran.css" />
+    <Content Include="fonts\font.family-Lato.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -350,7 +352,6 @@
     <Content Include="Views\Equipo\MiEquipo.cshtml" />
     <Content Include="Views\Equipo\ModificarIntegrante.cshtml" />
     <Content Include="Views\Equipo\EliminarIntegrante.cshtml" />
-    <Content Include="Views\Equipo\EliminarEquipo.cshtml" />
     <Content Include="Views\Administrador\IndexAdministrador.cshtml" />
     <Content Include="Views\Administrador\PerfilAdministrador.cshtml" />
     <Content Include="Views\Administrador\ModificarPerfilAdministrador.cshtml" />
@@ -361,6 +362,7 @@
     <Content Include="Views\Administrador\MisPedidos.cshtml" />
     <Content Include="Views\Administrador\ModificarPedido.cshtml" />
     <Content Include="Views\Reserva\ModificarReserva.cshtml" />
+    <Content Include="Views\Equipo\EliminarEquipo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

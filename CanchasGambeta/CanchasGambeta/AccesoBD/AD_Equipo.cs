@@ -379,15 +379,53 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool existeIntegranteEnEquipo(string email)
+        public static bool existeIntegranteEnEquipo(string nuevoIntegranteEmail)
         {
             bool existe = false;
-            
-            
-            
-            
-            
-            
+            List<string> listaEmailsEnEquipo = new List<string>();
+            Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select e.email from Email e join EquipoMails eq on e.idEmail = eq.email
+                                    where equipo = @idEquipo";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idEquipo", sesion.equipo);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        string nuevo = lector["email"].ToString();
+                        listaEmailsEnEquipo.Add(nuevo);
+                    }
+                }
+
+                foreach (string nombreEnLista in listaEmailsEnEquipo)
+                {
+                    if (nombreEnLista == nuevoIntegranteEmail)
+                    {
+                        return existe = true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
             return existe;
         }
 
@@ -442,7 +480,10 @@ namespace CanchasGambeta.AccesoBD
 
                 conexion.Open();
                 comando.Connection = conexion;
-                comando.ExecuteNonQuery();
+                if (comando.ExecuteNonQuery() == 0)
+                {
+                    return resultado;
+                }
                 resultado = true;
             }
             catch (Exception)
@@ -494,7 +535,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool eliminarEquipo(Equipo equipo)
+        public static bool eliminarEquipo(int idEquipo)
         {
             bool resultado = false;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -508,7 +549,7 @@ namespace CanchasGambeta.AccesoBD
                                                  from Usuario u join Equipo e on u.equipo = e.idEquipo join EquipoMails eqma on e.idEquipo = eqma.equipo
                                                  where idEquipo = @idEquipo";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@idEquipo", equipo.idEquipo);
+                comando.Parameters.AddWithValue("@idEquipo", idEquipo);
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consultaObtenerEquipo;
@@ -534,17 +575,17 @@ namespace CanchasGambeta.AccesoBD
                     string consultaEliminarEquipoDeEquipoMails = "delete from EquipoMails where email = @email and equipo = @idEquipo";
                     comando.Parameters.Clear();
                     comando.Parameters.AddWithValue("@email", email.idEmail);
-                    comando.Parameters.AddWithValue("@idEquipo", equipo.idEquipo);
+                    comando.Parameters.AddWithValue("@idEquipo", idEquipo);
 
                     comando.CommandText = consultaEliminarEquipoDeEquipoMails;
                     comando.ExecuteNonQuery();
 
-                    string consultaEliminarEmails = "delete from Email where idEmail = @idEmail";
+                    /*string consultaEliminarEmails = "delete from Email where idEmail = @idEmail";
                     comando.Parameters.Clear();
                     comando.Parameters.AddWithValue("@idEmail", email.idEmail);
 
                     comando.CommandText = consultaEliminarEmails;
-                    comando.ExecuteNonQuery();
+                    comando.ExecuteNonQuery();*/
                 }
 
 
@@ -557,7 +598,7 @@ namespace CanchasGambeta.AccesoBD
 
                 string consultaEliminarEquipo = "delete from Equipo where idEquipo = @idEquipo";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@idEquipo", equipo.idEquipo);
+                comando.Parameters.AddWithValue("@idEquipo", idEquipo);
 
                 comando.CommandText = consultaEliminarEquipo;
                 comando.ExecuteNonQuery();

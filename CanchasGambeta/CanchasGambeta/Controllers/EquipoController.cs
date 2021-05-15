@@ -69,12 +69,29 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Equipo.agregarNuevoIntegrante(email);
-                if (resultado) return RedirectToAction("MiEquipo", "Equipo");
+                if(email == sesion.email)
+                {
+                    ViewBag.ErrorInsertIntegrante = "Usted ya forma parte del equipo.";
+                    int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
+                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
+                    return View(listaEquipoMails);
+                }
+                if (AccesoBD.AD_Equipo.existeIntegranteEnEquipo(email))
+                {
+                    ViewBag.ErrorInsertIntegrante = "El integrante que desea agregar ya existe en su equipo.";
+                    int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
+                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
+                    return View(listaEquipoMails);
+                }
                 else
                 {
-                    ViewBag.ErrorInsertIntegrante = "Ocurrió un error al cargar el nuevo integrante. Intenteló nuevamente.";
-                    return View();
+                    bool resultado = AccesoBD.AD_Equipo.agregarNuevoIntegrante(email);
+                    if (resultado) return RedirectToAction("MiEquipo", "Equipo");
+                    else
+                    {
+                        ViewBag.ErrorInsertIntegrante = "Ocurrió un error al cargar el nuevo integrante. Intenteló nuevamente.";
+                        return View();
+                    }
                 }
             }
             return View();
@@ -98,42 +115,50 @@ namespace CanchasGambeta.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    bool resultado = AccesoBD.AD_Equipo.modificarIntegrante(email);
-                    if (resultado) return RedirectToAction("MiEquipo", "Equipo");
-                    else return View(email);
+                    if (AccesoBD.AD_Equipo.existeIntegranteEnEquipo(email.email1))
+                    {
+                        ViewBag.ErrorModificar = "El integrante que desea modificar ya existe en su equipo.";
+                        return View(email);
+                    }
+                    else
+                    {
+                        bool resultado = AccesoBD.AD_Equipo.modificarIntegrante(email);
+                        if (resultado) return RedirectToAction("MiEquipo", "Equipo");
+                        else
+                        {
+                            ViewBag.ErrorModificar = "Ocurrió un error al modificar el integrante, por favor inténtelo de nuevo.";
+                            return View(email);
+                        }                    
+                    }
                 }
             }
             catch(Exception ex)
             {
                 ViewBag.ErrorModificar = ex.Message;
-                return View();
+                return View(email);
             }
 
             return View(email);
         }
 
-        public ActionResult EliminarIntegrante(Email email)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            return View(email);
-        }
-
         [HttpPost]
-        public ActionResult EliminarIntegrante(Email email, int idEmail)
+        public ActionResult EliminarIntegrante(int idEmail, string email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Equipo.eliminarIntegrante(email);
+                Email integrante = new Email(idEmail, email);
+                bool resultado = AccesoBD.AD_Equipo.eliminarIntegrante(integrante);
                 if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                 else
                 {
                     ViewBag.ErrorEliminar = "Error al eliminar al integrante, por favor intentelo nuevamente.";
-                    return RedirectToAction("MiEquipo", "Equipo");
+                    int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
+                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
+                    ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
+                    return View(listaEquipoMails);
                 }
             }
             return View();
@@ -150,7 +175,7 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult EliminarEquipo(Equipo equipo)
+        public ActionResult EliminarEquipo(Equipo equipo, int idEquipo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
@@ -159,7 +184,7 @@ namespace CanchasGambeta.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(equipo);
+                    bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(idEquipo);
                     if (resultado)
                     {
                         using (Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3())
@@ -174,12 +199,14 @@ namespace CanchasGambeta.Controllers
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ViewBag.ErrorEliminar = ex;
-                return View(equipo);
+                List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
+                ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
+                ViewBag.ErrorEliminar = "Ocurrió un error al eliminar su equipo, inténtelo nuevamente";
+                return View(listaEquipoMails);
             }
-            return View(equipo);
+            return View(idEquipo);
         }
     }
 }

@@ -40,8 +40,16 @@ const botones = () => {
     }
 }
 
-function confirmarEliminar() {
+function confirmarEliminarIntegrante() {
     var confirmar = confirm("¿Está seguro de que desea eliminar al integrante?");
+    if (confirmar) {
+        return true;
+    }
+    return false;
+}
+
+function confirmarEliminarEquipo() {
+    var confirmar = confirm("¿Está seguro de que desea eliminar su equipo?");
     if (confirmar) {
         return true;
     }

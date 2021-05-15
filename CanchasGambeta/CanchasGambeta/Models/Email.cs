@@ -22,6 +22,12 @@ namespace CanchasGambeta.Models
     
         public int idEmail { get; set; }
         public string email1 { get; set; }
+
+        public Email(int idEmail, string email)
+        {
+            this.idEmail = idEmail;
+            this.email1 = email;
+        }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EquipoMails> EquipoMails { get; set; }
