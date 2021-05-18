@@ -15,6 +15,7 @@ namespace CanchasGambeta.ViewModels
         private string empresa;
         private DateTime fecha;
         private bool estado;
+        private List<TablaPedido> pedidosPendientes;
 
         public int IdPedido { get => idPedido; set => idPedido = value; }
         public string DescripcionPedido { get => descripcionPedido; set => descripcionPedido = value; }
@@ -24,6 +25,7 @@ namespace CanchasGambeta.ViewModels
         public DateTime Fecha { get => fecha; set => fecha = value; }
         public string Empresa { get => empresa; set => empresa = value; }
         public bool Estado { get => estado; set => estado = value; }
+        public List<TablaPedido> PedidosPendientes { get => pedidosPendientes; set => pedidosPendientes = value; }
     }
 
     public class NuevoPedido

@@ -164,18 +164,8 @@ namespace CanchasGambeta.Controllers
             return View();
         }
 
-        public ActionResult EliminarEquipo(int idEquipo)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(idEquipo);
-
-            return View(equipo);
-        }
-
         [HttpPost]
-        public ActionResult EliminarEquipo(Equipo equipo, int idEquipo)
+        public ActionResult EliminarEquipo(int idEquipo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");

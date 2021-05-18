@@ -43,6 +43,7 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.Telefono = lector["telefono"].ToString();
                         auxiliar.Empresa = lector["empresa"].ToString();
                         auxiliar.Estado = bool.Parse(lector["estado"].ToString());
+                        auxiliar.PedidosPendientes = obtenerPedidosPendientes();
                         lista.Add(auxiliar);
                     }
                 }
@@ -269,6 +270,44 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return resultado;
+        }
+
+        internal static List<TablaPedido> obtenerPedidosPendientes()
+        {
+            List<TablaPedido> lista = new List<TablaPedido>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idPedido from Pedido where estado = 1";
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        TablaPedido auxiliar = new TablaPedido();
+                        auxiliar.IdPedido = int.Parse(lector["idPedido"].ToString());
+                        lista.Add(auxiliar);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return lista;
         }
     }
 }

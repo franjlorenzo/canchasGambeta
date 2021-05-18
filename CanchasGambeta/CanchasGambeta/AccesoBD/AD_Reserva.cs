@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CanchasGambeta.AccesoBD
 {
@@ -90,7 +91,7 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
-        public static bool nuevaReserva(NuevaReservaVM reservaVM)
+        public static bool nuevaReserva(NuevaReservaConDropDownList reservaVM)
         {
             bool resultado = false;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -103,11 +104,11 @@ namespace CanchasGambeta.AccesoBD
                                     values (@cliente, @cancha, @horario, @fecha, @servicioAsador, @servicioInstrumentos, @estado)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@cliente", sesion.idUsuario);
-                comando.Parameters.AddWithValue("@cancha", reservaVM.IdCancha);
-                comando.Parameters.AddWithValue("@horario", reservaVM.IdHorario);
-                comando.Parameters.AddWithValue("@fecha", reservaVM.Fecha);
-                comando.Parameters.AddWithValue("@servicioAsador", reservaVM.ServicioAsador);
-                comando.Parameters.AddWithValue("@servicioInstrumentos", reservaVM.ServicioInstrumento);
+                comando.Parameters.AddWithValue("@cancha", reservaVM.idCancha);
+                comando.Parameters.AddWithValue("@horario", reservaVM.idHorario);
+                comando.Parameters.AddWithValue("@fecha", reservaVM.fecha);
+                comando.Parameters.AddWithValue("@servicioAsador", reservaVM.servicioAsador);
+                comando.Parameters.AddWithValue("@servicioInstrumentos", reservaVM.servicioInstrumento);
                 comando.Parameters.AddWithValue("@estado", true);
 
                 comando.CommandType = System.Data.CommandType.Text;
@@ -220,7 +221,7 @@ namespace CanchasGambeta.AccesoBD
             return idReserva;
         }
 
-        public static bool insertReservaInsumo(NuevaReservaVM reservaVM, int idReserva, List<int> insumosSeleccionados)
+        public static bool insertReservaInsumo(NuevaReservaConDropDownList reservaVM, int idReserva, List<int> insumosSeleccionados)
         {
             bool updateStock = false;
             bool resultado = false;
@@ -560,6 +561,63 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return resultado;
+        }
+
+        internal static List<SelectListItem> obtenerHorariosCancha(DateTime fecha, int idCancha)
+        {
+            List<Horario> listaHorario = new List<Horario>();
+            List<SelectListItem> listaHorariosCancha = new List<SelectListItem>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idHorario, horario
+                                    from Horario h
+                                    where idHorario not in (select horario
+						                                    from Reserva
+						                                    where cancha = @idCancha and fecha = @fecha)";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@fecha", fecha);
+                comando.Parameters.AddWithValue("@idCancha", idCancha);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        Horario horarioDisponible = new Horario();
+                        horarioDisponible.idHorario = int.Parse(lector["idHorario"].ToString());
+                        horarioDisponible.horario1 = lector["horario"].ToString();
+                        listaHorario.Add(horarioDisponible);
+                    }
+
+                    listaHorariosCancha = listaHorario.ConvertAll(d =>
+                    {
+                        return new SelectListItem()
+                        {
+                            Text = d.horario1,
+                            Value = d.idHorario.ToString(),
+                            Selected = false
+                        };
+                    });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return listaHorariosCancha;
         }
     }
 }

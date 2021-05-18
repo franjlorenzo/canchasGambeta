@@ -45,9 +45,26 @@ function confirmacionEliminar() {
     return false;
 }
 
-/*function buscarHorarios() {
-    console.log("prueba");
+/*function actualizarFechaHidden() {
+    var inputFecha = document.getElementById("idFechaReserva").value;
+    var fechaVisible = new Date(inputFecha.value);
+    fechaVisible.setMinutes(fechaVisible.getMinutes() + fechaVisible.getTimezoneOffset());
+    fechaVisible = fechaVisible.getTime();
+
+    let dia = String(fechaVisible.getDate());
+    let mes = String(fechaVisible.getMonth() + 1);
+    let anio = String(fechaVisible.getFullYear());
+
+    if (mes.length < 2) mes = '0' + mes;
+    if (dia.length < 2) dia = '0' + dia;
+
+    document.getElementById("fechaReservaElegida").value = `${dia}/${mes}/${anio}`;
 }*/
+
+var idHorario = document.getElementById("NuevaReservaConDropDownList_Horarios");
+if (idHorario.length > 1) {
+    idHorario.removeAttribute("disabled");
+}
 
 var fechaNueva = document.getElementById("Fecha");
 fechaNueva.removeAttribute("data-val-required");

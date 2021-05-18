@@ -16,35 +16,94 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            List<Cancha> canchas = AccesoBD.AD_Reserva.obtenerCanchas();
-            List<SelectListItem> listaCanchas = canchas.ConvertAll(d =>
+            Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+            NuevaReservaConDropDownList modelo = new NuevaReservaConDropDownList();
+            foreach (var cancha in db.Cancha)
             {
-                return new SelectListItem()
-                {
-                    Text = d.tipoCancha,
-                    Value = d.idCancha.ToString(),
-                    Selected = false
-                };
-            });
-
-            List<Horario> horarios = AccesoBD.AD_Reserva.obtenerHorarios();
-            List<SelectListItem> listaHorarios = horarios.ConvertAll(d =>
-            {
-                return new SelectListItem()
-                {
-                    Text = d.horario1,
-                    Value = d.idHorario.ToString(),
-                    Selected = false
-                };
-            });
-
-            ViewBag.canchas = listaCanchas;
-            ViewBag.horarios = listaHorarios;
-            return View( new VistaReserva {NuevaReservaVM = new NuevaReservaVM(), TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente()});
+                modelo.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
+            }
+            DateTime fechaNull = new DateTime(0001, 01, 01);
+            ViewBag.fechaReserva = fechaNull;
+            return View(new VistaReserva { NuevaReservaConDropDownList = modelo, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
         }
 
-        [HttpPost]
-        public ActionResult NuevaReserva(NuevaReservaVM nuevaReserva, List<int> cantidad)
+        [HttpPost]       
+        public ActionResult MisReservas(NuevaReservaConDropDownList nuevaReserva, List<int> cantidad)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            DateTime fechaNull = new DateTime(0001, 01, 01);
+            DateTime fechaReserva = DateTime.Parse(Request["fechaReservaElegida"]);
+            bool fechaSeleccionada = false;
+
+            try
+            {
+                if (nuevaReserva.fecha.Equals(fechaNull) && fechaReserva.Equals(fechaNull))
+                {
+
+                }
+                if (fechaSeleccionada) nuevaReserva.fecha = DateTime.Parse(Request["fecha"]);               
+                if (!fechaReserva.Equals(fechaNull) && fechaReserva == nuevaReserva.fecha)
+                {
+                    nuevaReserva.fecha = fechaReserva;
+                    nuevaReserva.servicioAsador = bool.Parse(Request["NuevaReservaVM.ServicioAsador"].Contains("true").ToString());
+                    nuevaReserva.servicioInstrumento = bool.Parse(Request.Form["NuevaReservaVM.ServicioInstrumento"].Contains("true").ToString());
+
+                    if (ModelState.IsValid)
+                    {
+                        bool insertExitoso = AccesoBD.AD_Reserva.nuevaReserva(nuevaReserva);
+                        if (insertExitoso)
+                        {
+                            bool insertReservaInsumo = AccesoBD.AD_Reserva.insertReservaInsumo(nuevaReserva, AccesoBD.AD_Reserva.obtenerReservaPorAtributos(nuevaReserva.idCancha, nuevaReserva.idHorario, nuevaReserva.fecha), cantidad);
+                            if (insertReservaInsumo) return RedirectToAction("MisReservas", "Reserva");
+                        }
+                        else
+                        {
+                            ViewBag.ErrorInsertReserva = "Ocurrió un error al registrar la reserva. Intenteló nuevamente.";
+                            return RedirectToAction("MisReservas", "Reserva");
+                        }
+                    }
+                }
+                else
+                {
+                    fechaSeleccionada = true;
+                    fechaReserva = nuevaReserva.fecha;
+                    ViewBag.fechaReserva = fechaReserva;
+                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    foreach (var cancha in db.Cancha)
+                    {
+                        nuevaReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
+                    }
+                    foreach (var item in nuevaReserva.Canchas)
+                    {
+                        if (item.Value.Equals(nuevaReserva.idCancha.ToString()))
+                        {
+                            item.Selected = true;
+                            break;
+                        }
+                    }
+                    nuevaReserva.Horarios = AccesoBD.AD_Reserva.obtenerHorariosCancha(nuevaReserva.fecha, nuevaReserva.idCancha);
+                    return View(new VistaReserva { NuevaReservaConDropDownList = nuevaReserva, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
+                }
+            }
+            catch (Exception)
+            {
+                ViewBag.fechaReserva = fechaNull;
+                ViewBag.SeleccionarFecha = "Debe seleccionar una fecha primero.";
+                Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                NuevaReservaConDropDownList modelo = new NuevaReservaConDropDownList();
+                foreach (var cancha in db.Cancha)
+                {
+                    modelo.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
+                }
+                return View(new VistaReserva { NuevaReservaConDropDownList = modelo, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
+            }                   
+            return View();
+        }
+        
+        
+        
+        /*public ActionResult NuevaReserva(NuevaReservaVM nuevaReserva, List<int> cantidad)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
@@ -68,7 +127,7 @@ namespace CanchasGambeta.Controllers
                 }
             }
             return View(nuevaReserva);
-        }
+        }*/
 
         public ActionResult ModificarReserva(int idReserva)
         {

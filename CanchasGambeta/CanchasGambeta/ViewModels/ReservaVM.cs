@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CanchasGambeta.ViewModels
 {
@@ -72,9 +73,33 @@ namespace CanchasGambeta.ViewModels
         public List<Insumo> ListaInsumosEnLaReserva { get => listaInsumosEnLaReserva; set => listaInsumosEnLaReserva = value; }
     }
 
+    public class NuevaReservaConDropDownList
+    {
+        public int idReserva { get; set; }
+        public int idCancha { get; set; }
+        public int idHorario { get; set; }
+        public DateTime fecha { get; set; }
+        public bool servicioAsador { get; set; }
+        public bool servicioInstrumento { get; set; }
+
+        public List<Insumo> listaInsumos = AccesoBD.AD_Insumo.obtenerInsumos();
+        public List<Insumo> ListaInsumos { get => listaInsumos; set => listaInsumos = value; }
+
+        public List<SelectListItem> Canchas { get; set; }
+        public List<SelectListItem> Horarios { get; set; }
+
+        public NuevaReservaConDropDownList()
+        {
+            this.Canchas = new List<SelectListItem>();
+            this.Horarios = new List<SelectListItem>();
+            this.fecha = new DateTime();
+        }
+    }
+
     public class VistaReserva
     {
         public NuevaReservaVM NuevaReservaVM { get; set; }
         public List<TablaReservaVM> TablaReservaVM { get; set; }
+        public NuevaReservaConDropDownList NuevaReservaConDropDownList { get; set; }
     }
 }

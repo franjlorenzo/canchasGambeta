@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <div>
                                 <label class="col-sm-6 control-label">Proveedores</label>
-                                @Html.DropDownList("idProveedor", proveedores, "Seleccione un proveedor", htmlAttributes: new { @onchange = "", @class = "form-control" })
+                                @Html.DropDownList("idProveedor", proveedores, "Seleccione un proveedor", htmlAttributes: new { @class = "form-control" })
                             </div>
                             <div>
                                 <label class="col-sm-6 control-label">Descripción</label>
@@ -48,72 +48,107 @@
 <div class="container">
     <div class="row" style="transform: translateY(60px); color:white">
         <div class="col-md-12 pt-3">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th class="text-center">
-                            Descripción
-                        </th>
-                        <th class="text-center">
-                            Fecha
-                        </th>
-                        <th class="text-center">
-                            Proveedor
-                        </th>
-                        <th class="text-center">
-                            Teléfono
-                        </th>
-                        <th class="text-center">
-                            Estado
-                        </th>
-                        <th class="text-center acciones" style="display:none">
-                            Acciones
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var listado in Model.TablaPedido)
-                    {
-                        if (listado.Estado == true)
-                        {
-                            <tr class="text-center">
+            @foreach (var item in Model.TablaPedido)
+            {
+                if (item.PedidosPendientes.Count == 0)
+                {
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    Pedidos
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
                                 <td class="text-center">
-                                    @listado.DescripcionPedido
-                                </td>
-                                <td class="text-center">
-                                    @listado.Fecha
-                                </td>
-                                <td class="text-center">
-                                    @listado.NombreProveedor - Empresa: @listado.Empresa
-                                </td>
-                                <td class="text-center">
-                                    @listado.Telefono
-                                </td>
-                                <td class="text-center">
-                                    Pendiente
-                                </td>
-                                <td class="text-center acciones" style="display:none">
-                                    <div class="btn-group">
-                                        @using (Html.BeginForm("ConcretarPedido", "Administrador", FormMethod.Post))
-                                        {
-                                            @Html.HiddenFor(Model => listado.IdPedido)
-                                            <button type="submit" class="btn btn-success m-1">Concretar</button>
-                                        }
-
-                                        <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1">Modificar</a>
-
-                                        @using (Html.BeginForm("EliminarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
-                                        {
-                                            @Html.HiddenFor(Model => listado.IdPedido)
-                                            <button type="submit" class="btn btn-danger m-1">Eliminar</button>
-                                        }
-                                    </div>
+                                    No hay pedidos pendientes
                                 </td>
                             </tr>
-                        }
-                    }
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                    break;
+                }
+                else
+                {
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    Descripción
+                                </th>
+                                <th class="text-center">
+                                    Fecha
+                                </th>
+                                <th class="text-center">
+                                    Proveedor
+                                </th>
+                                <th class="text-center">
+                                    Teléfono
+                                </th>
+                                <th class="text-center">
+                                    Estado
+                                </th>
+                                <th class="text-center acciones" style="display:none">
+                                    Acciones
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var listado in Model.TablaPedido)
+                            {
+                                if (listado.Estado == true)
+                                {
+                                    <tr class="text-center">
+                                        <td class="text-center">
+                                            @listado.DescripcionPedido
+                                        </td>
+                                        <td class="text-center">
+                                            @listado.Fecha
+                                        </td>
+                                        <td class="text-center">
+                                            @listado.NombreProveedor - Empresa: @listado.Empresa
+                                        </td>
+                                        <td class="text-center">
+                                            @listado.Telefono
+                                        </td>
+                                        <td class="text-center">
+                                            Pendiente
+                                        </td>
+                                        <td class="text-center acciones" style="display:none">
+                                            <div class="btn-group">
+                                                @using (Html.BeginForm("ConcretarPedido", "Administrador", FormMethod.Post))
+                                                {
+                                                    @Html.HiddenFor(Model => listado.IdPedido)
+                                                    <button type="submit" class="btn btn-success m-1">Concretar</button>
+                                                }
+
+                                                @if (listado.Fecha > DateTime.Today.AddDays(-2))
+                                                {
+                                                    <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1">Modificar</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1 disabled">Modificar</a>
+                                                }
+
+                                                @using (Html.BeginForm("EliminarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
+                                                {
+                                                    @Html.HiddenFor(Model => listado.IdPedido)
+                                                    <button type="submit" class="btn btn-danger m-1">Eliminar</button>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <small>*Nota: los pedidos que hayan sido registrados hace dos(2) días no pueden ser modificados por cuestiones de logistica.</small>
+                    break;
+                }
+            }
 
             <table class="table table-bordered table-striped" id="tablaPedidosConcretados" style="display:none">
                 <thead>
@@ -161,8 +196,12 @@
                     }
                 </tbody>
             </table>
+            <br />
             <div class="text-center btn-group">
-                <button class="btn btn-info m-1" onclick="mostrarBotones()">Modificar pedidos</button>
+                @if (Model.TablaPedido.Count() != 0)
+                {
+                    <button class="btn btn-info m-1" onclick="mostrarBotones()">Modificar pedidos</button>
+                }
                 @foreach (var listado in Model.TablaPedido)
                 {
                     if (listado.Estado == false)

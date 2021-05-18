@@ -3,6 +3,7 @@
     ViewBag.Title = "MisReservas";
     List<SelectListItem> canchas = (List<SelectListItem>)ViewBag.canchas;
     List<SelectListItem> horarios = (List<SelectListItem>)ViewBag.horarios;
+    DateTime fechaNull = new DateTime(0001, 01, 01);
 }
 
 <div class="container">
@@ -17,63 +18,89 @@
 
 <div class="row" style="transform: translateY(60px); color:white">
     <div class="col-lg-6">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th class="text-center">
-                        Reserva
-                    </th>
-                    <th class="text-center acciones" style="display:none">
-                        Acciones
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var listado in Model.TablaReservaVM)
-                {
-                    <tr class="text-center">
-                        @if (listado.Estado == true)
-                        {
-                            if (listado.ServicioAsador && listado.ServicioInstrumento)
-                            {
-                                <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: Si)</td>
-                            }
-                            else if (listado.ServicioAsador && !listado.ServicioInstrumento)
-                            {
-                                <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: No)</td>
-                            }
-                            else if (!listado.ServicioAsador && listado.ServicioInstrumento)
-                            {
-                                <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: Si)</td>
-
-                            }
-                            else
-                            {
-                                <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: No)</td>
-                            }
-                            <td class="text-center acciones" style="display:none">
-                                <div class="btn-group">
-                                    <a href="@Url.Action("ModificarReserva", "Reserva", new {@idReserva = listado.IdReserva})" class="btn btn-warning m-1">Modificar</a>
-                                    @using (Html.BeginForm("EliminarReserva", "Reserva", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
-                                    {
-                                        @Html.HiddenFor(Model => listado.IdReserva)
-                                        <button type="submit" class="btn btn-danger m-1">Eliminar</button>
-                                    }
-                                </div>
-                            </td>
-                        }
+        @if (Model.TablaReservaVM.Count() != 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Reserva
+                        </th>
+                        <th class="text-center acciones" style="display:none">
+                            Acciones
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.TablaReservaVM)
+                    {
+                        <tr class="text-center">
+                            @if (listado.Estado == true)
+                            {
+                                if (listado.ServicioAsador && listado.ServicioInstrumento)
+                                {
+                                    <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: Si)</td>
+                                }
+                                else if (listado.ServicioAsador && !listado.ServicioInstrumento)
+                                {
+                                    <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: No)</td>
+                                }
+                                else if (!listado.ServicioAsador && listado.ServicioInstrumento)
+                                {
+                                    <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: Si)</td>
+
+                                }
+                                else
+                                {
+                                    <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: No)</td>
+                                }
+                                <td class="text-center acciones" style="display:none">
+                                    <div class="btn-group">
+                                        <a href="@Url.Action("ModificarReserva", "Reserva", new {@idReserva = listado.IdReserva})" class="btn btn-warning m-1">Modificar</a>
+                                        @using (Html.BeginForm("EliminarReserva", "Reserva", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
+                                        {
+                                            @Html.HiddenFor(Model => listado.IdReserva)
+                                            <button type="submit" class="btn btn-danger m-1">Eliminar</button>
+                                        }
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Reservas
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No hay reservas registradas
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+
         <div class="p-3 text-center">
-            <button id="btnAccionesReserva" class="btn btn-info" onclick="botonAcciones()">Editar reservas</button>
+            @if (Model.TablaReservaVM.Count != 0)
+            {
+                <button id="btnAccionesReserva" class="btn btn-info" onclick="botonAcciones()">Editar reservas</button>
+            }
             @ViewBag.ErrorEliminarReserva
         </div>
     </div>
     <div class="col-lg-6">
         <h4 class="p-1">Llene los siguientes campos para concretar una reserva:</h4>
-        @using (Html.BeginForm("NuevaReserva", "Reserva", FormMethod.Post, new { onsubmit = "return validacionNuevaReserva();" }))
+        @using (Html.BeginForm("MisReservas", "Reserva", FormMethod.Post, new { onsubmit = "return validacionNuevaReserva();", @id = "idNuevaReserva" }))
         {
             <div class="row">
                 <div class="col-lg-12">
@@ -81,37 +108,68 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label">Fecha</label>
                             <div class="col-lg-12">
-                                @Html.TextBoxFor(Model => Model.NuevaReservaVM.Fecha, new { @type = "date", @class = "form-control datepicker" })
+                                @if (Model.NuevaReservaConDropDownList.fecha.Equals(fechaNull) && ViewBag.fechaReserva.Equals(fechaNull))
+                                {
+                                    <input hidden type="datetime" id="fechaReservaElegida" name="fechaReservaElegida" value="@ViewBag.fechaReserva" class="form-control datepicker" />
+                                    <input type="date" id="idFechaReserva" name="fecha" value="@ViewBag.fechaReserva" class="form-control datepicker" />
+                                }
+
+                                else
+                                {
+                                    <input hidden type="datetime" id="fechaReservaElegida" name="fechaReservaElegida" value="@ViewBag.fechaReserva" class="form-control datepicker" />
+                                    <input type="date" id="idFechaReserva" name="fecha" value="@ViewBag.fechaReserva" class="form-control datepicker" />
+                                }
+
                             </div>
+                        </div>
+                        <div class="form-label-group text-danger" style="margin-left:10px">
+                            @ViewBag.SeleccionarFecha
                         </div>
                         <div class="form-group">
                             <label class="col-lg-12 control-label">Cancha</label>
                             <div class="col-lg-12">
-                                @Html.DropDownList("idCancha", canchas, "Seleccione una cancha", htmlAttributes: new {@onchange="", @class = "form-control" })
+                                @{
+                                    int cantReservas = 0;
+                                    if (Model.TablaReservaVM.Count() != 0) { cantReservas = Model.TablaReservaVM.Count() + 1; }
+                                }                               
+                                <select name="idCancha" id="idCancha" data-val="true" class="form-control" onchange="document.getElementById('idNuevaReserva').submit()";>
+                                    <option value="">Seleccione una cancha</option>
+                                    @foreach (var item in Model.NuevaReservaConDropDownList.Canchas)
+                                    {
+                                        if (item.Selected)
+                                        {
+                                            <option value="@item.Value" selected="selected">@item.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    }
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-12 control-label">Horario</label>
                             <div class="col-lg-12">
-                                @Html.DropDownList("idHorario", horarios, "Seleccione el horario", htmlAttributes: new { @class = "form-control" })
+                                @Html.DropDownListFor(m => m.NuevaReservaConDropDownList.Horarios, Model.NuevaReservaConDropDownList.Horarios, "Seleccione el horario", htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-12">
                                 <label class="control-label">Servicio asador</label>
-                                @Html.CheckBoxFor(Model => Model.NuevaReservaVM.ServicioAsador)
+                                @Html.CheckBoxFor(Model => Model.NuevaReservaConDropDownList.servicioAsador)
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-12">
                                 <label class="control-label">Servicio instrumentos</label>
-                                @Html.CheckBoxFor(Model => Model.NuevaReservaVM.ServicioInstrumento)
+                                @Html.CheckBoxFor(Model => Model.NuevaReservaConDropDownList.servicioInstrumento)
                             </div>
                         </div>
 
                         <table class="table table-bordered table-striped" id="tablaInsumos" style="display:none">
                             <tbody>
-                                @foreach (var insumo in Model.NuevaReservaVM.ListaInsumos)
+                                @foreach (var insumo in Model.NuevaReservaConDropDownList.ListaInsumos)
                                 {
                                     if (insumo.stock > 5)
                                     {
@@ -154,10 +212,12 @@
             </div>
             <div class="form-label-group text-danger" style="margin-left:10px">
                 @ViewBag.ErrorInsertReserva
+                @ViewBag.Error
             </div>
         }
     </div>
 </div>
 
 <script src="~/Scripts/scriptReservas.js"></script>
+
 
