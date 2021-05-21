@@ -76,7 +76,7 @@ namespace CanchasGambeta.Controllers
                     List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
                     return View(listaEquipoMails);
                 }
-                if (AccesoBD.AD_Equipo.existeIntegranteEnEquipo(email))
+                else if (AccesoBD.AD_Equipo.existeIntegranteEnEquipo(email))
                 {
                     ViewBag.ErrorInsertIntegrante = "El integrante que desea agregar ya existe en su equipo.";
                     int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
@@ -90,23 +90,29 @@ namespace CanchasGambeta.Controllers
                     else
                     {
                         ViewBag.ErrorInsertIntegrante = "Ocurrió un error al cargar el nuevo integrante. Intenteló nuevamente.";
-                        return View();
+                        int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
+                        List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
+                        return View(listaEquipoMails);
                     }
                 }
             }
             return View();
         }
 
-        public ActionResult ModificarIntegrante(Email email)
+        public ActionResult ModificarIntegrante()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            return View(email);
+            int idEmail = int.Parse(Request["idEmail"]);
+            string email = Request["email1"];
+            Email integrante = new Email(idEmail, email);
+
+            return View(integrante);
         }
 
        [HttpPost]
-        public ActionResult ModificarIntegrante(Email email, int idEmail)
+        public ActionResult ModificarIntegrante(Email email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
@@ -154,11 +160,8 @@ namespace CanchasGambeta.Controllers
                 if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                 else
                 {
-                    ViewBag.ErrorEliminar = "Error al eliminar al integrante, por favor intentelo nuevamente.";
-                    int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
-                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
-                    ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
-                    return View(listaEquipoMails);
+                    ViewBag.ErrorEliminarIntegrante = "Error al eliminar al integrante, por favor intentelo nuevamente.";
+                    return RedirectToAction("MiEquipo", "Equipo");
                 }
             }
             return View();

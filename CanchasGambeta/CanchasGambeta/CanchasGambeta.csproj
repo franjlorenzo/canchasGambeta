@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="AccesoBD\AD_Administrador.cs" />
     <Compile Include="AccesoBD\AD_Equipo.cs" />
+    <Compile Include="AccesoBD\AD_Informe.cs" />
     <Compile Include="AccesoBD\AD_Insumo.cs" />
     <Compile Include="AccesoBD\AD_Reserva.cs" />
     <Compile Include="AccesoBD\AD_Usuario.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\EquipoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InformeController.cs" />
     <Compile Include="Controllers\InsumoController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
@@ -237,8 +239,11 @@
       <DependentUpon>ModelBDNotebook.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\CanchasMasReservadasVM.cs" />
+    <Compile Include="ViewModels\ClientesConMasReservas.cs" />
     <Compile Include="ViewModels\MailEquipoVM.cs" />
     <Compile Include="ViewModels\ProveedorPedidoVM.cs" />
+    <Compile Include="ViewModels\ReservasActivasYCanceladasVM.cs" />
     <Compile Include="ViewModels\ReservaVM.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -351,18 +356,18 @@
     <Content Include="Views\Equipo\NuevoEquipo.cshtml" />
     <Content Include="Views\Equipo\MiEquipo.cshtml" />
     <Content Include="Views\Equipo\ModificarIntegrante.cshtml" />
-    <Content Include="Views\Equipo\EliminarIntegrante.cshtml" />
     <Content Include="Views\Administrador\IndexAdministrador.cshtml" />
     <Content Include="Views\Administrador\PerfilAdministrador.cshtml" />
     <Content Include="Views\Administrador\ModificarPerfilAdministrador.cshtml" />
     <Content Include="Views\Insumo\MisInsumos.cshtml" />
     <Content Include="Views\Insumo\ModificarInsumo.cshtml" />
-    <Content Include="Views\Insumo\EliminarInsumo.cshtml" />
     <Content Include="Views\Reserva\MisReservas.cshtml" />
     <Content Include="Views\Administrador\MisPedidos.cshtml" />
     <Content Include="Views\Administrador\ModificarPedido.cshtml" />
     <Content Include="Views\Reserva\ModificarReserva.cshtml" />
-    <Content Include="Views\Equipo\EliminarEquipo.cshtml" />
+    <Content Include="Views\Informe\ReservasActivasYCandeladas.cshtml" />
+    <Content Include="Views\Informe\CanchasMasUtilizadas.cshtml" />
+    <Content Include="Views\Informe\ClientesConMasReservas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

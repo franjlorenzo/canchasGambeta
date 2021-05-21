@@ -1,0 +1,108 @@
+﻿@model CanchasGambeta.ViewModels.VistaReservasActivasYCanceladas
+@{
+    ViewBag.Title = "ReservasActivasYCandeladas";
+}
+
+    <div class="row" style="transform: translateY(70px); color:white">
+        <div class="col-md-6 text-center">
+            <h3>Reservas activas</h3>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Cliente
+                        </th>
+                        <th class="text-center">
+                            Fecha
+                        </th>
+                        <th class="text-center">
+                            Cancha
+                        </th>
+                        <th class="text-center">
+                            Horario
+                        </th>
+                        <th class="text-center">
+                            Servicio asador
+                        </th>
+                        <th class="text-center">
+                            Servicio instrumentos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.listaReservasActivas)
+                    {
+                    <tr class="text-center">
+                        <td>
+                            @listado.NombreCompleto
+                        </td>
+                        <td>
+                            @listado.Fecha
+                        </td>
+                        <td>
+                            @listado.TipoCancha
+                        </td>
+                        <td>
+                            @listado.Horario
+                        </td>
+                        @if (listado.ServicioAsador == true) {<td>Si</td>}
+                        else {<td>No</td>}
+                        @if (listado.ServicioInstrumento == true) {<td>Si</td>}
+                        else {<td>No</td>}
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6 text-center">
+            <h3>Reservas canceladas</h3>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Cliente
+                        </th>
+                        <th class="text-center">
+                            Fecha
+                        </th>
+                        <th class="text-center">
+                            Cancha
+                        </th>
+                        <th class="text-center">
+                            Horario
+                        </th>
+                        <th class="text-center">
+                            Servicio asador
+                        </th>
+                        <th class="text-center">
+                            Servicio instrumentos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.listaReservasCanceladas)
+                    {
+                        <tr class="text-center">
+                            <td>
+                                @listado.NombreCompleto
+                            </td>
+                            <td>
+                                @listado.Fecha
+                            </td>
+                            <td>
+                                @listado.TipoCancha
+                            </td>
+                            <td>
+                                @listado.Horario
+                            </td>
+                            @if (listado.ServicioAsador == true) {<td>Si</td>}
+                            else {<td>No</td>}
+                            @if (listado.ServicioInstrumento == true) {<td>Si</td>}
+                            else {<td>No</td>}
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+

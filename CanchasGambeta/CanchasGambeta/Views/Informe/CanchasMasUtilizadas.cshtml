@@ -1,0 +1,39 @@
+﻿@model IEnumerable<CanchasGambeta.ViewModels.CanchasMasReservadasVM>
+@{
+    ViewBag.Title = "CanchasMasUtilizadas";
+}
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-center">
+        <h3>Canchas más reservadas</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        Cancha
+                    </th>
+                    <th class="text-center">
+                        Cantidad de veces reservada
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var listado in Model)
+                {
+                    <tr class="text-center">
+                        <td>
+                            @listado.Cancha
+                        </td>
+                        <td>
+                            @listado.Cantidad
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <small>*Nota: si una cancha no sale en el listado es porque no hay ninguna reserva en la misma.</small>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+

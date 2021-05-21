@@ -22,16 +22,14 @@
     <div class="row aling-items-center">
         <div class="col-lg-4 text-center">
 
-            @Html.ActionLink("Reservas activas", "ReservasActivas", "Administrador", null, new { @class = "text-center btn btn-primary" })
-            <hr />
-            @Html.ActionLink("Reservas canceladas", "ReservasCanceladas", "Administrador", null, new { @class = "text-center btn btn-primary" })
+            @Html.ActionLink("Reservas activas y canceladas", "ReservasActivasYCandeladas", "Informe", null, new { @class = "text-center btn btn-primary" })
             <hr />
         </div>
         <div class="col-lg-4 text-center">
 
-            @Html.ActionLink("Canchas más utilizadas", "CanchasMasUtilizadas", "Administrador", null, new { @class = "text-center btn btn-warning" })
+            @Html.ActionLink("Canchas más utilizadas", "CanchasMasUtilizadas", "Informe", null, new { @class = "text-center btn btn-warning" })
             <hr />
-            @Html.ActionLink("Clientes con más reservas", "ClientesMasReservas", "Administrador", null, new { @class = "text-center btn btn-warning" })
+            @Html.ActionLink("Clientes con más reservas", "ClientesConMasReservas", "Informe", null, new { @class = "text-center btn btn-warning" })
             <hr />
         </div>
         <div class="col-lg-4 text-center">

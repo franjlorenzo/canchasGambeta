@@ -38,3 +38,11 @@ const botones = () => {
         }
     }
 }
+
+function confirmacionEliminarInsumo(){
+    var confirmar = confirm("¿Está seguro de que desea eliminar este insumo?");
+    if (confirmar) {
+        return true;
+    }
+    return false;
+}

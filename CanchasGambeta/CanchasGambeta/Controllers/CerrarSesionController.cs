@@ -39,19 +39,7 @@ namespace CanchasGambeta.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult EliminarEquipo()
-        {
-            Session.Clear();
-            return RedirectToAction("Index", "Home");
-        }
-
         public ActionResult NuevoEquipo()
-        {
-            Session.Clear();
-            return RedirectToAction("Index", "Home");
-        }
-
-        public ActionResult EliminarIntegrante()
         {
             Session.Clear();
             return RedirectToAction("Index", "Home");
@@ -87,12 +75,6 @@ namespace CanchasGambeta.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult EliminarInsumo()
-        {
-            Session.Clear();
-            return RedirectToAction("Index", "Home");
-        }
-
         public ActionResult MisReservas()
         {
             Session.Clear();
@@ -112,6 +94,24 @@ namespace CanchasGambeta.Controllers
         }
 
         public ActionResult ModificarReserva()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult CanchasMasUtilizadas()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult ClientesConMasReservas()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult ReservasActivasYCanceladas()
         {
             Session.Clear();
             return RedirectToAction("Index", "Home");

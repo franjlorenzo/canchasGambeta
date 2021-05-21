@@ -2,11 +2,11 @@
 
 function validacionNuevaReserva() {
     let cboCancha = document.getElementById("idCancha").value;
-    let cboHorario = document.getElementById("idHorario").value;
-    let fecha = document.getElementById("NuevaReservaVM_Fecha").value;
+    let cboHorario = document.getElementById("NuevaReservaConDropDownList_Horarios").value;
+    let fecha = document.getElementById("fechaReservaElegida").value;
 
     if (cboCancha == "" | cboHorario == "" | fecha == "") {
-        alert("Debe seleccionar una fecha/cancha/horario para registrar la reserva.");
+        alert("Debe seleccionar un horario para registrar la reserva.");
         return false;
     }
     return true;

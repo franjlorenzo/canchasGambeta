@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CanchasGambeta.ViewModels.ClientesConMasReservas>
+@{
+    ViewBag.Title = "ClientesConMasReservas";
+}
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-center">
+        <h3>Clientes con más reservas</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        Cliente
+                    </th>
+                    <th class="text-center">
+                        Email
+                    </th>
+                    <th class="text-center">
+                        Teléfono
+                    </th>
+                    <th class="text-center">
+                        Cantidad de reservas
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var listado in Model)
+                {
+                    <tr class="text-center">
+                        <td>
+                            @listado.NombreCompleto
+                        </td>
+                        <td>
+                            @listado.Email
+                        </td>
+                        <td>
+                            @listado.Telefono
+                        </td>
+                        <td>
+                            @listado.CantidadReservas
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <small>*Nota: las reservas solo se cuentan si estas se concretaron (no se dieron de baja).</small>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
