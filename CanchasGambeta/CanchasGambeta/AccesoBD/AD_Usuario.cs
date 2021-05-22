@@ -129,5 +129,46 @@ namespace CanchasGambeta.AccesoBD
             }
             return resultado;
         }
+
+        public static bool existeEmailUsuario(string email)
+        {
+            bool resultado = false;
+            List<string> listaEmails = new List<string>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = "select email from Usuario";
+                comando.Parameters.Clear();
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        string nuevo = lector["email"].ToString();
+                        listaEmails.Add(nuevo);
+                    }
+                }
+
+                foreach (string nombreEnLista in listaEmails) if (nombreEnLista == email) return resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
     }
 }

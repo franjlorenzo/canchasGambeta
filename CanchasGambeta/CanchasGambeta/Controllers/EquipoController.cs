@@ -58,6 +58,8 @@ namespace CanchasGambeta.Controllers
             List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
             ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
 
+            if(TempData["ErrorEliminarIntegrante"] != null) ViewBag.ErrorEliminarIntegrante = TempData["ErrorEliminarIntegrante"].ToString();
+            if (TempData["ErrorEliminarEquipo"] != null) ViewBag.ErrorEliminarEquipo = TempData["ErrorEliminarEquipo"].ToString();
             return View(listaEquipoMails);
         }
 
@@ -160,7 +162,7 @@ namespace CanchasGambeta.Controllers
                 if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                 else
                 {
-                    ViewBag.ErrorEliminarIntegrante = "Error al eliminar al integrante, por favor intentelo nuevamente.";
+                    TempData["ErrorEliminarIntegrante"] = "Error al eliminar al integrante, por favor inténtelo nuevamente.";
                     return RedirectToAction("MiEquipo", "Equipo");
                 }
             }
@@ -173,31 +175,27 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(idEquipo);
+                if (resultado)
                 {
-                    bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(idEquipo);
-                    if (resultado)
+                    using (Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3())
                     {
-                        using (Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3())
-                        {
-                            var oUser = (from data in db.Usuario
-                                         where data.idUsuario == sesion.idUsuario
-                                         select data).FirstOrDefault();
-
-                            Session["User"] = oUser;
-                        }
-                        return RedirectToAction("IndexCliente", "Cliente");
+                        var oUser = (from data in db.Usuario
+                                     where data.idUsuario == sesion.idUsuario
+                                     select data).FirstOrDefault();
+                        Session["User"] = oUser;
                     }
+                    return RedirectToAction("IndexCliente", "Cliente");
                 }
-            }
-            catch (Exception)
-            {
-                List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
-                ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
-                ViewBag.ErrorEliminar = "Ocurrió un error al eliminar su equipo, inténtelo nuevamente";
-                return View(listaEquipoMails);
+                else
+                {
+                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
+                    ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
+                    TempData["ErrorEliminarEquipo"] = "Ocurrió un error al eliminar su equipo, inténtelo nuevamente";
+                    return RedirectToAction("MiEquipo", "Equipo");
+                }
             }
             return View(idEquipo);
         }

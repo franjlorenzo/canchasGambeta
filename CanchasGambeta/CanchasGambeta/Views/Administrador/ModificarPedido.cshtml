@@ -14,12 +14,12 @@
     </div>
 </div>
 
-<div class="col-md-6 text-center" style="transform: translateY(60px);">
+<div class="col-md-6" style="transform: translateY(60px);">
     <div class="container" id="divNuevoPedido" style="color:white; display:block;">
         @using (Html.BeginForm("ModificarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return validacionModificarPedido();" }))
         {
             @Html.HiddenFor(Model => Model.idPedido)
-            <div class="row">
+            <div class="row  text-center">
                 <div class="col-lg-12">
                     <div class="form-horizontal">
                         <div class="form-group">

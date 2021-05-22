@@ -1,4 +1,6 @@
-﻿var btnNuevoInsumo = document.getElementById("btnNuevoInsumo");
+﻿'use strict';
+
+var btnNuevoInsumo = document.getElementById("btnNuevoInsumo");
 
 function validacionNuevoInsumo() {
     let txtInsumo = document.getElementById("txtInsumo").value;

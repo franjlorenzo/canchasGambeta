@@ -23,7 +23,7 @@
                         Nombre
                     </th>
                     <td>
-                        @sesion.nombreCompleto
+                        <input type="text" class="form-control" name="txtNombreCompleto" id="txtNombreCompleto" placeholder="@sesion.nombreCompleto" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -31,7 +31,7 @@
                         Correo Electrónico
                     </th>
                     <td>
-                        @sesion.email
+                        <input type="text" class="form-control" name="txtEmail" id="txtEmail" placeholder="@sesion.email" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -39,7 +39,7 @@
                         Teléfono
                     </th>
                     <td>
-                        @sesion.telefono
+                        <input type="text" class="form-control" name="txtTelefono" id="txtTelefono" placeholder="@sesion.telefono" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -47,12 +47,12 @@
                         Contraseña
                     </th>
                     <td>
-                        @sesion.password
+                        <input type="password" class="form-control" name="txtPassword" id="txtPassword" value="@sesion.password" readonly />
                     </td>
                 </tr>
             </table>
             <div>
-                @Html.ActionLink("Modificar perfil", "ModificarCliente", "Cliente", null, new { @class = "text-center btn btn-danger" })
+                @Html.ActionLink("Modificar perfil", "ModificarCliente", "Cliente", null, new { @class = "text-center btn btn-warning" })
             </div>
         </div>
     </div>

@@ -173,8 +173,8 @@ E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\es\Syste
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\es\System.Web.WebPages.resources.dll
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\es\System.Web.WebPages.Deployment.resources.dll
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\es\System.Web.WebPages.Razor.resources.dll
-E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\CanchasGambeta.csprojAssemblyReference.cache
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\CanchasGambeta.csproj.CoreCompileInputs.cache
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\CanchasGambeta.csproj.CopyComplete
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\CanchasGambeta.dll
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\CanchasGambeta.pdb
+E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\CanchasGambeta.csprojAssemblyReference.cache

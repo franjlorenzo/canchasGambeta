@@ -1,4 +1,6 @@
-﻿const validacionRegistro = () => {
+﻿'use strict';
+
+const validacionRegistro = () => {
     let txtNombreUsuario = document.getElementById("txtUsuario").value;
     let txtEmail = document.getElementById("txtEmail").value;
     let txtTelefono = document.getElementById("txtTelefono").value;
@@ -13,8 +15,17 @@
         alert("Las contraseñas no coinciden.");
         return false;
     }
+    if (!validarEmail(txtEmail)) {
+        alert("El email que ingresó no es válido");
+        return false;
+    }
     return true;
-};
+}
+
+function validarEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
 
 const validacionLogIn = () => {
     let txtEmail = document.getElementById("txtEmail").value;

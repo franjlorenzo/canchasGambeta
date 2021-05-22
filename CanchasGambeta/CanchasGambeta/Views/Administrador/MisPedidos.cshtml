@@ -127,16 +127,16 @@
                                                 @if (listado.Fecha > DateTime.Today.AddDays(-2))
                                                 {
                                                     <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1">Modificar</a>
+                                                    using (Html.BeginForm("EliminarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
+                                                    {
+                                                        @Html.HiddenFor(Model => listado.IdPedido)
+                                                        <button type="submit" class="btn btn-danger m-1">Eliminar</button>
+                                                    }
                                                 }
                                                 else
                                                 {
                                                     <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1 disabled">Modificar</a>
-                                                }
-
-                                                @using (Html.BeginForm("EliminarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
-                                                {
-                                                    @Html.HiddenFor(Model => listado.IdPedido)
-                                                    <button type="submit" class="btn btn-danger m-1">Eliminar</button>
+                                                    <a class="btn btn-danger m-1 disabled">Eliminar</a>
                                                 }
                                             </div>
                                         </td>
@@ -145,7 +145,11 @@
                             }
                         </tbody>
                     </table>
-                    <small>*Nota: los pedidos que hayan sido registrados hace dos(2) días no pueden ser modificados por cuestiones de logistica.</small>
+                    <div class="form-label-group text-danger" style="margin-left:10px">
+                        @ViewBag.ErrorConcretarPedido
+                        @ViewBag.ErrorEliminarPedido
+                    </div>
+                    <small>*Nota: los pedidos que hayan sido registrados hace dos(2) días no pueden ser modificados ni eliminados por cuestiones de logistica.</small>
                     break;
                 }
             }

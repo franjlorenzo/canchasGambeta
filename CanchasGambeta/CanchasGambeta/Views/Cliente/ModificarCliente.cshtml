@@ -41,18 +41,25 @@
                     <div class="form-group">
                         <label class="col-sm-6 control-label">Contraseña</label>
                         <div class="col-sm-6">
-                            @Html.TextBoxFor(Model => Model.password, htmlAttributes: new { @class = "form-control", id = "txtPassword" })
+                            <input type="password" name="password" id="txtPassword" class="form-control" value="@Model.password" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-6 control-label">Confirmar Contraseña</label>
+                        <div class="col-sm-6">
+                            <input type="password" name="ConfirmarPassword" id="txtConfirmarPassword" class="form-control" value="@Model.password" />
                         </div>
                     </div>
                     <div class="form-group text-left">
                         <div class="col-sm-12">
-                            <button class="btn btn-primary" type="submit">
-                                Confirmar cambios
+                            <button class="btn btn-success" type="submit">
+                                Guardar cambios
                             </button>
+                            @Html.ActionLink("Cancelar", "PerfilCliente", "Cliente", null, new { @class = "text-center btn btn-warning" })
                         </div>
                         <div class="form-label-group text-danger" style="margin-left:10px">
-                            @ViewBag.ErrorModificarUsuario
-                            @ViewBag.ContraseñasIguales
+                            @ViewBag.ErrorActualizarUsuario
+                            @ViewBag.EmailYaRegistrado
                         </div>
                     </div>
                 </div>

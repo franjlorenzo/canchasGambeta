@@ -260,7 +260,7 @@ namespace CanchasGambeta.Controllers
                 EnableSsl = true,
             };
 
-            smtpClient.Send("lorenzofran1@gmail.com", "mati992008@gmail.com", "Prueba", "Esto es una prueba cara de nalga");
+            smtpClient.Send("lorenzofran1@gmail.com", "fcojlorenzo@gmail.com", "Prueba", "Esto te lo mando con C#");
             return RedirectToAction("IndexCliente", "Cliente");
         }
     }

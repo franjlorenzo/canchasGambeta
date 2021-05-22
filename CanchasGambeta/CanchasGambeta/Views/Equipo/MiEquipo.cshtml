@@ -85,10 +85,14 @@
                     </tbody>
                 </table>
                 <div class="btn-group">
-                    <a href="@Url.Action("EliminarEquipo", "Equipo", new { @idEquipo = sesion.equipo})" class="btn btn-danger">Eliminar Equipo</a>
+                    @using (Html.BeginForm("EliminarEquipo", "Equipo", FormMethod.Post, new { onsubmit = "return confirmarEliminarEquipo();" }))
+                    {
+                        <input type="hidden" name="idEquipo" value="@sesion.equipo" />
+                        <button type="submit" class="btn btn-danger m-1">Eliminar Equipo</button>
+                    }
                 </div>
                 <div class="form-label-group text-danger">
-                    @ViewBag.ErrorEliminar
+                    @ViewBag.ErrorEliminarEquipo
                 </div>
             }
 

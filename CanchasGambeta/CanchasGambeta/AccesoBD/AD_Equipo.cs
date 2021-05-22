@@ -165,7 +165,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<MailEquipoVM> obtenerMailsEquipo(int idEquipo)
+        public static List<MailEquipoVM> obtenerMailsEquipo(int? idEquipo)
         {
             List<MailEquipoVM> lista = new List<MailEquipoVM>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);

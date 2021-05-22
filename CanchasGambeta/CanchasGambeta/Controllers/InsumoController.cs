@@ -16,6 +16,7 @@ namespace CanchasGambeta.Controllers
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             List<Insumo> listaInsumo = AccesoBD.AD_Insumo.obtenerInsumos();
+            if (TempData["ErrorEliminarInsumo"] != null) ViewBag.ErrorEliminarInsumo = TempData["ErrorEliminarInsumo"].ToString();
             return View(listaInsumo);
         }
 
@@ -49,22 +50,23 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult ModificarInsumo(Insumo insumo)
+        public ActionResult ModificarInsumo(Insumo insumoModificado)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Insumo.modificarInsumo(insumo);
+                bool resultado = AccesoBD.AD_Insumo.modificarInsumo(insumoModificado);
                 if (resultado) return RedirectToAction("MisInsumos", "Insumo");
                 else
                 {
                     ViewBag.ErrorModificarInsumo = "Ocurrió un error al modificar el insumo. Inténtelo nuevamente.";
+                    Insumo insumo = AccesoBD.AD_Insumo.obtenerInsumoPorId(insumoModificado.idInsumo);
                     return View(insumo);
                 }
             }
-            return View(insumo);
+            return View(insumoModificado);
         }
 
         [HttpPost]
@@ -81,9 +83,8 @@ namespace CanchasGambeta.Controllers
                 if (resultado) return RedirectToAction("MisInsumos", "Insumo");
                 else
                 {
-                    ViewBag.ErrorEliminarInsumo = "Ocurrió un error al eliminar el insumo. Inténtelo nuevamente.";
-                    List<Insumo> listaInsumo = AccesoBD.AD_Insumo.obtenerInsumos();
-                    return View(listaInsumo);
+                    TempData["ErrorEliminarInsumo"] = "Ocurrió un error al eliminar el insumo, inténtelo nuevamente.";
+                    return RedirectToAction("MisInsumos", "Insumo");
                 }
             }           
             return View();

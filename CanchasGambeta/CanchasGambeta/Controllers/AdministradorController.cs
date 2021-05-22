@@ -37,16 +37,42 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult ModificarPerfilAdministrador(Usuario usuario)
+        public ActionResult ModificarPerfilAdministrador(Usuario usuarioModificado)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                if (usuarioModificado.email != sesion.email)
                 {
-                    bool resultado = AccesoBD.AD_Usuario.actualizarUsuario(usuario);
+                    if (!AccesoBD.AD_Usuario.existeEmailUsuario(usuarioModificado.email))
+                    {
+                        bool resultado = AccesoBD.AD_Usuario.actualizarUsuario(usuarioModificado);
+                        if (resultado)
+                        {
+                            var oUser = AccesoBD.AD_Usuario.obtenerUsuario(sesion.idUsuario);
+                            Session["User"] = oUser;
+
+                            return RedirectToAction("PerfilAdministrador", "Administrador");
+                        }
+                        else
+                        {
+                            ViewBag.ErrorActualizarUsuario = "Ocurrió un error al actualizar su perfil, inténtelo nuevamente.";
+                            Usuario usuario = AccesoBD.AD_Usuario.obtenerUsuario(sesion.idUsuario);
+                            return View(usuario);
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.EmailYaRegistrado = "El correo electrónico al que desea cambiarse ya está registrado.";
+                        Usuario usuario = AccesoBD.AD_Usuario.obtenerUsuario(sesion.idUsuario);
+                        return View(usuario);
+                    }
+                }
+                else
+                {
+                    bool resultado = AccesoBD.AD_Usuario.actualizarUsuario(usuarioModificado);
                     if (resultado)
                     {
                         var oUser = AccesoBD.AD_Usuario.obtenerUsuario(sesion.idUsuario);
@@ -54,15 +80,16 @@ namespace CanchasGambeta.Controllers
 
                         return RedirectToAction("PerfilAdministrador", "Administrador");
                     }
-                    else return View(usuario);
+                    else
+                    {
+                        ViewBag.ErrorActualizarUsuario = "Ocurrió un error al actualizar su perfil, inténtelo nuevamente.";
+                        Usuario usuario = AccesoBD.AD_Usuario.obtenerUsuario(sesion.idUsuario);
+                        return View(usuario);
+                    }
                 }
+                
             }
-            catch (Exception ex)
-            {
-                ViewBag.Error = ex.Message;
-                return View();
-            }
-            return View(usuario);
+            return View(usuarioModificado);
         }
 
         public ActionResult MisPedidos()
@@ -82,6 +109,9 @@ namespace CanchasGambeta.Controllers
             });
 
             ViewBag.proveedores = listaProveedores;
+            if (TempData["ErrorInsertPedido"] != null) ViewBag.ErrorInsertPedido = TempData["ErrorInsertPedido"].ToString();
+            if (TempData["ErrorConcretarPedido"] != null) ViewBag.ErrorConcretarPedido = TempData["ErrorConcretarPedido"].ToString();
+            if(TempData["ErrorEliminarPedido"] != null) ViewBag.ErrorEliminarPedido = TempData["ErrorEliminarPedido"].ToString();
             return View( new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = new NuevoPedido()});
         }
 
@@ -93,18 +123,15 @@ namespace CanchasGambeta.Controllers
 
             nuevoPedido.IdProveedor = int.Parse(idProveedor);
 
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                bool resultado = AccesoBD.AD_Administrador.nuevoPedido(nuevoPedido);
+                if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                else
                 {
-                    bool resultado = AccesoBD.AD_Administrador.nuevoPedido(nuevoPedido);
-                    if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                    TempData["ErrorInsertPedido"] = "Ocurrió un error al registrar el pedido, inténtelo nuevamente.";
+                    return RedirectToAction("MisPedidos", "Administrador");
                 }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorInsertPedido = ex.Message;
-                return RedirectToAction("MisPedidos", "Administrador");
             }
 
             return View();
@@ -118,18 +145,15 @@ namespace CanchasGambeta.Controllers
 
             int idPedido = int.Parse(Request["listado.IdPedido"]);
 
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                bool resultado = AccesoBD.AD_Administrador.concretarUnPedido(idPedido);
+                if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                else
                 {
-                    bool resultado = AccesoBD.AD_Administrador.concretarUnPedido(idPedido);
-                    if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                    TempData["ErrorConcretarPedido"] = "Ocurrió un error al concretrar el pedido, inténtelo nuevamente.";
+                    return RedirectToAction("MisPedidos", "Administrador");
                 }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorConcretarPedido = ex.Message;
-                return RedirectToAction("MisPedidos", "Administrador");
             }
 
             return View();
@@ -166,26 +190,45 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult ModificarPedido(Pedido pedido)
+        public ActionResult ModificarPedido(Pedido pedidoModificado)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                bool resultado = AccesoBD.AD_Administrador.modificarPedido(pedidoModificado);
+                if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                else
                 {
-                    bool resultado = AccesoBD.AD_Administrador.modificarPedido(pedido);
-                    if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                    ViewBag.ErrorModificarPedido = "Error al modificar el pedido, inténtelo nuevamente.";
+                    List<Proveedor> proveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedores();
+                    List<SelectListItem> listaProveedores = proveedores.ConvertAll(d =>
+                    {
+                        return new SelectListItem()
+                        {
+                            Text = d.nombreCompleto + " - (" + d.empresa + ")",
+                            Value = d.idProveedor.ToString(),
+                            Selected = false
+                        };
+                    });
+
+                    ViewBag.proveedores = listaProveedores;
+                    Pedido pedido = AccesoBD.AD_Administrador.obtenerPedidoPorId(pedidoModificado.idPedido);
+
+                    foreach (var item in listaProveedores)
+                    {
+                        if (item.Value.Equals(pedido.proveedor.ToString()))
+                        {
+                            item.Selected = true;
+                            break;
+                        }
+                    }
+                    return View(pedido);
                 }
             }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorModificarPedido = ex.Message;
-                return View(pedido);
-            }
 
-            return View(pedido);
+            return View(pedidoModificado);
         }
 
         [HttpPost]
@@ -196,18 +239,13 @@ namespace CanchasGambeta.Controllers
 
             int idPedido = int.Parse(Request["listado.IdPedido"]);
 
-            try
+            bool resultado = AccesoBD.AD_Administrador.eliminarPedido(idPedido);
+            if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+            else
             {
-                bool resultado = AccesoBD.AD_Administrador.eliminarPedido(idPedido);
-                if (resultado) return RedirectToAction("MisPedidos", "Administrador");
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorEliminarPedido = ex.Message;
+                TempData["ErrorEliminarPedido"] = "Ocurrió un error al eliminar el pedido, inténtelo nuevamente.";
                 return RedirectToAction("MisPedidos", "Administrador");
             }
-
-            return View();
         }
     }
 }
