@@ -32,7 +32,7 @@ namespace CanchasGambeta.Controllers
                 if (resultado) return RedirectToAction("MisInsumos", "Insumo");
                 else
                 {
-                    ViewBag.ErrorInsertInsumo = "Ocurrió un error al cargar el nuevo insumo. Inténtelo nuevamente.";
+                    ViewBag.ErrorInsertInsumo = "Ocurrió un error al cargar el nuevo insumo, inténtelo nuevamente.";
                     List<Insumo> listaInsumo = AccesoBD.AD_Insumo.obtenerInsumos();
                     return View(listaInsumo);
                 }

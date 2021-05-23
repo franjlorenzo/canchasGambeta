@@ -1,7 +1,5 @@
 ﻿'use strict';
 
-var btnNuevoInsumo = document.getElementById("btnNuevoInsumo");
-
 function validacionNuevoInsumo() {
     let txtInsumo = document.getElementById("txtInsumo").value;
     let txtPrecio = document.getElementById("txtPrecio").value;

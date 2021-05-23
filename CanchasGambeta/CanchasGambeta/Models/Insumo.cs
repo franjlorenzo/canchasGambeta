@@ -24,6 +24,7 @@ namespace CanchasGambeta.Models
         public string insumo1 { get; set; }
         public decimal precio { get; set; }
         public int stock { get; set; }
+        public bool estado { get; set; }
         public int cantidad { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -21,7 +21,8 @@
     <hr />
     <div class="row aling-items-center">
         <div class="col-lg-4 text-center">
-
+            @Html.ActionLink("Horarios más reservados", "HorariosMasReservados", "Informe", null, new { @class = "text-center btn btn-primary" })
+            <hr />
             @Html.ActionLink("Reservas activas y canceladas", "ReservasActivasYCandeladas", "Informe", null, new { @class = "text-center btn btn-primary" })
             <hr />
         </div>
@@ -33,9 +34,9 @@
             <hr />
         </div>
         <div class="col-lg-4 text-center">
-            @Html.ActionLink("Elementos rotos del mes", "ElementosRotos", "Administrador", null, new { @class = "text-center btn btn-success" })
+            @Html.ActionLink("Instrumentos disponibles", "InstrumentosDisponibles", "Informe", null, new { @class = "text-center btn btn-success" })
             <hr />
-            @Html.ActionLink("Horarios más reservados", "HorariosMasReservados", "Administrador", null, new { @class = "text-center btn btn-success" })
+            @Html.ActionLink("Instrumentos rotos del mes", "InstrumentosRotos", "Informe", null, new { @class = "text-center btn btn-success" })
             <hr />
         </div>
     </div>

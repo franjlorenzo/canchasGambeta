@@ -253,14 +253,15 @@ namespace CanchasGambeta.Controllers
         [HttpPost]
         public ActionResult EnviarMail()
         {
+
             var smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("lorenzofran1@gmail.com", "Candelariafl1997"),
+                Credentials = new NetworkCredential("canchasgambeta@gmail.com", "Canchasgambetafl1997"),
                 EnableSsl = true,
             };
 
-            smtpClient.Send("lorenzofran1@gmail.com", "fcojlorenzo@gmail.com", "Prueba", "Esto te lo mando con C#");
+            smtpClient.Send("canchasgambeta@gmail.com", "lorenzofran1@gmail.com", "Prueba", "Esto te lo mando con C#");
             return RedirectToAction("IndexCliente", "Cliente");
         }
     }

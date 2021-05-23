@@ -8,14 +8,6 @@
     <Property Name="tipoCancha" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Reserva" Relationship="Self.FK_Reserva_Cancha" FromRole="Cancha" ToRole="Reserva" />
   </EntityType>
-  <EntityType Name="ElementoRoto">
-    <Key>
-      <PropertyRef Name="idElementoRoto" />
-    </Key>
-    <Property Name="idElementoRoto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="elemento" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
-  </EntityType>
   <EntityType Name="Email">
     <Key>
       <PropertyRef Name="idEmail" />
@@ -70,6 +62,7 @@
     <Property Name="precio" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
     <Property Name="stock" Type="Int32" Nullable="false" />
     <NavigationProperty Name="ReservaInsumos" Relationship="Self.FK_ReservaInsumos_Insumo" FromRole="Insumo" ToRole="ReservaInsumos" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="Pedido">
     <Key>
@@ -277,7 +270,6 @@
   </Association>
   <EntityContainer Name="Canchas_GambetaEntities2" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Cancha" EntityType="Self.Cancha" />
-    <EntitySet Name="ElementoRoto" EntityType="Self.ElementoRoto" />
     <EntitySet Name="Email" EntityType="Self.Email" />
     <EntitySet Name="Equipo" EntityType="Self.Equipo" />
     <EntitySet Name="EquipoMails" EntityType="Self.EquipoMails" />
@@ -334,5 +326,52 @@
       <End Role="Rol" EntitySet="Rol" />
       <End Role="Usuario" EntitySet="Usuario" />
     </AssociationSet>
+    <EntitySet Name="Instrumento" EntityType="Canchas_GambetaModel2.Instrumento" />
+    <EntitySet Name="InstrumentoRoto" EntityType="Canchas_GambetaModel2.InstrumentoRoto" />
+    <EntitySet Name="sysdiagrams" EntityType="Canchas_GambetaModel2.sysdiagrams" />
+    <AssociationSet Name="FK_InstrumentoRoto_Instrumento" Association="Canchas_GambetaModel2.FK_InstrumentoRoto_Instrumento">
+      <End Role="Instrumento" EntitySet="Instrumento" />
+      <End Role="InstrumentoRoto" EntitySet="InstrumentoRoto" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="Instrumento">
+    <Key>
+      <PropertyRef Name="idInstrumento" />
+    </Key>
+    <Property Name="idInstrumento" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="instrumento1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="fechaCompra" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="InstrumentoRoto" Relationship="Canchas_GambetaModel2.FK_InstrumentoRoto_Instrumento" FromRole="Instrumento" ToRole="InstrumentoRoto" />
+  </EntityType>
+  <EntityType Name="InstrumentoRoto">
+    <Key>
+      <PropertyRef Name="idInstrumentoRoto" />
+    </Key>
+    <Property Name="idInstrumentoRoto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="instrumento" Type="Int32" Nullable="false" />
+    <Property Name="fechaRotura" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="Instrumento1" Relationship="Canchas_GambetaModel2.FK_InstrumentoRoto_Instrumento" FromRole="InstrumentoRoto" ToRole="Instrumento" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_InstrumentoRoto_Instrumento">
+    <End Type="Canchas_GambetaModel2.Instrumento" Role="Instrumento" Multiplicity="1" />
+    <End Type="Canchas_GambetaModel2.InstrumentoRoto" Role="InstrumentoRoto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Instrumento">
+        <PropertyRef Name="idInstrumento" />
+      </Principal>
+      <Dependent Role="InstrumentoRoto">
+        <PropertyRef Name="instrumento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

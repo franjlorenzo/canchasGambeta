@@ -26,7 +26,6 @@ namespace CanchasGambeta.Models
         }
     
         public virtual DbSet<Cancha> Cancha { get; set; }
-        public virtual DbSet<ElementoRoto> ElementoRoto { get; set; }
         public virtual DbSet<Email> Email { get; set; }
         public virtual DbSet<Equipo> Equipo { get; set; }
         public virtual DbSet<EquipoMails> EquipoMails { get; set; }
@@ -39,5 +38,8 @@ namespace CanchasGambeta.Models
         public virtual DbSet<ReservaInsumos> ReservaInsumos { get; set; }
         public virtual DbSet<Rol> Rol { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<Instrumento> Instrumento { get; set; }
+        public virtual DbSet<InstrumentoRoto> InstrumentoRoto { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
     }
 }

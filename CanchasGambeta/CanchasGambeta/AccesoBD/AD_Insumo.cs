@@ -18,7 +18,9 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idInsumo, insumo, precio, stock from Insumo";
+                string consulta = @"select idInsumo, insumo, precio, stock
+                                    from Insumo
+                                    where estado = 1";
                 comando.Parameters.Clear();
 
                 comando.CommandType = System.Data.CommandType.Text;
@@ -60,11 +62,12 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consultaInsertEquipo = "insert into Insumo (insumo, precio, stock) values (@insumo, @precio, @stock)";
+                string consultaInsertEquipo = "insert into Insumo (insumo, precio, stock, estado) values (@insumo, @precio, @stock, @estado)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@insumo", insumo);
                 comando.Parameters.AddWithValue("@precio", precio);
                 comando.Parameters.AddWithValue("@stock", stock);
+                comando.Parameters.AddWithValue("@estado", 1);
 
 
                 comando.CommandType = System.Data.CommandType.Text;
@@ -173,7 +176,8 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consultaEliminarInsumo = "delete from Insumo where idInsumo = @idInsumo";
+                string consultaEliminarInsumo = @"update Insumo set estado = 0 
+                                                  where idInsumo = @idInsumo";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idInsumo", idInsumo);
 

@@ -7,14 +7,6 @@
     <Property Name="idCancha" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="tipoCancha" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
-  <EntityType Name="ElementoRoto">
-    <Key>
-      <PropertyRef Name="idElementoRoto" />
-    </Key>
-    <Property Name="idElementoRoto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="elemento" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="fecha" Type="date" Nullable="false" />
-  </EntityType>
   <EntityType Name="Email">
     <Key>
       <PropertyRef Name="idEmail" />
@@ -52,6 +44,22 @@
     <Property Name="horario" Type="int" Nullable="false" />
     <Property Name="reserva" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="Instrumento">
+    <Key>
+      <PropertyRef Name="idInstrumento" />
+    </Key>
+    <Property Name="idInstrumento" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="instrumento" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="fechaCompra" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="InstrumentoRoto">
+    <Key>
+      <PropertyRef Name="idInstrumentoRoto" />
+    </Key>
+    <Property Name="idInstrumentoRoto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="instrumento" Type="int" Nullable="false" />
+    <Property Name="fechaRotura" Type="date" Nullable="false" />
+  </EntityType>
   <EntityType Name="Insumo">
     <Key>
       <PropertyRef Name="idInsumo" />
@@ -60,6 +68,7 @@
     <Property Name="insumo" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="precio" Type="money" Nullable="false" />
     <Property Name="stock" Type="int" Nullable="false" />
+    <Property Name="estado" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Pedido">
     <Key>
@@ -108,6 +117,16 @@
     </Key>
     <Property Name="idRol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="rol" Type="nvarchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="Usuario">
     <Key>
@@ -178,6 +197,18 @@
       </Principal>
       <Dependent Role="HorarioReservas">
         <PropertyRef Name="reserva" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InstrumentoRoto_Instrumento">
+    <End Role="Instrumento" Type="Self.Instrumento" Multiplicity="1" />
+    <End Role="InstrumentoRoto" Type="Self.InstrumentoRoto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Instrumento">
+        <PropertyRef Name="idInstrumento" />
+      </Principal>
+      <Dependent Role="InstrumentoRoto">
+        <PropertyRef Name="instrumento" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -255,18 +286,20 @@
   </Association>
   <EntityContainer Name="Canchas_GambetaModel2StoreContainer">
     <EntitySet Name="Cancha" EntityType="Self.Cancha" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="ElementoRoto" EntityType="Self.ElementoRoto" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Email" EntityType="Self.Email" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Equipo" EntityType="Self.Equipo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EquipoMails" EntityType="Self.EquipoMails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Horario" EntityType="Self.Horario" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HorarioReservas" EntityType="Self.HorarioReservas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Instrumento" EntityType="Self.Instrumento" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InstrumentoRoto" EntityType="Self.InstrumentoRoto" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Insumo" EntityType="Self.Insumo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Proveedor" EntityType="Self.Proveedor" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Reserva" EntityType="Self.Reserva" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ReservaInsumos" EntityType="Self.ReservaInsumos" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Cliente_Equipo" Association="Self.FK_Cliente_Equipo">
       <End Role="Equipo" EntitySet="Equipo" />
@@ -287,6 +320,10 @@
     <AssociationSet Name="FK_HorarioReservas_Reserva" Association="Self.FK_HorarioReservas_Reserva">
       <End Role="Reserva" EntitySet="Reserva" />
       <End Role="HorarioReservas" EntitySet="HorarioReservas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InstrumentoRoto_Instrumento" Association="Self.FK_InstrumentoRoto_Instrumento">
+      <End Role="Instrumento" EntitySet="Instrumento" />
+      <End Role="InstrumentoRoto" EntitySet="InstrumentoRoto" />
     </AssociationSet>
     <AssociationSet Name="FK_Pedido_Proveedor" Association="Self.FK_Pedido_Proveedor">
       <End Role="Proveedor" EntitySet="Proveedor" />

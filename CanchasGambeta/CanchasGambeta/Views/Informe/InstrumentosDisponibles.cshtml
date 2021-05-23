@@ -1,0 +1,116 @@
+﻿@model IEnumerable<CanchasGambeta.Models.Instrumento>
+@using CanchasGambeta.Models
+@{
+    ViewBag.Title = "InstrumentosDisponibles";
+}
+
+<div class="container">
+    <div class="row" style="transform: translateY(60px);">
+        <div class="col-md-6">
+            <div>
+                <h3 class="text-center" style="color:white">Instrumentos de Canchas gambeta</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" style="transform: translateY(60px); color:white">
+        <div class="col-md-6">
+            @if (Model.Count() != 0)
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Instrumento
+                            </th>
+                            <th class="text-center">
+                                Adquirido el
+                            </th>
+                            <th class="text-center">
+                                Acciones
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var listado in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @listado.instrumento1
+                                </td>
+                                <td class="text-center">
+                                    @listado.fechaCompra
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        @using (Html.BeginForm("NuevoInstrumentoRoto", "Informe", FormMethod.Post, new { onsubmit = "return confirmacionNuevoInstrumentoRoto();" }))
+                                        {
+                                            <input type="hidden" name="idInstrumento" value="@listado.idInstrumento" />
+                                            <button type="submit" class="btn btn-danger m-1">Roto</button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="form-label-group text-danger" style="margin-left:10px">
+                    @ViewBag.ErrorNuevoInstrumentoRoto
+                </div>
+            }
+            else
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Instrumentos
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">
+                                No hay instrumentos
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <div class="col-md-6 text-center">
+            <div class="container" style="color:white; display:block;">
+                <h4 class="p-1">Ingrese los datos del nuevo instrumento</h4>
+                @using (Html.BeginForm("NuevoInstrumento", "Informe", FormMethod.Post, new { onsubmit = "return validacionNuevoInstrumento();" }))
+                {
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div>
+                                        <label class="col-sm-6 control-label">Instrumento</label>
+                                        <input type="text" class="form-control" id="txtInstrumento" name="instrumento1" />
+                                    </div>
+                                    <div>
+                                        <label class="col-sm-6 control-label">Fecha de adquisición</label>
+                                        <input type="date" class="form-control datepicker" id="txtFechaCompra" name="fechaCompra" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                    <div class="form-label-group text-danger" style="margin-left:10px">
+                        @ViewBag.ErrorInsertInstrumento
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/scriptInstrumentos.js"></script>
+

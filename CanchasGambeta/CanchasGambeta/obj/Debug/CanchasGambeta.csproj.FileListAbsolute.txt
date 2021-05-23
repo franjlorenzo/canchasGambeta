@@ -178,3 +178,10 @@ E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\Ca
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\CanchasGambeta.dll
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\CanchasGambeta.pdb
 E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\obj\Debug\CanchasGambeta.csprojAssemblyReference.cache
+E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\BouncyCastle.Crypto.dll
+E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\MimeKit.dll
+E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\System.Buffers.dll
+E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\BouncyCastle.Crypto.xml
+E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\MimeKit.pdb
+E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\MimeKit.xml
+E:\Fran\Facultad\Tesis\canchasGambeta\CanchasGambeta\CanchasGambeta\bin\System.Buffers.xml

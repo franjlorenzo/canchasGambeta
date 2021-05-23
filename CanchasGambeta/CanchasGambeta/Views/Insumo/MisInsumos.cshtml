@@ -9,7 +9,7 @@
     <div class="row" style="transform: translateY(60px);">
         <div class="col-md-6">
             <div>
-                <h3 class="text-center" style="color:white">Mis Insumos </h3>
+                <h3 class="text-center" style="color:white">Mis Insumos</h3>
             </div>
         </div>
     </div>
@@ -40,9 +40,8 @@
                     <tbody>
                         @foreach (var listado in Model)
                         {
-                            <tr class="text-center">
+                            <tr>
                                 <td class="text-center">
-                                    @Html.HiddenFor(Model => listado.idInsumo)
                                     @listado.insumo1
                                 </td>
                                 <td class="text-center">
@@ -94,7 +93,7 @@
         </div>
 
         <div class="col-md-6 text-center">
-            <div class="container" id="divNuevoIntegrante" style="color:white; display:block;">
+            <div class="container" style="color:white; display:block;">
                 <h4 class="p-1">Ingrese los valores del nuevo insumo</h4>
                 @using (Html.BeginForm("MisInsumos", "Insumo", FormMethod.Post, new { onsubmit = "return validacionNuevoInsumo();" }))
                 {
@@ -118,7 +117,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" id="btnNuevoInsumo" class="btn btn-success">Agregar</button>
+                    <button type="submit" class="btn btn-success">Agregar</button>
                     <div class="form-label-group text-danger" style="margin-left:10px">
                         @ViewBag.ErrorInsertInsumo
                     </div>
