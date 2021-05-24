@@ -245,7 +245,9 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idInstrumento, instrumento, fechaCompra from Instrumento";
+                string consulta = @"select idInstrumento, instrumento, fechaCompra 
+                                    from Instrumento
+                                    where estado = 1";
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consulta;
@@ -285,10 +287,11 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consultaInsertInstrumento = "insert into Instrumento (instrumento, fechaCompra) values (@instrumento, @fechaCompra)";
+                string consultaInsertInstrumento = "insert into Instrumento (instrumento, fechaCompra, estado) values (@instrumento, @fechaCompra, @estado)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@instrumento", nuevoInstrumento.instrumento1);
                 comando.Parameters.AddWithValue("@fechaCompra", nuevoInstrumento.fechaCompra);
+                comando.Parameters.AddWithValue("@estado", 1);
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consultaInsertInstrumento;
@@ -318,7 +321,8 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consultaUpdateInstrumento = "";
+                string consultaUpdateInstrumento = @"update Instrumento set estado = 0
+                                                     where idInstrumento = @idInstrumento";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idInstrumento", idInstrumento);
 
@@ -327,6 +331,93 @@ namespace CanchasGambeta.AccesoBD
 
                 conexion.Open();
                 comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+
+                string consultaInsertInstrumentoRoto = @"insert into InstrumentoRoto (instrumento, fechaRotura) values (@idInstrumento, getdate())";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idInstrumento", idInstrumento);
+
+                comando.CommandText = consultaInsertInstrumentoRoto;
+                comando.ExecuteNonQuery();
+
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static List<InstrumentoRotoVM> obtenerInstrumentosRotos()
+        {
+            List<InstrumentoRotoVM> listaInstrumentosRotos = new List<InstrumentoRotoVM>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select ir.instrumento 'idInstrumento', i.instrumento, fechaRotura 
+                                    from Instrumento i join InstrumentoRoto ir on i.idInstrumento = ir.instrumento";
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        InstrumentoRotoVM auxiliar = new InstrumentoRotoVM();
+                        auxiliar.IdInstrumento = int.Parse(lector["idInstrumento"].ToString());
+                        auxiliar.Instrumento = lector["instrumento"].ToString();
+                        auxiliar.FechaRotura = DateTime.Parse(lector["fechaRotura"].ToString());
+                        listaInstrumentosRotos.Add(auxiliar);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return listaInstrumentosRotos;
+        }
+
+        public static bool eliminarInstrumentoRoto(int idInstrumento)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consultaEliminarInstrumentoRoto = @"delete from InstrumentoRoto where instrumento = @idInstrumento";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idInstrumento", idInstrumento);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consultaEliminarInstrumentoRoto;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+
+                string consultaEliminarInstrumento = @"delete from Instrumento where idInstrumento = @idInstrumento";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idInstrumento", idInstrumento);
+
+                comando.CommandText = consultaEliminarInstrumento;
                 comando.ExecuteNonQuery();
 
                 resultado = true;

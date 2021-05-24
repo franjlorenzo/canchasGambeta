@@ -23,6 +23,7 @@ namespace CanchasGambeta.Models
         public int idInstrumento { get; set; }
         public string instrumento1 { get; set; }
         public System.DateTime fechaCompra { get; set; }
+        public bool estado { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InstrumentoRoto> InstrumentoRoto { get; set; }

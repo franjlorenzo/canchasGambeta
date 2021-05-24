@@ -56,6 +56,7 @@
           <Property Name="idInstrumento" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="instrumento" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="fechaCompra" Type="date" Nullable="false" />
+          <Property Name="estado" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="InstrumentoRoto">
           <Key>
@@ -701,6 +702,7 @@
           <Property Name="instrumento1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="fechaCompra" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="InstrumentoRoto" Relationship="Canchas_GambetaModel2.FK_InstrumentoRoto_Instrumento" FromRole="Instrumento" ToRole="InstrumentoRoto" />
+          <Property Name="estado" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="InstrumentoRoto">
           <Key>
@@ -869,6 +871,7 @@
           <EntitySetMapping Name="Instrumento">
             <EntityTypeMapping TypeName="Canchas_GambetaModel2.Instrumento">
               <MappingFragment StoreEntitySet="Instrumento">
+                <ScalarProperty Name="estado" ColumnName="estado" />
                 <ScalarProperty Name="fechaCompra" ColumnName="fechaCompra" />
                 <ScalarProperty Name="instrumento1" ColumnName="instrumento" />
                 <ScalarProperty Name="idInstrumento" ColumnName="idInstrumento" />

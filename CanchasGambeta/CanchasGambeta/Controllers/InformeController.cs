@@ -52,6 +52,7 @@ namespace CanchasGambeta.Controllers
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             if (TempData["ErrorInsertInstrumento"] != null) ViewBag.ErrorInsertInstrumento = TempData["ErrorInsertInstrumento"].ToString();
+            if (TempData["ErrorInsertInstrumentoRoto"] != null) ViewBag.ErrorInsertInstrumentoRoto = TempData["ErrorInsertInstrumentoRoto"].ToString();
 
             List<Instrumento> listaInstrumentosDisponibles = AccesoBD.AD_Informe.obtenerInstrumentosDisponibles();
             return View(listaInstrumentosDisponibles);
@@ -71,6 +72,55 @@ namespace CanchasGambeta.Controllers
                 {
                     TempData["ErrorInsertInstrumento"] = "Ocurrió un error al cargar el nuevo instrumento, inténtelo nuevamente.";
                     return RedirectToAction("InstrumentosDisponibles", "Informe");
+                }
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult NuevoInstrumentoRoto(int idInstrumento)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Informe.nuevoElementoRoto(idInstrumento);
+                if (resultado) return RedirectToAction("InstrumentosDisponibles", "Informe");
+                else
+                {
+                    TempData["ErrorInsertInstrumentoRoto"] = "Ocurrió un error al registrar el instrumento roto, inténtelo nuevamente.";
+                    return RedirectToAction("InstrumentosDisponibles", "Informe");
+                }
+            }
+            return View();
+        }
+
+        public ActionResult InstrumentosRotos()
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            if (TempData["ErrorEliminarInstrumentoRoto"] != null) ViewBag.ErrorEliminarInstrumentoRoto = TempData["ErrorEliminarInstrumentoRoto"].ToString();
+
+            List<InstrumentoRotoVM> listaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotos();
+            return View(listaInstrumentosRotos);
+        }
+
+        [HttpPost]
+        public ActionResult EliminarInstrumentoRoto(int idInstrumento)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Informe.eliminarInstrumentoRoto(idInstrumento);
+                if (resultado) return RedirectToAction("InstrumentosRotos", "Informe");
+                else
+                {
+                    TempData["ErrorEliminarInstrumentoRoto"] = "Ocurrió un error al eliminar el instrumento roto, inténtelo nuevamente.";
+                    return RedirectToAction("InstrumentosRotos", "Informe");
                 }
             }
             return View();

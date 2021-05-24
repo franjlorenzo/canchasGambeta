@@ -131,6 +131,7 @@
     <EntitySetMapping Name="Instrumento">
       <EntityTypeMapping TypeName="Canchas_GambetaModel2.Instrumento">
         <MappingFragment StoreEntitySet="Instrumento">
+          <ScalarProperty Name="estado" ColumnName="estado" />
           <ScalarProperty Name="fechaCompra" ColumnName="fechaCompra" />
           <ScalarProperty Name="instrumento1" ColumnName="instrumento" />
           <ScalarProperty Name="idInstrumento" ColumnName="idInstrumento" />

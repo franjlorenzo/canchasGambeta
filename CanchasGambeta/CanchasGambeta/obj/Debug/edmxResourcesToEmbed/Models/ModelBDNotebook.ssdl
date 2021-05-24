@@ -51,6 +51,7 @@
     <Property Name="idInstrumento" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="instrumento" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="fechaCompra" Type="date" Nullable="false" />
+    <Property Name="estado" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="InstrumentoRoto">
     <Key>

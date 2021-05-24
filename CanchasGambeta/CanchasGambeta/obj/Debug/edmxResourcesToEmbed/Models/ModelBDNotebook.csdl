@@ -342,6 +342,7 @@
     <Property Name="instrumento1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="fechaCompra" Type="DateTime" Nullable="false" Precision="0" />
     <NavigationProperty Name="InstrumentoRoto" Relationship="Canchas_GambetaModel2.FK_InstrumentoRoto_Instrumento" FromRole="Instrumento" ToRole="InstrumentoRoto" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="InstrumentoRoto">
     <Key>

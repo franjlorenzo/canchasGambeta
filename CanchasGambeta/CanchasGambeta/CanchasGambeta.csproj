@@ -254,6 +254,7 @@
     <Compile Include="ViewModels\CanchasMasReservadasVM.cs" />
     <Compile Include="ViewModels\ClientesConMasReservas.cs" />
     <Compile Include="ViewModels\HorariosMasReservados.cs" />
+    <Compile Include="ViewModels\InstrumentoRotoVM.cs" />
     <Compile Include="ViewModels\MailEquipoVM.cs" />
     <Compile Include="ViewModels\ProveedorPedidoVM.cs" />
     <Compile Include="ViewModels\ReservasActivasYCanceladasVM.cs" />
@@ -384,6 +385,7 @@
     <Content Include="Views\Informe\ClientesConMasReservas.cshtml" />
     <Content Include="Views\Informe\HorariosMasReservados.cshtml" />
     <Content Include="Views\Informe\InstrumentosDisponibles.cshtml" />
+    <Content Include="Views\Informe\InstrumentosRotos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
