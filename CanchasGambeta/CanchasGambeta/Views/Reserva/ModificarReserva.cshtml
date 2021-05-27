@@ -8,7 +8,7 @@
 <div class="row" style="transform: translateY(60px); color:white">
     <div class="col-md-6">
         <h4 class="p-1">Llene los siguientes campos para concretar una reserva:</h4>
-        @using (Html.BeginForm("ModificarReserva", "Reserva", FormMethod.Post, new { onsubmit = "" }))
+        @using (Html.BeginForm("ModificarReserva", "Reserva", FormMethod.Post, new { onsubmit = "return validacionModificarReserva();" }))
         {
             @Html.HiddenFor(Model => Model.IdReserva)
             <div class="row">
@@ -17,8 +17,9 @@
                         <div class="form-group">
                             <label class="col-sm-6 control-label">Fecha</label>
                             <div class="col-sm-6">
-                                <input hidden type="datetime" id="fechaReserva" name="fechaReserva" value="@Model.Fecha" class="form-control datepicker" />
-                                <input type="date" id="fechaNuevaReserva" name="fechaNuevaReserva" value="@Model.Fecha" class="form-control datepicker" />
+                                <!--<input hidden type="datetime" id="fechaReserva" name="fechaReserva" value="Model.Fecha" class="form-control datepicker" />-->
+                                @Html.TextBoxFor(model => model.Fecha, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", id = "fechaNuevaReserva", name = "fechaNuevaReserva" }) <!--comprobar id y name para el controlador-->
+                                <!--<input type="date" id="fechaNuevaReserva" name="fechaNuevaReserva" value="Model.Fecha" class="form-control datepicker" />-->
                             </div>
                         </div>
                         <div class="form-group">
@@ -122,6 +123,6 @@
     </div>
 </div>
 
-<script src="~/Scripts/scriptReservas.js"></script>
+<script src="~/Scripts/scriptModificarReserva.js"></script>
 
 

@@ -142,7 +142,8 @@ namespace CanchasGambeta.AccesoBD
                 string consulta = @"select idReserva, fecha, ho.horario, tipoCancha, servicioAsador, servicioInstrumentos, ho.idHorario, idCancha, estado
                                     from Reserva r join Horario ho on ho.idHorario = r.horario
                                          join Cancha c on c.idCancha = r.cancha
-                                    where cliente = @idUsuario and day(fecha) >= day(getdate())";
+                                    where cliente = @idUsuario and fecha >= dateadd(day, -1, fecha)
+                                    order by 2";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idUsuario", sesion.idUsuario);
 
@@ -221,7 +222,7 @@ namespace CanchasGambeta.AccesoBD
             return idReserva;
         }
 
-        public static bool insertReservaInsumo(NuevaReservaConDropDownList reservaVM, int idReserva, List<int> insumosSeleccionados)
+        public static bool insertReservaInsumo(NuevaReservaConDropDownList reservaVM, List<int> insumosSeleccionados)
         {
             bool updateStock = false;
             bool resultado = false;
@@ -240,7 +241,7 @@ namespace CanchasGambeta.AccesoBD
                 {
                     if (insumosSeleccionados[i] != 0) { updateStock = true; }
                     comando.Parameters.Clear();
-                    comando.Parameters.AddWithValue("@idReserva", idReserva);
+                    comando.Parameters.AddWithValue("@idReserva", reservaVM.idReserva);
                     comando.Parameters.AddWithValue("@insumo", reservaVM.ListaInsumos[i].idInsumo);
                     comando.Parameters.AddWithValue("@cantidad", insumosSeleccionados[i]);
                     comando.ExecuteNonQuery();
@@ -563,7 +564,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        internal static List<SelectListItem> obtenerHorariosCancha(DateTime fecha, int idCancha)
+        public static List<SelectListItem> obtenerHorariosCancha(DateTime fecha, int idCancha)
         {
             List<Horario> listaHorario = new List<Horario>();
             List<SelectListItem> listaHorariosCancha = new List<SelectListItem>();
@@ -618,6 +619,81 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return listaHorariosCancha;
+        }
+
+        public static bool insertHorarioReservas(int idReserva, int idHorario)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"insert into HorarioReservas (horario, reserva) values (@idHorario, @idReserva)";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idHorario", idHorario);
+                comando.Parameters.AddWithValue("@idReserva", idReserva);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static DatosReserva obtenerDatosReserva(int idReserva)
+        {
+            DatosReserva reserva = new DatosReserva();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select fecha, tipoCancha, h.horario
+                                    from Reserva r join Horario h on h.idHorario = r.horario
+                                         join Cancha c on c.idCancha = r.cancha
+                                    where idReserva = @idReserva";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idReserva", idReserva);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        reserva.Fecha = DateTime.Parse(lector["fecha"].ToString());
+                        reserva.TipoCancha = lector["tipoCancha"].ToString();
+                        reserva.Horario = lector["horario"].ToString();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return reserva;
         }
     }
 }

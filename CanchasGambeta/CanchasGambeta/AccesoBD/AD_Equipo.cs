@@ -615,7 +615,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static Equipo obtenerEquipoUsuario(int idEquipo)
+        public static Equipo obtenerEquipoUsuario(int? idEquipo)
         {
             Equipo nuevo = new Equipo();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -652,6 +652,43 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return nuevo;
+        }
+
+        public static bool cambiarNombreEquipo(string nombreEquipo)
+        {
+            bool resultado = false;
+            Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"update Equipo set nombreEquipo = @nombreEquipo
+                                    where idEquipo = @idEquipo";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@nombreEquipo", nombreEquipo);
+                comando.Parameters.AddWithValue("@idEquipo", obtenerEquiporPorId());
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                if (comando.ExecuteNonQuery() == 0)
+                {
+                    return resultado;
+                }
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
         }
     }
 }

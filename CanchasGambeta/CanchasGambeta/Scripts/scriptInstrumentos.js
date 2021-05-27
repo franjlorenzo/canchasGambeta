@@ -18,3 +18,11 @@ function confirmacionNuevoInstrumentoRoto() {
     }
     return false;
 }
+
+function confirmacionEliminarInstrumentoRoto() {
+    var confirmar = confirm("¿Está seguro de que desea eliminar este intrumento roto?");
+    if (confirmar) {
+        return true;
+    }
+    return false;
+}

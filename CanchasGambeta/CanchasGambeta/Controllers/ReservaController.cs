@@ -2,10 +2,7 @@
 using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Globalization; //Esto para parse de la fecha por parametro al registrar una reserva
 using System.Net.Mail;
 using System.Net;
 
@@ -25,46 +22,37 @@ namespace CanchasGambeta.Controllers
             {
                 modelo.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
             }
-            DateTime fechaNull = new DateTime(0001, 01, 01);
-            ViewBag.fechaReserva = fechaNull;
+            modelo.fecha = DateTime.Today;
             return View(new VistaReserva { NuevaReservaConDropDownList = modelo, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
         }
 
         [HttpPost]       
-        public ActionResult MisReservas(NuevaReservaConDropDownList nuevaReserva, List<int> cantidad, string fecha)
+        public ActionResult MisReservas(NuevaReservaConDropDownList nuevaReserva, List<int> cantidad)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-            DateTime fechaNull = new DateTime(0001, 01, 01);
-            DateTime fechaReserva = DateTime.Parse(Request["fechaReservaElegida"]);
-            int canchaSeleccionada = 0;
-
-            DateTime fechaElegida = DateTime.ParseExact(fecha, "d/M/yyyy", CultureInfo.CurrentCulture);
+            nuevaReserva.fecha = DateTime.Parse(Request["NuevaReservaConDropDownList.fecha"]);
+            int idCanchaElegida = int.Parse(Request["idCanchaElegida"]);
+            DateTime fechaElegida = DateTime.Parse(Request["fechaElegida"]);
 
             try
             {
-                //Se elije la fecha de la reserva, no se elige la cancha entonces se devuelve la vista sin modificaciones
-                if (!nuevaReserva.fecha.Equals(fechaNull) && nuevaReserva.idCancha != canchaSeleccionada)
+                /*Solo se cambia la fecha, cancha no seleccionada. Se devuelve la vista con la fecha cambiada y con viewbag actualizado*/
+                if(nuevaReserva.fecha != fechaElegida && nuevaReserva.idCancha == idCanchaElegida && nuevaReserva.idCancha == 0)
                 {
-
-                }
-                if (!nuevaReserva.fecha.Equals(fechaNull) && nuevaReserva.idCancha == canchaSeleccionada)
-                {
-                    fechaReserva = nuevaReserva.fecha;
-                    ViewBag.fechaReserva = fechaReserva;
                     Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
                     NuevaReservaConDropDownList modelo = new NuevaReservaConDropDownList();
                     foreach (var cancha in db.Cancha)
                     {
                         modelo.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
                     }
+                    modelo.fecha = nuevaReserva.fecha;
+                    ViewBag.fechaElegida = nuevaReserva.fecha;
                     return View(new VistaReserva { NuevaReservaConDropDownList = modelo, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
                 }
-
-                //Se elije la fecha de la reserva, la cancha y se devuelven los horarios disponibles
-                if (!fechaElegida.Equals(fechaNull) && fechaReserva.Equals(fechaNull)) //cuando elijo horario entra aca y no deberia
+                /*Solo se cambia la cancha, pero antes no habia cancha seleccionada. Se devuelven los horarios disponibles de esa cancha en ese dia*/
+                if(nuevaReserva.fecha == fechaElegida && nuevaReserva.idCancha != idCanchaElegida && idCanchaElegida == 0)
                 {
-                    ViewBag.fechaReserva = fechaElegida; //CAMBIADO, va fechaReserva
                     Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
                     foreach (var cancha in db.Cancha)
                     {
@@ -78,50 +66,118 @@ namespace CanchasGambeta.Controllers
                             break;
                         }
                     }
-                    nuevaReserva.Horarios = AccesoBD.AD_Reserva.obtenerHorariosCancha(fechaReserva, nuevaReserva.idCancha);
+                    nuevaReserva.Horarios = AccesoBD.AD_Reserva.obtenerHorariosCancha(nuevaReserva.fecha, nuevaReserva.idCancha);
+                    ViewBag.idCanchaElegida = nuevaReserva.idCancha;
+                    ViewBag.fechaElegida = nuevaReserva.fecha;
                     return View(new VistaReserva { NuevaReservaConDropDownList = nuevaReserva, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
                 }
-
-                //Se elije el horario, no se cambia la fecha elegida o se elige la misma y se hace el insert de la reserva y los insumos
-                if ((nuevaReserva.fecha.Equals(fechaNull) && !fechaReserva.Equals(fechaNull)) || (nuevaReserva.fecha.Equals(fechaReserva) && !fechaReserva.Equals(fechaNull)))
+                /*Se cambia la fecha y hay una cancha seleccionada anteriormente. Se devuelven los horarios actualizados para esa fecha*/
+                if(nuevaReserva.fecha != fechaElegida && nuevaReserva.idCancha == idCanchaElegida && nuevaReserva.idCancha != 0)
                 {
-                    nuevaReserva.fecha = fechaReserva;
-                    nuevaReserva.idHorario = int.Parse(Request["NuevaReservaConDropDownList.Horarios"]);
+                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    foreach (var cancha in db.Cancha)
+                    {
+                        nuevaReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
+                    }
+                    foreach (var item in nuevaReserva.Canchas)
+                    {
+                        if (item.Value.Equals(nuevaReserva.idCancha.ToString()))
+                        {
+                            item.Selected = true;
+                            break;
+                        }
+                    }
+                    nuevaReserva.Horarios = AccesoBD.AD_Reserva.obtenerHorariosCancha(nuevaReserva.fecha, nuevaReserva.idCancha);
+                    ViewBag.fechaElegida = nuevaReserva.fecha;
+                    ViewBag.idCanchaElegida = nuevaReserva.idCancha;
+                    return View(new VistaReserva { NuevaReservaConDropDownList = nuevaReserva, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
+                }
+                /*Se cambia la cancha y ya se estaban mostrando los horarios. Se devuelven los horarios actualizados para esa cancha*/
+                if(nuevaReserva.fecha == fechaElegida && nuevaReserva.idCancha != idCanchaElegida && idCanchaElegida != 0)
+                {
+                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    foreach (var cancha in db.Cancha)
+                    {
+                        nuevaReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
+                    }
+                    foreach (var item in nuevaReserva.Canchas)
+                    {
+                        if (item.Value.Equals(nuevaReserva.idCancha.ToString()))
+                        {
+                            item.Selected = true;
+                            break;
+                        }
+                    }
+                    nuevaReserva.Horarios = AccesoBD.AD_Reserva.obtenerHorariosCancha(nuevaReserva.fecha, nuevaReserva.idCancha);
+                    ViewBag.idCanchaElegida = nuevaReserva.idCancha;
+                    return View(new VistaReserva { NuevaReservaConDropDownList = nuevaReserva, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
+                }
+                /*La fecha y cancha coinciden con sus viewbags y el horario es seleccionado. Se hace el insert en la BD*/
+                if (nuevaReserva.fecha == fechaElegida && nuevaReserva.idCancha == idCanchaElegida && nuevaReserva.idHorario != 0)
+                {
                     nuevaReserva.servicioAsador = bool.Parse(Request["NuevaReservaConDropDownList.servicioAsador"].Contains("true").ToString());
                     nuevaReserva.servicioInstrumento = bool.Parse(Request.Form["NuevaReservaConDropDownList.servicioInstrumento"].Contains("true").ToString());
 
-                    bool insertExitoso = AccesoBD.AD_Reserva.nuevaReserva(nuevaReserva);
-                    if (insertExitoso)
+                    bool insertReserva = AccesoBD.AD_Reserva.nuevaReserva(nuevaReserva);
+                    if (insertReserva)
                     {
-                        bool insertReservaInsumo = AccesoBD.AD_Reserva.insertReservaInsumo(nuevaReserva, AccesoBD.AD_Reserva.obtenerReservaPorAtributos(nuevaReserva.idCancha, nuevaReserva.idHorario, nuevaReserva.fecha), cantidad);
-                        if (insertReservaInsumo) return RedirectToAction("MisReservas", "Reserva");
+                        nuevaReserva.idReserva = AccesoBD.AD_Reserva.obtenerReservaPorAtributos(nuevaReserva.idCancha, nuevaReserva.idHorario, nuevaReserva.fecha);
+                        bool insertReservaInsumo = AccesoBD.AD_Reserva.insertReservaInsumo(nuevaReserva, cantidad);
+                        bool insertHorarioReservas = AccesoBD.AD_Reserva.insertHorarioReservas(nuevaReserva.idReserva, nuevaReserva.idHorario);
+                        if (insertReservaInsumo && insertHorarioReservas)
+                        {
+                            bool enviarMails = bool.Parse(Request["NuevaReservaConDropDownList.enviarMails"].Contains("true").ToString());
+                            if (enviarMails)
+                            {
+                                var smtpClient = new SmtpClient("smtp.gmail.com")
+                                {
+                                    Port = 587,
+                                    Credentials = new NetworkCredential("canchasgambeta@gmail.com", "Canchasgambetafl1997"),
+                                    EnableSsl = true,
+                                };
+
+                                DatosReserva reservaCliente = AccesoBD.AD_Reserva.obtenerDatosReserva(nuevaReserva.idReserva);
+                                List<MailEquipoVM> listaIntegrantesEquipo = AccesoBD.AD_Equipo.obtenerMailsEquipo(sesion.equipo);
+                                string mensaje = "Hola! su compañero de equipo hizo una reserva para el día " + reservaCliente.Fecha + " a las " + reservaCliente.Horario + " en la cancha " + reservaCliente.TipoCancha;
+                                
+                                foreach (var lista in listaIntegrantesEquipo)
+                                {
+                                    smtpClient.Send("canchasgambeta@gmail.com", lista.Email, "Nueva reserva!", mensaje);
+                                }
+                            }
+                            return RedirectToAction("MisReservas", "Reserva");
+                        }
                     }
                     else
                     {
-                        ViewBag.ErrorInsertReserva = "Ocurrió un error al registrar la reserva. Intenteló nuevamente.";
+                        ViewBag.ErrorInsertReserva = "Ocurrió un error al registrar la reserva, inténtelo nuevamente.";
                         Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
-                        NuevaReservaConDropDownList modelo = new NuevaReservaConDropDownList();
                         foreach (var cancha in db.Cancha)
                         {
-                            modelo.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
+                            nuevaReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
                         }
-                        ViewBag.fechaReserva = fechaNull;
-                        return View(new VistaReserva { NuevaReservaConDropDownList = modelo, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
+                        foreach (var item in nuevaReserva.Canchas)
+                        {
+                            if (item.Value.Equals(nuevaReserva.idCancha.ToString()))
+                            {
+                                item.Selected = true;
+                                break;
+                            }
+                        }
+                        foreach (var horario in db.Horario)
+                        {
+                            nuevaReserva.Horarios.Add(new SelectListItem { Text = horario.horario1, Value = horario.idHorario.ToString() });
+                        }
+                        foreach (var item in nuevaReserva.Horarios)
+                        {
+                            if (item.Value.Equals(nuevaReserva.idHorario.ToString()))
+                            {
+                                item.Selected = true;
+                                break;
+                            }
+                        }
+                        return View(new VistaReserva { NuevaReservaConDropDownList = nuevaReserva, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
                     }
-                }
-
-                //No se elige una fecha, se elige la cancha entonces se muestra mensaje para que se seleccione una fecha
-                if (nuevaReserva.fecha.Equals(fechaNull) && fechaReserva.Equals(fechaNull))
-                {
-                    ViewBag.fechaReserva = fechaNull;
-                    ViewBag.SeleccionarFecha = "Debe seleccionar una fecha primero.";
-                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
-                    NuevaReservaConDropDownList modelo = new NuevaReservaConDropDownList();
-                    foreach (var cancha in db.Cancha)
-                    {
-                        modelo.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
-                    }
-                    return View(new VistaReserva { NuevaReservaConDropDownList = modelo, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
                 }
             }
             catch (Exception ex)
@@ -247,22 +303,6 @@ namespace CanchasGambeta.Controllers
                 }
             }
             return View();
-        }
-
-        //PRUEBA MAILS
-        [HttpPost]
-        public ActionResult EnviarMail()
-        {
-
-            var smtpClient = new SmtpClient("smtp.gmail.com")
-            {
-                Port = 587,
-                Credentials = new NetworkCredential("canchasgambeta@gmail.com", "Canchasgambetafl1997"),
-                EnableSsl = true,
-            };
-
-            smtpClient.Send("canchasgambeta@gmail.com", "lorenzofran1@gmail.com", "Prueba", "Esto te lo mando con C#");
-            return RedirectToAction("IndexCliente", "Cliente");
         }
     }
 }

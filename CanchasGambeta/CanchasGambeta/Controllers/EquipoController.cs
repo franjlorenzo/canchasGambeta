@@ -191,13 +191,48 @@ namespace CanchasGambeta.Controllers
                 }
                 else
                 {
-                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
-                    ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
                     TempData["ErrorEliminarEquipo"] = "Ocurrió un error al eliminar su equipo, inténtelo nuevamente";
                     return RedirectToAction("MiEquipo", "Equipo");
                 }
             }
             return View(idEquipo);
+        }
+
+        public ActionResult CambiarNombreEquipo()
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
+            return View(equipo);
+        }
+
+        [HttpPost]
+        public ActionResult CambiarNombreEquipo(string nombreEquipo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            if (ModelState.IsValid)
+            {
+                bool existeEquipo = AccesoBD.AD_Equipo.existeEquipo(nombreEquipo);
+                if (existeEquipo)
+                {
+                    ViewBag.ErrorCreacion = "El nombre del equipo ya se encuentra registrado, intente con otro.";
+                    Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
+                    return View(equipo);
+                }
+
+                bool resultado = AccesoBD.AD_Equipo.cambiarNombreEquipo(nombreEquipo);
+                if (resultado) return RedirectToAction("MiEquipo", "Equipo");
+                else
+                {
+                    ViewBag.ErrorCambiarNombre = "Ocurrió un error al cambiar el nombre de su equipo, inténtelo nuevamente";
+                    Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
+                    return View(equipo);
+                }
+            }
+            return View();
         }
     }
 }

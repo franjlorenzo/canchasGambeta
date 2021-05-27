@@ -21,7 +21,7 @@ namespace CanchasGambeta.Models
             this.EquipoMails = new HashSet<EquipoMails>();
         }
     
-        public int idEquipo { get; set; }
+        public int? idEquipo { get; set; }
         public string nombreEquipo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

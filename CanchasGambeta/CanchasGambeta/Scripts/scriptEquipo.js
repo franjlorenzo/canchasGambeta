@@ -9,6 +9,16 @@ if (cantmiembros.length == 13) {
     divNuevoIntegrante.style.display = "none";
 }
 
+function validacionNuevoEquipo() {
+    let txtNombreEquipo = document.getElementById("txtNombreEquipo").value;
+
+    if (!txtNombreEquipo) {
+        alert("El equipo debe tener un nombre!");
+        return false;
+    }
+    return true;
+}
+
 function validacionNuevoIntegrante() {
     var txtEmail = document.getElementById("txtEmail").value;
     if (!txtEmail) {

@@ -272,7 +272,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        internal static List<TablaPedido> obtenerPedidosPendientes()
+        public static List<TablaPedido> obtenerPedidosPendientes()
         {
             List<TablaPedido> lista = new List<TablaPedido>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);

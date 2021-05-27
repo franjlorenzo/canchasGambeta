@@ -2,12 +2,18 @@
 
 function validacionNuevaReserva() {
     let cboCancha = document.getElementById("idCancha").value;
-    let cboHorario = document.getElementById("NuevaReservaConDropDownList_Horarios").value;
-    let fecha = document.getElementById("fechaReservaElegida").value;
+    let cboHorario = document.getElementById("idHorario").value;
+    let fecha = document.getElementById("NuevaReservaConDropDownList_fecha").value;
 
     if (cboCancha == "" | cboHorario == "" | fecha == "") {
-        alert("Debe seleccionar un horario para registrar la reserva.");
-        return false;
+        if (cboCancha == "") {
+            alert("Debe seleccionar una cancha para registrar la reserva");
+            return false;
+        }
+        if (cboHorario == "") {
+            alert("Debe seleccionar un horario para registrar la reserva");
+            return false;
+        }
     }
     return true;
 }
@@ -40,28 +46,12 @@ const botonInsumos = () => {
 }
 
 function confirmacionEliminar() {
-    var eliminar = confirm("¿Esta seguro de que quiere eliminar este pedido?");
+    var eliminar = confirm("¿Esta seguro de que quiere eliminar esta reserva?");
     if (eliminar) return true;
     return false;
 }
 
-/*function actualizarFechaHidden() {
-    var inputFecha = document.getElementById("idFechaReserva").value;
-    var fechaVisible = new Date(inputFecha.value);
-    fechaVisible.setMinutes(fechaVisible.getMinutes() + fechaVisible.getTimezoneOffset());
-    fechaVisible = fechaVisible.getTime();
-
-    let dia = String(fechaVisible.getDate());
-    let mes = String(fechaVisible.getMonth() + 1);
-    let anio = String(fechaVisible.getFullYear());
-
-    if (mes.length < 2) mes = '0' + mes;
-    if (dia.length < 2) dia = '0' + dia;
-
-    document.getElementById("fechaReservaElegida").value = `${dia}/${mes}/${anio}`;
-}*/
-
-var idHorario = document.getElementById("NuevaReservaConDropDownList_Horarios");
+var idHorario = document.getElementById("idHorario");
 if (idHorario.length > 1) {
     idHorario.removeAttribute("disabled");
 }

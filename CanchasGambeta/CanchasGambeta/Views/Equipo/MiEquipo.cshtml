@@ -8,8 +8,9 @@
 <div class="container">
     <div class="row" style="transform: translateY(60px);">
         <div class="col-md-6">
-            <div>
+            <div class="btn-group">
                 <h3 class="text-center" style="color:white">Mi equipo: @ViewBag.nombreEquipo </h3>
+                <a href="@Url.Action("CambiarNombreEquipo", "Equipo", new {@nombreEquipo = ViewBag.nombreEquipo})" class="btn btn-primary ml-2 mb-2">Cambiar nombre</a>
             </div>
         </div>
     </div>

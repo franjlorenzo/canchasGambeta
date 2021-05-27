@@ -81,6 +81,7 @@ namespace CanchasGambeta.ViewModels
         public DateTime fecha { get; set; }
         public bool servicioAsador { get; set; }
         public bool servicioInstrumento { get; set; }
+        public bool enviarMails { get; set; }
 
         public List<Insumo> listaInsumos = AccesoBD.AD_Insumo.obtenerInsumos();
         public List<Insumo> ListaInsumos { get => listaInsumos; set => listaInsumos = value; }
@@ -94,6 +95,17 @@ namespace CanchasGambeta.ViewModels
             this.Horarios = new List<SelectListItem>();
             this.fecha = new DateTime();
         }
+    }
+
+    public class DatosReserva
+    {
+        private DateTime fecha;
+        private string tipoCancha;
+        private string horario;
+
+        public DateTime Fecha { get => fecha; set => fecha = value; }
+        public string TipoCancha { get => tipoCancha; set => tipoCancha = value; }
+        public string Horario { get => horario; set => horario = value; }
     }
 
     public class VistaReserva

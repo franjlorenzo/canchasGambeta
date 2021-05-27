@@ -15,6 +15,10 @@ const validacionRegistro = () => {
         alert("Las contraseñas no coinciden.");
         return false;
     }
+    else if (txtTelefono.length < 10) {
+        alert("El teléfono que ingresó no es válido");
+        return false;
+    }
     if (!validarEmail(txtEmail)) {
         alert("El email que ingresó no es válido");
         return false;
@@ -33,16 +37,6 @@ const validacionLogIn = () => {
 
     if (!txtEmail | !txtPassword) {
         alert("Faltan campos obligatorios.");
-        return false;
-    }
-    return true;
-}
-
-const validacionNuevoEquipo = () => {
-    let txtNombreEquipo = document.getElementById("txtNombreEquipo").value;
-
-    if (!txtNombreEquipo) {
-        alert("El equipo debe tener un nombre!");
         return false;
     }
     return true;
