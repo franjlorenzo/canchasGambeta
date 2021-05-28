@@ -91,7 +91,7 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
-        public static bool nuevaReserva(NuevaReservaConDropDownList reservaVM)
+        public static bool nuevaReserva(NuevaReservaVM reservaVM)
         {
             bool resultado = false;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -142,8 +142,8 @@ namespace CanchasGambeta.AccesoBD
                 string consulta = @"select idReserva, fecha, ho.horario, tipoCancha, servicioAsador, servicioInstrumentos, ho.idHorario, idCancha, estado
                                     from Reserva r join Horario ho on ho.idHorario = r.horario
                                          join Cancha c on c.idCancha = r.cancha
-                                    where cliente = @idUsuario and fecha >= dateadd(day, -1, fecha)
-                                    order by 2";
+                                    where cliente = @idUsuario and fecha >= CURRENT_TIMESTAMP-1 and estado = 1
+                                    order by 2, 3";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idUsuario", sesion.idUsuario);
 
@@ -222,7 +222,7 @@ namespace CanchasGambeta.AccesoBD
             return idReserva;
         }
 
-        public static bool insertReservaInsumo(NuevaReservaConDropDownList reservaVM, List<int> insumosSeleccionados)
+        public static bool insertReservaInsumo(NuevaReservaVM reservaVM, List<int> insumosSeleccionados)
         {
             bool updateStock = false;
             bool resultado = false;
@@ -408,8 +408,8 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select fecha, servicioAsador, servicioInstrumentos
-                                    from Reserva r
+                string consulta = @"select fecha, cancha, r.horario, h.horario 'Hora', servicioAsador, servicioInstrumentos
+                                    from Reserva r join Horario h on h.idHorario = r.horario
                                     where idReserva = @idReserva";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idReserva", idReserva);
@@ -426,6 +426,9 @@ namespace CanchasGambeta.AccesoBD
                     while (lector.Read())
                     {
                         datosReserva.Fecha = DateTime.Parse(lector["fecha"].ToString());
+                        datosReserva.IdCancha = int.Parse(lector["cancha"].ToString());
+                        datosReserva.IdHorario = int.Parse(lector["horario"].ToString());
+                        datosReserva.Horario = lector["Hora"].ToString();
                         datosReserva.ServicioAsador = bool.Parse(lector["servicioAsador"].ToString());
                         datosReserva.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
                     }
@@ -442,7 +445,7 @@ namespace CanchasGambeta.AccesoBD
             return datosReserva;
         }
 
-        public static bool modificarReserva(ActualizarReservaVM actualizarReservaVM, List<int> cantidadesNuevas, List<int> idInsumosEnReserva)
+        public static bool modificarReserva(ActualizarReservaVM actualizarReservaVM, List<int> cantidadesNuevas)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -539,10 +542,13 @@ namespace CanchasGambeta.AccesoBD
                 comando.Connection = conexion;
                 comando.ExecuteNonQuery();
 
-                string consultaEliminarInsumosDeReserva = @"delete from ReservaInsumos where reserva = @idReserva and insumo = @idInsumo";
-                comando.CommandText = consultaEliminarInsumosDeReserva;
+                string consultaEliminarInsumosDeReserva = @"delete from ReservaInsumos 
+                                                            where reserva = @idReserva and insumo = @idInsumo";
+                string consultaSumarStockInsumo = @"update Insumo set stock = stock + @cantidad
+                                                    where idInsumo = @idInsumo";
                 List<Insumo> insumosEnReserva = obtenerInsumosDeLaReserva(idReserva);
 
+                comando.CommandText = consultaEliminarInsumosDeReserva;
                 foreach (var insumo in insumosEnReserva)
                 {
                     comando.Parameters.Clear();
@@ -550,6 +556,23 @@ namespace CanchasGambeta.AccesoBD
                     comando.Parameters.AddWithValue("@idInsumo", insumo.idInsumo);
                     comando.ExecuteNonQuery();
                 }
+
+                comando.CommandText = consultaSumarStockInsumo;
+                foreach (var insumo in insumosEnReserva)
+                {
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@cantidad", insumo.cantidad);
+                    comando.Parameters.AddWithValue("@idInsumo", insumo.idInsumo);
+                    comando.ExecuteNonQuery();
+                }
+
+                string consultaEliminarHorarioReserva = @"delete from HorarioReservas 
+                                                          where reserva = @idReserva";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idReserva", idReserva);
+
+                comando.CommandText = consultaEliminarHorarioReserva;
+                comando.ExecuteNonQuery();
 
                 resultado = true;
             }
@@ -694,6 +717,51 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return reserva;
+        }
+
+        public static List<Insumo> armarListaInsumos(List<int> listaInsumosActualizados, List<int> listaidInsumos)
+        {
+            List<Insumo> listaInsumos = new List<Insumo>();
+            bool remover = false;
+
+            foreach (var insumosNuevos in listaInsumosActualizados)
+            {
+                if (remover) listaidInsumos.RemoveAt(0);
+                foreach (var idInsumos in listaidInsumos)
+                {
+                    remover = true;
+                    Insumo insumo = new Insumo();
+                    insumo.idInsumo = idInsumos;
+                    insumo.cantidad = insumosNuevos;
+                    listaInsumos.Add(insumo);
+                    break;
+                }
+            }
+
+            return listaInsumos;
+        }
+
+        public static bool seActualizoInsumo(List<Insumo> listaInsumosNuevos, List<Insumo> listaInsumosOriginales)
+        {            
+            bool seActualizoInsumo = false;
+            bool remover = false;
+            foreach (var insumosOriginales in listaInsumosOriginales)
+            {
+                if (remover) listaInsumosNuevos.RemoveAt(0);
+                foreach (var insumosNuevos in listaInsumosNuevos)
+                {
+                    remover = true;
+                    if (insumosNuevos.idInsumo == insumosOriginales.idInsumo)
+                    {
+                        if (insumosNuevos.cantidad != insumosOriginales.cantidad)
+                        {
+                            seActualizoInsumo = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return seActualizoInsumo;
         }
     }
 }
