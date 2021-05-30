@@ -4,219 +4,209 @@
     ViewBag.Title = "MisPedidos";
 }
 
-<div class="container">
-    <div class="row" style="transform: translateY(60px);">
-        <div class="col-md-6">
-            <div>
-                <h3 class="text-center" style="color:white">Mis Pedidos</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-6 text-center" style="transform: translateY(60px);">
-    <div class="container" id="divNuevoPedido" style="color:white; display:block;">
-        <h4 class="p-1">Complete el formulario para realizar un nuevo pedido:</h4>
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <h4 class="p-1">Complete el formulario para realizar un nuevo pedido</h4>
         @using (Html.BeginForm("NuevoPedido", "Administrador", FormMethod.Post, new { onsubmit = "return validacionNuevoPedido();" }))
         {
             @Html.HiddenFor(Model => Model.NuevoPedido.Fecha)
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div>
-                                <label class="col-sm-6 control-label">Proveedores</label>
-                                @Html.DropDownList("idProveedor", proveedores, "Seleccione un proveedor", htmlAttributes: new { @class = "form-control" })
-                            </div>
-                            <div>
-                                <label class="col-sm-6 control-label">Descripción</label>
-                                @Html.TextAreaFor(Model => Model.NuevoPedido.Descripcion, htmlAttributes: new { @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Proveedores</label>
+                    @Html.DropDownList("idProveedor", proveedores, "Seleccione un proveedor", htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Descripción</label>
+                    @Html.TextAreaFor(Model => Model.NuevoPedido.Descripcion, htmlAttributes: new { @class = "form-control" })
                 </div>
             </div>
-
             <button class="btn btn-success" type="submit">Enviar Pedido</button>
             <div class="form-label-group text-danger" style="margin-left:10px">
                 @ViewBag.ErrorInsertPedido
             </div>
         }
     </div>
+    <div class="col-md-5">
+        ABM PROVEEDORES
+    </div>
+    <div class="col-md-1"></div>
 </div>
 
-<div class="container">
-    <div class="row" style="transform: translateY(60px); color:white">
-        <div class="col-md-12 pt-3">
-            @foreach (var item in Model.TablaPedido)
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-1"></div>
+    <div class="col-md-10 pt-3">
+        <h3 class="text-center">Mis Pedidos</h3>
+        @foreach (var item in Model.TablaPedido)
+        {
+            if (item.PedidosPendientes.Count == 0)
             {
-                if (item.PedidosPendientes.Count == 0)
-                {
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center">
-                                    Pedidos
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-center">
-                                    No hay pedidos pendientes
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    break;
-                }
-                else
-                {
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center">
-                                    Descripción
-                                </th>
-                                <th class="text-center">
-                                    Fecha
-                                </th>
-                                <th class="text-center">
-                                    Proveedor
-                                </th>
-                                <th class="text-center">
-                                    Teléfono
-                                </th>
-                                <th class="text-center">
-                                    Estado
-                                </th>
-                                <th class="text-center acciones" style="display:none">
-                                    Acciones
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var listado in Model.TablaPedido)
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Pedidos
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">
+                                No hay pedidos pendientes
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                break;
+            }
+            else
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Descripción
+                            </th>
+                            <th class="text-center">
+                                Fecha
+                            </th>
+                            <th class="text-center">
+                                Proveedor
+                            </th>
+                            <th class="text-center">
+                                Teléfono
+                            </th>
+                            <th class="text-center">
+                                Estado
+                            </th>
+                            <th class="text-center acciones" style="display:none">
+                                Acciones
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var listado in Model.TablaPedido)
+                        {
+                            if (listado.Estado == true)
                             {
-                                if (listado.Estado == true)
-                                {
-                                    <tr class="text-center">
-                                        <td class="text-center">
-                                            @listado.DescripcionPedido
-                                        </td>
-                                        <td class="text-center">
-                                            @listado.Fecha
-                                        </td>
-                                        <td class="text-center">
-                                            @listado.NombreProveedor - Empresa: @listado.Empresa
-                                        </td>
-                                        <td class="text-center">
-                                            @listado.Telefono
-                                        </td>
-                                        <td class="text-center">
-                                            Pendiente
-                                        </td>
-                                        <td class="text-center acciones" style="display:none">
-                                            <div class="btn-group">
-                                                @using (Html.BeginForm("ConcretarPedido", "Administrador", FormMethod.Post))
+                                <tr class="text-center">
+                                    <td class="text-center">
+                                        @listado.DescripcionPedido
+                                    </td>
+                                    <td class="text-center">
+                                        @listado.Fecha
+                                    </td>
+                                    <td class="text-center">
+                                        @listado.NombreProveedor - Empresa: @listado.Empresa
+                                    </td>
+                                    <td class="text-center">
+                                        @listado.Telefono
+                                    </td>
+                                    <td class="text-center">
+                                        Pendiente
+                                    </td>
+                                    <td class="text-center acciones" style="display:none">
+                                        <div class="btn-group">
+                                            @using (Html.BeginForm("ConcretarPedido", "Administrador", FormMethod.Post))
+                                            {
+                                                @Html.HiddenFor(Model => listado.IdPedido)
+                                                <button type="submit" class="btn btn-success m-1">Concretar</button>
+                                            }
+
+                                            @if (listado.Fecha > DateTime.Today.AddDays(-2))
+                                            {
+                                                <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1">Modificar</a>
+                                                using (Html.BeginForm("EliminarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
                                                 {
                                                     @Html.HiddenFor(Model => listado.IdPedido)
-                                                    <button type="submit" class="btn btn-success m-1">Concretar</button>
+                                                    <button type="submit" class="btn btn-danger m-1">Eliminar</button>
                                                 }
-
-                                                @if (listado.Fecha > DateTime.Today.AddDays(-2))
-                                                {
-                                                    <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1">Modificar</a>
-                                                    using (Html.BeginForm("EliminarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
-                                                    {
-                                                        @Html.HiddenFor(Model => listado.IdPedido)
-                                                        <button type="submit" class="btn btn-danger m-1">Eliminar</button>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1 disabled">Modificar</a>
-                                                    <a class="btn btn-danger m-1 disabled">Eliminar</a>
-                                                }
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1 disabled">Modificar</a>
+                                                <a class="btn btn-danger m-1 disabled">Eliminar</a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
                             }
-                        </tbody>
-                    </table>
-                    <div class="form-label-group text-danger" style="margin-left:10px">
-                        @ViewBag.ErrorConcretarPedido
-                        @ViewBag.ErrorEliminarPedido
-                    </div>
-                    <small>*Nota: los pedidos que hayan sido registrados hace dos(2) días no pueden ser modificados ni eliminados por cuestiones de logistica.</small>
-                    break;
-                }
-            }
-
-            <table class="table table-bordered table-striped" id="tablaPedidosConcretados" style="display:none">
-                <thead>
-                    <tr>
-                        <th class="text-center">
-                            Descripción
-                        </th>
-                        <th class="text-center">
-                            Fecha
-                        </th>
-                        <th class="text-center">
-                            Proveedor
-                        </th>
-                        <th class="text-center">
-                            Teléfono
-                        </th>
-                        <th class="text-center">
-                            Estado
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var listado in Model.TablaPedido)
-                    {
-                        if (listado.Estado == false)
-                        {
-                            <tr class="text-center">
-                                <td class="text-center">
-                                    @listado.DescripcionPedido
-                                </td>
-                                <td class="text-center">
-                                    @listado.Fecha
-                                </td>
-                                <td class="text-center">
-                                    @listado.NombreProveedor - Empresa: @listado.Empresa
-                                </td>
-                                <td class="text-center">
-                                    @listado.Telefono
-                                </td>
-                                <td class="text-center">
-                                    Concretado
-                                </td>
-                            </tr>
                         }
-                    }
-                </tbody>
-            </table>
-            <br />
-            <div class="text-center btn-group">
-                @if (Model.TablaPedido.Count() != 0)
-                {
-                    <button class="btn btn-info m-1" onclick="mostrarBotones()">Modificar pedidos</button>
-                }
+                    </tbody>
+                </table>
+                <div class="form-label-group text-danger" style="margin-left:10px">
+                    @ViewBag.ErrorConcretarPedido
+                    @ViewBag.ErrorEliminarPedido
+                </div>
+                <small>*Nota: los pedidos que hayan sido registrados hace dos(2) días no pueden ser modificados ni eliminados por cuestiones de logistica.</small>
+                break;
+            }
+        }
+
+        <table class="table table-bordered table-striped" id="tablaPedidosConcretados" style="display:none">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        Descripción
+                    </th>
+                    <th class="text-center">
+                        Fecha
+                    </th>
+                    <th class="text-center">
+                        Proveedor
+                    </th>
+                    <th class="text-center">
+                        Teléfono
+                    </th>
+                    <th class="text-center">
+                        Estado
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach (var listado in Model.TablaPedido)
                 {
                     if (listado.Estado == false)
                     {
-                        <button class="btn btn-info m-1" onclick="mostrarPedidosConcretados()">Ver pedidos concretados</button>
-                        break;
+                        <tr class="text-center">
+                            <td class="text-center">
+                                @listado.DescripcionPedido
+                            </td>
+                            <td class="text-center">
+                                @listado.Fecha
+                            </td>
+                            <td class="text-center">
+                                @listado.NombreProveedor - Empresa: @listado.Empresa
+                            </td>
+                            <td class="text-center">
+                                @listado.Telefono
+                            </td>
+                            <td class="text-center">
+                                Concretado
+                            </td>
+                        </tr>
                     }
                 }
-            </div>
+            </tbody>
+        </table>
+
+        <br />
+        <div class="text-center btn-group">
+            @if (Model.TablaPedido.Count() != 0)
+            {
+                <button class="btn btn-info m-1" onclick="mostrarBotones()">Modificar pedidos</button>
+            }
+            @foreach (var listado in Model.TablaPedido)
+            {
+                if (listado.Estado == false)
+                {
+                    <button class="btn btn-info m-1" onclick="mostrarPedidosConcretados()">Ver pedidos concretados</button>
+                    break;
+                }
+            }
         </div>
     </div>
+    <div class="col-md-1"></div>
 </div>
 
 <script src="~/Scripts/scriptPedidos.js"></script>

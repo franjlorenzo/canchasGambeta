@@ -3,56 +3,39 @@
     ViewBag.Title = "ModificarInsumo";
 }
 
-<div class="container" style="color: white; transform: translateY(60px);">
-    <div class="row">
-        <div class="col-sm-12">
-            <div>
-                <h3>Modifique el correo electrónico del integrante</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container" style="color: white; transform: translateY(60px);">
-    @using (Html.BeginForm("ModificarInsumo", "Insumo", FormMethod.Post, new { onsubmit = "return validacionModificarInsumo();" }))
-    {
-        @Html.HiddenFor(Model => Model.idInsumo)
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-6 control-label">Nombre del insumo</label>
-                        <div class="col-sm-6">
-                            @Html.TextBoxFor(Model => Model.insumo1, htmlAttributes: new { @class = "form-control", id = "txtInsumo" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-6 control-label">Precio</label>
-                        <div class="col-sm-6">
-                            @Html.TextBoxFor(Model => Model.precio, htmlAttributes: new { @class = "form-control", id = "txtPrecio" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-6 control-label">Stock</label>
-                        <div class="col-sm-6">
-                            @Html.TextBoxFor(Model => Model.stock, htmlAttributes: new { @class = "form-control", id = "txtStock" })
-                        </div>
-                    </div>
-                    <div class="form-group text-left">
-                        <div class="col-sm-12">
-                            <button class="btn btn-success" type="submit">
-                                Confirmar cambios
-                            </button>
-                            @Html.ActionLink("Cancelar", "MisInsumos", "Insumo", null, new { @class = "text-center btn btn-warning" })
-                        </div>
-                    </div>
-                    <div class="form-label-group text-danger">
-                        @ViewBag.ErrorModificarInsumo
-                    </div>
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <h3 class="text-center">Modifique los datos del insumo</h3>
+        @using (Html.BeginForm("ModificarInsumo", "Insumo", FormMethod.Post, new { onsubmit = "return validacionModificarInsumo();" }))
+        {
+            @Html.HiddenFor(Model => Model.idInsumo)
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Nombre del insumo</label>
+                    @Html.TextBoxFor(Model => Model.insumo1, htmlAttributes: new { @class = "form-control", id = "txtInsumo" })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Precio</label>
+                    @Html.TextBoxFor(Model => Model.precio, htmlAttributes: new { @class = "form-control", id = "txtPrecio" })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Stock</label>
+                    @Html.TextBoxFor(Model => Model.stock, htmlAttributes: new { @class = "form-control", id = "txtStock" })
+                </div>
+                <div class="form-group text-left">
+                    <button class="btn btn-success" type="submit">
+                        Confirmar cambios
+                    </button>
+                    @Html.ActionLink("Cancelar", "MisInsumos", "Insumo", null, new { @class = "text-center btn btn-warning" })
+                </div>
+                <div class="form-label-group text-danger">
+                    @ViewBag.ErrorModificarInsumo
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
+    <div class="col-md-3"></div>
 </div>
 
 <script src="~/Scripts/scriptInsumos.js"></script>

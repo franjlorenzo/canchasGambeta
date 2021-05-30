@@ -11,7 +11,7 @@ namespace CanchasGambeta.Controllers
     public class InformeController : Controller
     {
         // GET: Informe
-        public ActionResult ReservasActivasYCandeladas()
+        public ActionResult ReservasActivasYCanceladas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");

@@ -7,18 +7,10 @@
     var sesion = (Usuario)HttpContext.Current.Session["User"];
 }
 
-<div class="container">
-    <div class="row" style="transform: translateY(60px);">
-        <div class="col-md-6">
-            <div>
-                <h3 class="text-center" style="color:white">Mis reservas</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row" style="transform: translateY(60px); color:white">
-    <div class="col-lg-6">
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-1"></div>
+    <div class="col-md-6">
+        <h3 class="text-center" style="color:white">Mis reservas</h3>
         @if (Model.TablaReservaVM.Count() != 0)
         {
             <table class="table table-bordered table-striped">
@@ -90,7 +82,6 @@
                 </tbody>
             </table>
         }
-
         <div class="p-3 text-center">
             @if (Model.TablaReservaVM.Count != 0)
             {
@@ -100,7 +91,7 @@
             @ViewBag.ErrorModificarReserva
         </div>
     </div>
-    <div class="col-lg-6">
+    <div class="col-md-4">
         <h4 class="p-1">Llene los siguientes campos para concretar una reserva:</h4>
         @using (Html.BeginForm("MisReservas", "Reserva", FormMethod.Post, new { onsubmit = "return validacionNuevaReserva();", @id = "idNuevaReserva" }))
         {
@@ -223,7 +214,9 @@
             </div>
         }
     </div>
+    <div class="col-md-1"></div>
 </div>
+
 
 <script src="~/Scripts/scriptReservas.js"></script>
 

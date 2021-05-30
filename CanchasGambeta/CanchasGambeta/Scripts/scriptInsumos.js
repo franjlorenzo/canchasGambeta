@@ -25,22 +25,22 @@ function validacionModificarInsumo() {
 }
 
 const botones = () => {
-    var acciones = document.getElementsByClassName("text-center acciones");
+    let acciones = document.getElementsByClassName("text-center acciones");
 
     if (acciones[0].style.display == "none") {
-        for (var i = 0; i < acciones.length; i++) {
+        for (let i = 0; i < acciones.length; i++) {
             acciones[i].style.display = "block";
         }
     }
     else {
-        for (var i = 0; i < acciones.length; i++) {
+        for (let i = 0; i < acciones.length; i++) {
             acciones[i].style.display = "none";
         }
     }
 }
 
 function confirmacionEliminarInsumo(){
-    var confirmar = confirm("¿Está seguro de que desea eliminar este insumo?");
+    let confirmar = confirm("¿Está seguro de que desea eliminar este insumo?");
     if (confirmar) {
         return true;
     }

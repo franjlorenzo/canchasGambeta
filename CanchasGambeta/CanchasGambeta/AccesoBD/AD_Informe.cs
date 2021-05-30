@@ -19,7 +19,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select nombreCompleto, tipoCancha, h.horario, fecha, servicioAsador, servicioInstrumentos, estado
+                string consulta = @"select r.idReserva, nombreCompleto, tipoCancha, h.horario, fecha, servicioAsador, servicioInstrumentos, estado
                                     from Usuario u join Reserva r on u.idUsuario = r.cliente
                                          join Cancha c on c.idCancha = r.cancha
 	                                     join Horario h on h.idHorario = r.horario
@@ -38,12 +38,14 @@ namespace CanchasGambeta.AccesoBD
                     while (lector.Read())
                     {
                         ReservasActivas auxiliar = new ReservasActivas();
+                        auxiliar.IdReserva = int.Parse(lector["idReserva"].ToString());
                         auxiliar.NombreCompleto = lector["nombreCompleto"].ToString();
                         auxiliar.TipoCancha = lector["tipoCancha"].ToString();
                         auxiliar.Horario = lector["horario"].ToString();
                         auxiliar.Fecha = DateTime.Parse(lector["fecha"].ToString());
                         auxiliar.ServicioAsador = bool.Parse(lector["servicioAsador"].ToString());
                         auxiliar.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
+                        auxiliar.ListaInsumosReserva = AD_Reserva.obtenerInsumosDeLaReserva(auxiliar.IdReserva);
                         listaReservas.Add(auxiliar);
                     }
                 }

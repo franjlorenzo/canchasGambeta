@@ -12,7 +12,7 @@ function validacionNuevoInstrumento() {
 }
 
 function confirmacionNuevoInstrumentoRoto() {
-    var confirmar = confirm("¿Está seguro de que desea mover este elemento a la lista de rotos?");
+    let confirmar = confirm("¿Está seguro de que desea mover este elemento a la lista de rotos?");
     if (confirmar) {
         return true;
     }
@@ -20,7 +20,7 @@ function confirmacionNuevoInstrumentoRoto() {
 }
 
 function confirmacionEliminarInstrumentoRoto() {
-    var confirmar = confirm("¿Está seguro de que desea eliminar este intrumento roto?");
+    let confirmar = confirm("¿Está seguro de que desea eliminar este intrumento roto?");
     if (confirmar) {
         return true;
     }

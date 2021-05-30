@@ -78,6 +78,18 @@
                         <li class="nav-item">
                             @Html.ActionLink("Reservar", "MisReservas", "Reserva", null, new { @class = "nav-link" })
                         </li>
+                        @if (sesion.equipo == null || sesion.equipo == 0)
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("Nuevo equipo", "NuevoEquipo", "Equipo", null, new { @class = "nav-link" })
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("Mi equipo", "MiEquipo", "Equipo", null, new { @class = "nav-link" })
+                            </li>
+                        }
                         <li class="nav-item">
                             @Html.ActionLink("Mi perfil", "PerfilCliente", "Cliente", null, new { @class = "nav-link" })
                         </li>
@@ -100,7 +112,5 @@
             </div>
         </div>-->
     </div>
-
-    <!--<script src="~/Scripts/bootstrap.bundle.min.js"></script>-->
 </body>
 </html>

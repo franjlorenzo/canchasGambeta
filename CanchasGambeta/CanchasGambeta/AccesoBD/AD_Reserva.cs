@@ -450,6 +450,8 @@ namespace CanchasGambeta.AccesoBD
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
+            actualizarReservaVM.ListaInsumosEnLaReserva = null;
+            actualizarReservaVM.ListaInsumosEnLaReserva = obtenerInsumosDeLaReserva(actualizarReservaVM.IdReserva); //obtengo las cantidades originales para compararlas con las cantidades nuevas
 
             try
             {
@@ -600,7 +602,7 @@ namespace CanchasGambeta.AccesoBD
                                     from Horario h
                                     where idHorario not in (select horario
 						                                    from Reserva
-						                                    where cancha = @idCancha and fecha = @fecha)";
+						                                    where cancha = @idCancha and fecha = @fecha and estado = 1)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@fecha", fecha);
                 comando.Parameters.AddWithValue("@idCancha", idCancha);
@@ -745,10 +747,10 @@ namespace CanchasGambeta.AccesoBD
         {            
             bool seActualizoInsumo = false;
             bool remover = false;
-            foreach (var insumosOriginales in listaInsumosOriginales)
+            foreach (var insumosNuevos in listaInsumosNuevos)
             {
-                if (remover) listaInsumosNuevos.RemoveAt(0);
-                foreach (var insumosNuevos in listaInsumosNuevos)
+                if (remover) listaInsumosOriginales.RemoveAt(0);
+                foreach (var insumosOriginales in listaInsumosOriginales)
                 {
                     remover = true;
                     if (insumosNuevos.idInsumo == insumosOriginales.idInsumo)

@@ -5,126 +5,108 @@
     ViewBag.Title = "MisInsumos";
 }
 
-<div class="container">
-    <div class="row" style="transform: translateY(60px);">
-        <div class="col-md-6">
-            <div>
-                <h3 class="text-center" style="color:white">Mis Insumos</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row" style="transform: translateY(60px); color:white">
-        <div class="col-md-6">
-            @if (Model.Count() != 0)
-            {
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                Insumo
-                            </th>
-                            <th class="text-center">
-                                Precio
-                            </th>
-                            <th class="text-center">
-                                Stock
-                            </th>
-                            <th class="text-center acciones" style="display:none">
-                                Acciones
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var listado in Model)
-                        {
-                            <tr>
-                                <td class="text-center">
-                                    @listado.insumo1
-                                </td>
-                                <td class="text-center">
-                                    $@listado.precio
-                                </td>
-                                <td class="text-center">
-                                    @listado.stock
-                                </td>
-                                <td class="text-center acciones" style="display:none">
-                                    <div class="btn-group">
-                                        <a href="@Url.Action("ModificarInsumo", "Insumo", new {idInsumo = listado.idInsumo})" class="btn btn-warning m-1">Modificar</a>
-                                        @using (Html.BeginForm("EliminarInsumo", "Insumo", FormMethod.Post, new { onsubmit = "return confirmacionEliminarInsumo();" }))
-                                        {
-                                            <input type="hidden" name="idInsumo" value="@listado.idInsumo" />
-                                            <button type="submit" class="btn btn-danger m-1">Eliminar</button>
-                                        }
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <div class="form-label-group text-danger" style="margin-left:10px">
-                    @ViewBag.ErrorEliminarInsumo
-                </div>
-                <div>
-                    <button id="btnModificarInsumos" class="btn btn-info" onclick="botones()">Modificar insumos</button>
-                </div>
-            }
-            else
-            {
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                Insumos
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <h3 class="text-center" style="color:white">Mis Insumos</h3>
+        @if (Model.Count() != 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                        <th class="text-center">
+                            Precio
+                        </th>
+                        <th class="text-center">
+                            Stock
+                        </th>
+                        <th class="text-center acciones" style="display:none">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model)
+                    {
                         <tr>
                             <td class="text-center">
-                                No hay insumos
+                                @listado.insumo1
+                            </td>
+                            <td class="text-center">
+                                $@listado.precio
+                            </td>
+                            <td class="text-center">
+                                @listado.stock
+                            </td>
+                            <td class="text-center acciones" style="display:none">
+                                <div class="btn-group">
+                                    <a href="@Url.Action("ModificarInsumo", "Insumo", new {idInsumo = listado.idInsumo})" class="btn btn-warning m-1">Modificar</a>
+                                    @using (Html.BeginForm("EliminarInsumo", "Insumo", FormMethod.Post, new { onsubmit = "return confirmacionEliminarInsumo();" }))
+                                    {
+                                        <input type="hidden" name="idInsumo" value="@listado.idInsumo" />
+                                        <button type="submit" class="btn btn-danger m-1">Eliminar</button>
+                                    }
+                                </div>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-            }
-        </div>
-
-        <div class="col-md-6 text-center">
-            <div class="container" style="color:white; display:block;">
-                <h4 class="p-1">Ingrese los valores del nuevo insumo</h4>
-                @using (Html.BeginForm("MisInsumos", "Insumo", FormMethod.Post, new { onsubmit = "return validacionNuevoInsumo();" }))
-                {
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-horizontal">
-                                <div class="form-group">                                   
-                                    <div>
-                                        <label class="col-sm-6 control-label">Nombre</label>
-                                        <input type="text" class="form-control" id="txtInsumo" name="insumo" />
-                                    </div>                                    
-                                    <div>
-                                        <label class="col-sm-6 control-label">Precio</label>
-                                        <input type="text" class="form-control" id="txtPrecio" name="precio" />
-                                    </div>                                 
-                                    <div>
-                                        <label class="col-sm-6 control-label">Stock</label>
-                                        <input type="text" class="form-control" id="txtStock" name="stock" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success">Agregar</button>
-                    <div class="form-label-group text-danger" style="margin-left:10px">
-                        @ViewBag.ErrorInsertInsumo
-                    </div>
-                }
+                    }
+                </tbody>
+            </table>
+            <div class="form-label-group text-danger" style="margin-left:10px">
+                @ViewBag.ErrorEliminarInsumo
             </div>
-        </div>
+            <div>
+                <button id="btnModificarInsumos" class="btn btn-info" onclick="botones()">Modificar insumos</button>
+            </div>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No hay insumos
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
     </div>
+    <div class="col-md-5">
+        <h4 class="p-1">Ingrese los valores del nuevo insumo</h4>
+        @using (Html.BeginForm("MisInsumos", "Insumo", FormMethod.Post, new { onsubmit = "return validacionNuevoInsumo();" }))
+        {
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Nombre</label>
+                    <input type="text" class="form-control" id="txtInsumo" name="insumo" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Precio</label>
+                    <input type="text" class="form-control" id="txtPrecio" name="precio" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Stock</label>
+                    <input type="text" class="form-control" id="txtStock" name="stock" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Agregar</button>
+            <div class="form-label-group text-danger" style="margin-left:10px">
+                @ViewBag.ErrorInsertInsumo
+            </div>
+        }
+    </div>
+    <div class="col-md-1"></div>
 </div>
 
 <script src="~/Scripts/scriptInsumos.js"></script>

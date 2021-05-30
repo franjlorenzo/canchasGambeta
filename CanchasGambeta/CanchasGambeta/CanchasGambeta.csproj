@@ -381,7 +381,7 @@
     <Content Include="Views\Administrador\MisPedidos.cshtml" />
     <Content Include="Views\Administrador\ModificarPedido.cshtml" />
     <Content Include="Views\Reserva\ModificarReserva.cshtml" />
-    <Content Include="Views\Informe\ReservasActivasYCandeladas.cshtml" />
+    <Content Include="Views\Informe\ReservasActivasYCanceladas.cshtml" />
     <Content Include="Views\Informe\CanchasMasUtilizadas.cshtml" />
     <Content Include="Views\Informe\ClientesConMasReservas.cshtml" />
     <Content Include="Views\Informe\HorariosMasReservados.cshtml" />

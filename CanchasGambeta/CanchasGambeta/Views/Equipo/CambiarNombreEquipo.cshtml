@@ -3,44 +3,31 @@
     ViewBag.Title = "CambiarNombreEquipo";
 }
 
-<div class="container" style="color: white; transform: translateY(60px);">
-    <div class="row">
-        <div class="col-sm-12">
-            <div>
-                <h3>Ingrese el nuevo nombre del equipo</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container" style="color: white; transform: translateY(60px);">
-    @using (Html.BeginForm("CambiarNombreEquipo", "Equipo", FormMethod.Post, new { onsubmit = "return validacionNuevoEquipo();" }))
-    {
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-6 control-label">Nombre del equipo</label>
-                        <div class="col-sm-6">
-                            @Html.TextBoxFor(Model => Model.nombreEquipo, htmlAttributes: new { @class = "form-control", id = "txtNombreEquipo" })
-                        </div>
-                    </div>
-                    <div class="form-group text-left">
-                        <div class="col-sm-12">
-                            <button class="btn btn-primary" type="submit">
-                                Cambiar nombre
-                            </button>
-                            @Html.ActionLink("Cancelar", "MiEquipo", "Equipo", null, new { @class = "text-center btn btn-warning" })
-                        </div>
-                    </div>
-                    <div class="form-label-group text-danger" style="margin-left:10px">
-                        @ViewBag.ErrorCambiarNombre
-                        @ViewBag.ErrorCreacion
-                    </div>
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <h3>Ingrese el nuevo nombre del equipo</h3>
+        @using (Html.BeginForm("CambiarNombreEquipo", "Equipo", FormMethod.Post, new { onsubmit = "return validacionNuevoEquipo();" }))
+        {
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Nombre del equipo</label>
+                    @Html.TextBoxFor(Model => Model.nombreEquipo, htmlAttributes: new { @class = "form-control", id = "txtNombreEquipo" })
+                </div>
+                <div class="form-group text-left">
+                    <button class="btn btn-success" type="submit">
+                        Cambiar nombre
+                    </button>
+                    @Html.ActionLink("Cancelar", "MiEquipo", "Equipo", null, new { @class = "text-center btn btn-warning" })
+                </div>
+                <div class="form-label-group text-danger" style="margin-left:10px">
+                    @ViewBag.ErrorCambiarNombre
+                    @ViewBag.ErrorCreacion
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
+    <div class="col-md-4"></div>
 </div>
 
 <script src="~/Scripts/scriptEquipo.js"></script>
