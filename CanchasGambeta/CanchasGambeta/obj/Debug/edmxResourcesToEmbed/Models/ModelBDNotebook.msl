@@ -76,6 +76,7 @@
     <EntitySetMapping Name="Proveedor">
       <EntityTypeMapping TypeName="Canchas_GambetaModel2.Proveedor">
         <MappingFragment StoreEntitySet="Proveedor">
+          <ScalarProperty Name="email" ColumnName="email" />
           <ScalarProperty Name="telefono" ColumnName="telefono" />
           <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
           <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />

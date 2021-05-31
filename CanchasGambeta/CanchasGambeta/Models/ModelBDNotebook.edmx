@@ -94,6 +94,7 @@
           <Property Name="nombreCompleto" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="empresa" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="telefono" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Reserva">
           <Key>
@@ -444,6 +445,7 @@
           <Property Name="empresa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Proveedor" FromRole="Proveedor" ToRole="Pedido" />
           <Property Name="telefono" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Reserva">
           <Key>
@@ -816,6 +818,7 @@
           <EntitySetMapping Name="Proveedor">
             <EntityTypeMapping TypeName="Canchas_GambetaModel2.Proveedor">
               <MappingFragment StoreEntitySet="Proveedor">
+                <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="telefono" ColumnName="telefono" />
                 <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
                 <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />

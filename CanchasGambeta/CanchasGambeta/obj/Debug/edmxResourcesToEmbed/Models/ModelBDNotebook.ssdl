@@ -89,6 +89,7 @@
     <Property Name="nombreCompleto" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="empresa" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="telefono" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="Reserva">
     <Key>

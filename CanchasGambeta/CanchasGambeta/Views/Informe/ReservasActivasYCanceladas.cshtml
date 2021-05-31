@@ -17,10 +17,10 @@
                         Fecha
                     </th>
                     <th class="text-center">
-                        Cancha
+                        Horario
                     </th>
                     <th class="text-center">
-                        Horario
+                        Cancha
                     </th>
                     <th class="text-center">
                         Servicio asador
@@ -36,18 +36,20 @@
             <tbody>
                 @foreach (var listado in Model.listaReservasActivas)
                 {
+                    string fecha = listado.Fecha.ToString();
+                    string[] fechaSplit = fecha.Split(' ');
                     <tr class="text-center">
                         <td>
                             @listado.NombreCompleto
                         </td>
                         <td>
-                            @listado.Fecha
-                        </td>
-                        <td>
-                            @listado.TipoCancha
+                            @fechaSplit[0]
                         </td>
                         <td>
                             @listado.Horario
+                        </td>
+                        <td>
+                            @listado.TipoCancha
                         </td>
                         @if (listado.ServicioAsador == true)
                         {
@@ -103,10 +105,10 @@
                         Fecha
                     </th>
                     <th class="text-center">
-                        Cancha
+                        Horario
                     </th>
                     <th class="text-center">
-                        Horario
+                        Cancha
                     </th>
                     <th class="text-center">
                         Servicio asador
@@ -119,18 +121,20 @@
             <tbody>
                 @foreach (var listado in Model.listaReservasCanceladas)
                 {
+                    string fecha = listado.Fecha.ToString();
+                    string[] fechaSplit = fecha.Split(' ');
                     <tr class="text-center">
                         <td>
                             @listado.NombreCompleto
                         </td>
                         <td>
-                            @listado.Fecha
-                        </td>
-                        <td>
-                            @listado.TipoCancha
+                            @fechaSplit[0]
                         </td>
                         <td>
                             @listado.Horario
+                        </td>
+                        <td>
+                            @listado.TipoCancha
                         </td>
                         @if (listado.ServicioAsador == true)
                         {

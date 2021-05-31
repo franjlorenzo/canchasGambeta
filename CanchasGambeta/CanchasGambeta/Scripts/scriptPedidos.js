@@ -1,7 +1,22 @@
 ﻿'use strict';
 
-const mostrarBotones = () => {
-    let acciones = document.getElementsByClassName("text-center acciones");
+const mostrarBotonesPedidos = () => {
+    let acciones = document.getElementsByClassName("text-center accionesPedidos");
+
+    if (acciones[0].style.display == "none") {
+        for (let i = 0; i < acciones.length; i++) {
+            acciones[i].style.display = "block";
+        }
+    }
+    else {
+        for (let i = 0; i < acciones.length; i++) {
+            acciones[i].style.display = "none";
+        }
+    }
+}
+
+const mostrarBotonesProveedores = () => {
+    let acciones = document.getElementsByClassName("text-center accionesProveedores");
 
     if (acciones[0].style.display == "none") {
         for (let i = 0; i < acciones.length; i++) {
@@ -34,6 +49,20 @@ function validacionNuevoPedido() {
     return true;
 }
 
+function validacionNuevoProveedor() {
+    let txtNombreProveedor = document.getElementById("txtNombreProveedor").value;
+    let txtTelefono = document.getElementById("txtTelefono").value;
+    let txtEmail = document.getElementById("txtEmail").value;
+    let txtEmpresa = document.getElementById("txtEmpresa").value;
+
+    if (!txtNombreProveedor | !txtTelefono | txtEmail | txtEmpresa) {
+        alert("Faltan campos obligatorios para el registro.");
+        return false;
+    }
+
+    return true;
+}
+
 function validacionModificarPedido() {
     let txtDescripcion = document.getElementById("descripcion").value;
     let cboProveedor = document.getElementById("proveedor").value;
@@ -46,7 +75,27 @@ function validacionModificarPedido() {
     return true;
 }
 
-function confirmacionEliminar() {
+function validacionModificarProveedor() {
+    let txtNombreProveedor = document.getElementById("txtNombreProveedor").value;
+    let txtTelefono = document.getElementById("txtTelefono").value;
+    let txtEmail = document.getElementById("txtEmail").value;
+    let txtEmpresa = document.getElementById("txtEmpresa").value;
+
+    if (!txtNombreProveedor | !txtTelefono | txtEmail | txtEmpresa) {
+        alert("Faltan campos obligatorios para modificar al proveedor.");
+        return false;
+    }
+
+    return true;
+}
+
+function confirmacionEliminarProveedor() {
+    let eliminar = confirm("¿Esta seguro de que quiere eliminar este proveedor?");
+    if (eliminar) return true;
+    return false;
+}
+
+function confirmacionEliminarPedido() {
     let eliminar = confirm("¿Esta seguro de que quiere eliminar este pedido?");
     if (eliminar) return true;
     return false;

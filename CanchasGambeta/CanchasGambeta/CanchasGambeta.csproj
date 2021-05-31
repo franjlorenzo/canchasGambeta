@@ -153,7 +153,6 @@
     <Compile Include="Controllers\LogInController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\ReservaController.cs" />
-    <Compile Include="Filters\VerificarSesion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -388,9 +387,11 @@
     <Content Include="Views\Informe\InstrumentosDisponibles.cshtml" />
     <Content Include="Views\Informe\InstrumentosRotos.cshtml" />
     <Content Include="Views\Equipo\CambiarNombreEquipo.cshtml" />
+    <Content Include="Views\Administrador\ModificarProveedor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

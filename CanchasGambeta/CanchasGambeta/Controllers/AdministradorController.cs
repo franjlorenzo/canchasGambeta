@@ -111,8 +111,11 @@ namespace CanchasGambeta.Controllers
             ViewBag.proveedores = listaProveedores;
             if (TempData["ErrorInsertPedido"] != null) ViewBag.ErrorInsertPedido = TempData["ErrorInsertPedido"].ToString();
             if (TempData["ErrorConcretarPedido"] != null) ViewBag.ErrorConcretarPedido = TempData["ErrorConcretarPedido"].ToString();
-            if(TempData["ErrorEliminarPedido"] != null) ViewBag.ErrorEliminarPedido = TempData["ErrorEliminarPedido"].ToString();
-            return View( new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = new NuevoPedido()});
+            if (TempData["ErrorEliminarPedido"] != null) ViewBag.ErrorEliminarPedido = TempData["ErrorEliminarPedido"].ToString();
+            if (TempData["ErrorInsertProveedor"] != null) ViewBag.ErrorInsertProveedor = TempData["ErrorInsertProveedor"].ToString();
+            if (TempData["ErrorEliminarProveedor"] != null) ViewBag.ErrorEliminarProveedor = TempData["ErrorEliminarProveedor"].ToString();
+            if (TempData["ErrorPedidosSinConcretar"] != null) ViewBag.ErrorPedidosSinConcretar = TempData["ErrorPedidosSinConcretar"].ToString();
+            return View( new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = new NuevoPedido(), NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedoresTabla() });
         }
 
         [HttpPost]
@@ -246,6 +249,79 @@ namespace CanchasGambeta.Controllers
                 TempData["ErrorEliminarPedido"] = "Ocurrió un error al eliminar el pedido, inténtelo nuevamente.";
                 return RedirectToAction("MisPedidos", "Administrador");
             }
+        }
+
+        [HttpPost]
+        public ActionResult NuevoProveedor(NuevoProveedor nuevoProveedor)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Administrador.nuevoProveedor(nuevoProveedor);
+                if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                else
+                {
+                    TempData["ErrorInsertProveedor"] = "Ocurrió un erro al registrar el proveedor, inténtelo nuevamente";
+                    return RedirectToAction("MisPedidos", "Administrador");
+                }
+            }
+
+            return View();
+        }
+
+        public ActionResult ModificarProveedor(int idProveedor)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            Proveedor proveedor = AccesoBD.AD_Administrador.obtenerProveedorPorId(idProveedor);
+            return View(proveedor);
+        }
+
+        [HttpPost]
+        public ActionResult ModificarProveedor(Proveedor proveedor)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Administrador.modificarProveedor(proveedor);
+                if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                else
+                {
+                    ViewBag.ErrorModificarProveedor = "Ocurrió un error al modificar al proveedor, inténtelo nuevamente.";
+                    return View(proveedor);
+                }
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EliminarProveedor()
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            int idProveedor = int.Parse(Request["idProveedor"]);
+
+            if (AccesoBD.AD_Administrador.pedidosSinConcretar(idProveedor))
+            {
+                bool resultado = AccesoBD.AD_Administrador.eliminarProveedor(idProveedor);
+                if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                else
+                {
+                    TempData["ErrorEliminarProveedor"] = "Ocurrió un error al eliminar el proveedor, inténtelo nuevamente.";
+                    return RedirectToAction("MisPedidos", "Administrador");
+                }
+            }
+            else
+            {
+                TempData["ErrorPedidosSinConcretar"] = "Todavía hay pedidos sin concretar al proveedor que quiere eliminar, concretelos para poder eliminar";
+                return RedirectToAction("MisPedidos", "Administrador");
+            }          
         }
     }
 }

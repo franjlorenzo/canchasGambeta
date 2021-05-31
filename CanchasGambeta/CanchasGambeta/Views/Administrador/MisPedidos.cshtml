@@ -2,9 +2,129 @@
 @{
     List<SelectListItem> proveedores = (List<SelectListItem>)ViewBag.proveedores;
     ViewBag.Title = "MisPedidos";
+    bool pedidoSinConcretar = false;
+    foreach (var item in Model.TablaPedido)
+    {
+        if(item.Estado == true) { pedidoSinConcretar = true; }
+    }
 }
 
 <div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-1"></div>
+    <div class="col-md-6">
+        <h4 class="text-center">Proveedores</h4>
+        @if (Model.TablaProveedores.Count() != 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Nombre
+                        </th>
+                        <th class="text-center">
+                            Empresa
+                        </th>
+                        <th class="text-center">
+                            Teléfono
+                        </th>
+                        <th class="text-center">
+                            Correo electrónico
+                        </th>
+                        <th class="text-center accionesProveedores" style="display:none">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.TablaProveedores)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @listado.NombreCompleto
+                            </td>
+                            <td class="text-center">
+                                @listado.Empresa
+                            </td>
+                            <td class="text-center">
+                                @listado.Telefono
+                            </td>
+                            <td class="text-center">
+                                @listado.Email
+                            </td>
+                            <td class="text-center accionesProveedores" style="display:none">
+                                <div class="btn-group">
+                                    <a href="@Url.Action("ModificarProveedor", "Administrador", new {idProveedor = listado.IdProveedor})" class="btn btn-warning m-1">Modificar</a>
+                                    @using (Html.BeginForm("EliminarProveedor", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminarProveedor();" }))
+                                    {
+                                        <input type="hidden" name="idProveedor" value="@listado.IdProveedor" />
+                                        <button type="submit" class="btn btn-danger m-1">Eliminar</button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="form-label-group text-danger" style="margin-left:10px">
+                @ViewBag.ErrorEliminarProveedor
+                @ViewBag.ErrorPedidosSinConcretar
+            </div>
+            <div>
+                <button class="btn btn-info" onclick="mostrarBotonesProveedores()">Modificar proveedores</button>
+            </div>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Proveedores
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No hay proveedores
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-md-4">
+        <h4>Complete el formulario para registrar un nuevo proveedor</h4>
+        @using (Html.BeginForm("NuevoProveedor", "Administrador", FormMethod.Post, new { onsubmit = "return validacionNuevoProveedor();" }))
+        {
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Nombre del proveedor</label>
+                    @Html.TextBoxFor(Model => Model.NuevoProveedor.NombreCompleto, htmlAttributes: new { @class = "form-control", id = "txtNombreProveedor" })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Teléfono</label>
+                    @Html.TextBoxFor(Model => Model.NuevoProveedor.Telefono, htmlAttributes: new { @class = "form-control", id = "txtTelefono", maxlength = 10 })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Correo electrónico</label>
+                    @Html.TextBoxFor(Model => Model.NuevoProveedor.Email, htmlAttributes: new { @class = "form-control", id = "txtEmail" })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Empresa</label>
+                    @Html.TextBoxFor(Model => Model.NuevoProveedor.Empresa, htmlAttributes: new { @class = "form-control", id = "txtEmpresa" })
+                </div>
+            </div>
+            <button class="btn btn-success" type="submit">Registrar proveedor</button>
+            <div class="form-label-group text-danger" style="margin-left:10px">
+                @ViewBag.ErrorInsertProveedor
+            </div>
+        }
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+<div class="row" style="transform: translateY(70px); color: white">
     <div class="col-md-1"></div>
     <div class="col-md-5">
         <h4 class="p-1">Complete el formulario para realizar un nuevo pedido</h4>
@@ -27,9 +147,7 @@
             </div>
         }
     </div>
-    <div class="col-md-5">
-        ABM PROVEEDORES
-    </div>
+    <div class="col-md-5"></div>
     <div class="col-md-1"></div>
 </div>
 
@@ -39,27 +157,7 @@
         <h3 class="text-center">Mis Pedidos</h3>
         @foreach (var item in Model.TablaPedido)
         {
-            if (item.PedidosPendientes.Count == 0)
-            {
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                Pedidos
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center">
-                                No hay pedidos pendientes
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                break;
-            }
-            else
+            if (pedidoSinConcretar)
             {
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -79,7 +177,7 @@
                             <th class="text-center">
                                 Estado
                             </th>
-                            <th class="text-center acciones" style="display:none">
+                            <th class="text-center accionesPedidos" style="display:none">
                                 Acciones
                             </th>
                         </tr>
@@ -89,12 +187,14 @@
                         {
                             if (listado.Estado == true)
                             {
+                                string fecha = listado.Fecha.ToString();
+                                string[] fechaSplit = fecha.Split(' ');
                                 <tr class="text-center">
                                     <td class="text-center">
                                         @listado.DescripcionPedido
                                     </td>
                                     <td class="text-center">
-                                        @listado.Fecha
+                                        @fechaSplit[0]
                                     </td>
                                     <td class="text-center">
                                         @listado.NombreProveedor - Empresa: @listado.Empresa
@@ -105,7 +205,7 @@
                                     <td class="text-center">
                                         Pendiente
                                     </td>
-                                    <td class="text-center acciones" style="display:none">
+                                    <td class="text-center accionesPedidos" style="display:none">
                                         <div class="btn-group">
                                             @using (Html.BeginForm("ConcretarPedido", "Administrador", FormMethod.Post))
                                             {
@@ -115,8 +215,8 @@
 
                                             @if (listado.Fecha > DateTime.Today.AddDays(-2))
                                             {
-                                                <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1">Modificar</a>
-                                                using (Html.BeginForm("EliminarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminar();" }))
+                                                <a href="@Url.Action("ModificarPedido", "Administrador", new { idPedido = listado.IdPedido })" class="btn btn-warning m-1">Modificar</a>
+                                                using (Html.BeginForm("EliminarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminarPedido();" }))
                                                 {
                                                     @Html.HiddenFor(Model => listado.IdPedido)
                                                     <button type="submit" class="btn btn-danger m-1">Eliminar</button>
@@ -124,7 +224,7 @@
                                             }
                                             else
                                             {
-                                                <a href="@Url.Action("ModificarPedido", "Administrador", new {idPedido = listado.IdPedido})" class="btn btn-warning m-1 disabled">Modificar</a>
+                                                <a href="@Url.Action("ModificarPedido", "Administrador", new { idPedido = listado.IdPedido })" class="btn btn-warning m-1 disabled">Modificar</a>
                                                 <a class="btn btn-danger m-1 disabled">Eliminar</a>
                                             }
                                         </div>
@@ -141,6 +241,27 @@
                 <small>*Nota: los pedidos que hayan sido registrados hace dos(2) días no pueden ser modificados ni eliminados por cuestiones de logistica.</small>
                 break;
             }
+            else
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Pedidos
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">
+                                No hay pedidos pendientes
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                break;
+            }
+
         }
 
         <table class="table table-bordered table-striped" id="tablaPedidosConcretados" style="display:none">
@@ -168,12 +289,14 @@
                 {
                     if (listado.Estado == false)
                     {
+                        string fecha = listado.Fecha.ToString();
+                        string[] fechaSplit = fecha.Split(' ');
                         <tr class="text-center">
                             <td class="text-center">
                                 @listado.DescripcionPedido
                             </td>
                             <td class="text-center">
-                                @listado.Fecha
+                                @fechaSplit[0]
                             </td>
                             <td class="text-center">
                                 @listado.NombreProveedor - Empresa: @listado.Empresa
@@ -192,9 +315,9 @@
 
         <br />
         <div class="text-center btn-group">
-            @if (Model.TablaPedido.Count() != 0)
+            @if (pedidoSinConcretar)
             {
-                <button class="btn btn-info m-1" onclick="mostrarBotones()">Modificar pedidos</button>
+                <button class="btn btn-info m-1" onclick="mostrarBotonesPedidos()">Modificar pedidos</button>
             }
             @foreach (var listado in Model.TablaPedido)
             {

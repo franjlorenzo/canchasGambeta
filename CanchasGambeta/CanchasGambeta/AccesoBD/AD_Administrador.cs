@@ -67,7 +67,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idProveedor, nombreCompleto, empresa, telefono from Proveedor";
+                string consulta = @"select idProveedor, nombreCompleto, empresa, telefono, email from Proveedor";
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consulta;
@@ -85,6 +85,49 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.nombreCompleto = lector["nombreCompleto"].ToString();
                         auxiliar.empresa = lector["empresa"].ToString();
                         auxiliar.telefono = lector["telefono"].ToString();
+                        auxiliar.email = lector["email"].ToString();
+                        lista.Add(auxiliar);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return lista;
+        }
+
+        public static List<TablaProveedores> obtenerTodosLosProveedoresTabla()
+        {
+            List<TablaProveedores> lista = new List<TablaProveedores>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idProveedor, nombreCompleto, empresa, telefono, email from Proveedor";
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        TablaProveedores auxiliar = new TablaProveedores();
+                        auxiliar.IdProveedor = int.Parse(lector["idProveedor"].ToString());
+                        auxiliar.NombreCompleto = lector["nombreCompleto"].ToString();
+                        auxiliar.Empresa = lector["empresa"].ToString();
+                        auxiliar.Telefono = lector["telefono"].ToString();
+                        auxiliar.Email = lector["email"].ToString();
                         lista.Add(auxiliar);
                     }
                 }
@@ -308,6 +351,209 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return lista;
+        }
+
+        public static Proveedor obtenerProveedorPorId(int idProveedor)
+        {
+            Proveedor proveedor = new Proveedor();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select * from Proveedor where idProveedor = @idProveedor";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idProveedor", idProveedor);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        proveedor.idProveedor = idProveedor;
+                        proveedor.nombreCompleto = lector["nombreCompleto"].ToString();
+                        proveedor.telefono = lector["telefono"].ToString();
+                        proveedor.empresa = lector["empresa"].ToString();
+                        proveedor.email = lector["email"].ToString();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return proveedor;
+        }
+
+        public static bool nuevoProveedor(NuevoProveedor nuevoProveedor)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"insert into Proveedor (nombreCompleto, empresa, telefono, email) values (@nombreCompleto, @empresa, @telefono, @email)";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@nombreCompleto", nuevoProveedor.NombreCompleto);
+                comando.Parameters.AddWithValue("@empresa", nuevoProveedor.Empresa);
+                comando.Parameters.AddWithValue("@telefono", nuevoProveedor.Telefono);
+                comando.Parameters.AddWithValue("@email", nuevoProveedor.Email);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static bool pedidosSinConcretar(int idProveedor)
+        {
+            bool resultado = true;
+            List<Pedido> pedidosAProveedor = new List<Pedido>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select * from Pedido
+                                    where proveedor = @idProveedor";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idProveedor", idProveedor);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        Pedido auxiliar = new Pedido();
+                        auxiliar.estado = bool.Parse(lector["estado"].ToString());
+                        pedidosAProveedor.Add(auxiliar);
+                    }
+                }
+
+                foreach (var lista in pedidosAProveedor)
+                {
+                    if(lista.estado == true)
+                    {
+                        resultado = false;
+                        break;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static bool modificarProveedor(Proveedor proveedor)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"update Proveedor set nombreCompleto = @nombreCompleto,
+                                                         telefono = @telefono,
+                                                         email = @email,
+                                                         empresa = @empresa
+                                    where idProveedor = @idProveedor";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@nombreCompleto", proveedor.nombreCompleto);
+                comando.Parameters.AddWithValue("@telefono", proveedor.telefono);
+                comando.Parameters.AddWithValue("@email", proveedor.email);
+                comando.Parameters.AddWithValue("@empresa", proveedor.empresa);
+                comando.Parameters.AddWithValue("@idProveedor", proveedor.idProveedor);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static bool eliminarProveedor(int idProveedor)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consultaEliminarPedidos = @"delete from Pedido where proveedor = @idProveedor";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idProveedor", idProveedor);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consultaEliminarPedidos;
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+
+                string consultaEliminarProveedor = @"delete from Proveedor where idProveedor = @idProveedor";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idProveedor", idProveedor);
+                comando.CommandText = consultaEliminarProveedor;
+                comando.ExecuteNonQuery();
+
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
         }
     }
 }

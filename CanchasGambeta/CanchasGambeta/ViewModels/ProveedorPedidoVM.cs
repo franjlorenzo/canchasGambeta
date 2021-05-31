@@ -41,9 +41,41 @@ namespace CanchasGambeta.ViewModels
         public int IdProveedor { get => idProveedor; set => idProveedor = value; }
     }
 
+    public class NuevoProveedor
+    {
+        private int idProveedor;
+        private string nombreCompleto;
+        private string telefono;
+        private string email;
+        private string empresa;
+
+        public int IdProveedor { get => idProveedor; set => idProveedor = value; }
+        public string NombreCompleto { get => nombreCompleto; set => nombreCompleto = value; }
+        public string Telefono { get => telefono; set => telefono = value; }
+        public string Email { get => email; set => email = value; }
+        public string Empresa { get => empresa; set => empresa = value; }
+    }
+
+    public class TablaProveedores
+    {
+        private int idProveedor;
+        private string nombreCompleto;
+        private string telefono;
+        private string email;
+        private string empresa;
+
+        public int IdProveedor { get => idProveedor; set => idProveedor = value; }
+        public string NombreCompleto { get => nombreCompleto; set => nombreCompleto = value; }
+        public string Telefono { get => telefono; set => telefono = value; }
+        public string Email { get => email; set => email = value; }
+        public string Empresa { get => empresa; set => empresa = value; }
+    }
+
     public class VistaMisPedidos
     {
         public List<TablaPedido> TablaPedido { get; set; }
         public NuevoPedido NuevoPedido { get; set; }
+        public NuevoProveedor NuevoProveedor { get; set; }
+        public List<TablaProveedores> TablaProveedores { get; set; }
     }
 }

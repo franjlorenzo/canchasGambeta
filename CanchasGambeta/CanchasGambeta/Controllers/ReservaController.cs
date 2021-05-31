@@ -125,32 +125,13 @@ namespace CanchasGambeta.Controllers
                         nuevaReserva.idReserva = AccesoBD.AD_Reserva.obtenerReservaPorAtributos(nuevaReserva.idCancha, nuevaReserva.idHorario, nuevaReserva.fecha);
                         bool insertReservaInsumo = AccesoBD.AD_Reserva.insertReservaInsumo(nuevaReserva, cantidad);
                         bool insertHorarioReservas = AccesoBD.AD_Reserva.insertHorarioReservas(nuevaReserva.idReserva, nuevaReserva.idHorario);
-                        if (insertReservaInsumo && insertHorarioReservas)
+
+                        if (insertReservaInsumo && insertHorarioReservas && sesion.equipo != null)
                         {
-                            if (sesion.equipo != null)
-                            {
-                                bool enviarMails = bool.Parse(Request["NuevaReservaVM.enviarMails"].Contains("true").ToString());
-                                if (enviarMails)
-                                {
-                                    var smtpClient = new SmtpClient("smtp.gmail.com")
-                                    {
-                                        Port = 587,
-                                        Credentials = new NetworkCredential("canchasgambeta@gmail.com", "Canchasgambetafl1997"),
-                                        EnableSsl = true,
-                                    };
-
-                                    DatosReserva reservaCliente = AccesoBD.AD_Reserva.obtenerDatosReserva(nuevaReserva.idReserva);
-                                    List<MailEquipoVM> listaIntegrantesEquipo = AccesoBD.AD_Equipo.obtenerMailsEquipo(sesion.equipo);
-                                    string mensaje = "Hola! su compañero de equipo hizo una reserva para el día " + reservaCliente.Fecha + " a las " + reservaCliente.Horario + " en la cancha " + reservaCliente.TipoCancha;
-
-                                    foreach (var lista in listaIntegrantesEquipo)
-                                    {
-                                        smtpClient.Send("canchasgambeta@gmail.com", lista.Email, "Nueva reserva!", mensaje);
-                                    }
-                                }
-                            }
-                            return RedirectToAction("MisReservas", "Reserva");
+                            bool enviarMails = bool.Parse(Request["NuevaReservaVM.enviarMails"].Contains("true").ToString());
+                            if(enviarMails) AccesoBD.AD_Reserva.enviarMailsReserva(nuevaReserva.idReserva, 1);
                         }
+                        return RedirectToAction("MisReservas", "Reserva");
                     }
                     else
                     {
@@ -327,36 +308,11 @@ namespace CanchasGambeta.Controllers
                         if (ModelState.IsValid)
                         {
                             bool resultado = AccesoBD.AD_Reserva.modificarReserva(actualizarReserva, listaInsumosActualizados);
-                            if (resultado)
+                            if (resultado && sesion.equipo != null)
                             {
-                                if(sesion.equipo != null)
-                                {
-                                    bool enviarMails = bool.Parse(Request["EnviarMails"].Contains("true").ToString());
-                                    if (enviarMails)
-                                    {
-                                        var smtpClient = new SmtpClient("smtp.gmail.com")
-                                        {
-                                            Port = 587,
-                                            Credentials = new NetworkCredential("canchasgambeta@gmail.com", "Canchasgambetafl1997"),
-                                            EnableSsl = true,
-                                        };
-
-                                        DatosReserva reservaCliente = AccesoBD.AD_Reserva.obtenerDatosReserva(actualizarReserva.IdReserva);
-                                        List<MailEquipoVM> listaIntegrantesEquipo = AccesoBD.AD_Equipo.obtenerMailsEquipo(sesion.equipo);
-                                        string mensaje = "Hola de nuevo! su compañero de equipo hizo una modificación de la reserva y es el día " + reservaCliente.Fecha + " a las "
-                                                            + reservaCliente.Horario + ", agregó o quitó insumos.";
-
-                                        foreach (var lista in listaIntegrantesEquipo)
-                                        {
-                                            smtpClient.Send("canchasgambeta@gmail.com", lista.Email, "Reserva modificada", mensaje);
-                                        }
-                                    }
-                                    return RedirectToAction("MisReservas", "Reserva");
-                                }
-                                else
-                                {
-                                    return RedirectToAction("MisReservas", "Reserva");
-                                }                               
+                                bool enviarMails = bool.Parse(Request["EnviarMails"].Contains("true").ToString());
+                                if (enviarMails) AccesoBD.AD_Reserva.enviarMailsReserva(actualizarReserva.IdReserva, 3);
+                                return RedirectToAction("MisReservas", "Reserva");
                             }
                             else
                             {
@@ -377,36 +333,11 @@ namespace CanchasGambeta.Controllers
                     if (ModelState.IsValid)
                     {
                         bool resultado = AccesoBD.AD_Reserva.modificarReserva(actualizarReserva, listaInsumosActualizados);
-                        if (resultado)
+                        if (resultado && sesion.equipo != null)
                         {
-                            if(sesion.equipo != null)
-                            {
-                                bool enviarMails = bool.Parse(Request["EnviarMails"].Contains("true").ToString());
-                                if (enviarMails)
-                                {
-                                    var smtpClient = new SmtpClient("smtp.gmail.com")
-                                    {
-                                        Port = 587,
-                                        Credentials = new NetworkCredential("canchasgambeta@gmail.com", "Canchasgambetafl1997"),
-                                        EnableSsl = true,
-                                    };
-
-                                    DatosReserva reservaCliente = AccesoBD.AD_Reserva.obtenerDatosReserva(actualizarReserva.IdReserva);
-                                    List<MailEquipoVM> listaIntegrantesEquipo = AccesoBD.AD_Equipo.obtenerMailsEquipo(sesion.equipo);
-                                    string mensaje = "Hola de nuevo! su compañero de equipo hizo una modificación de la reserva y es el día " + reservaCliente.Fecha + " a las "
-                                                        + reservaCliente.Horario + " en la cancha " + reservaCliente.TipoCancha;
-
-                                    foreach (var lista in listaIntegrantesEquipo)
-                                    {
-                                        smtpClient.Send("canchasgambeta@gmail.com", lista.Email, "Reserva modificada", mensaje);
-                                    }
-                                }
-                                return RedirectToAction("MisReservas", "Reserva");
-                            }
-                            else
-                            {
-                                return RedirectToAction("MisReservas", "Reserva");
-                            }                           
+                            bool enviarMails = bool.Parse(Request["EnviarMails"].Contains("true").ToString());
+                            if (enviarMails) AccesoBD.AD_Reserva.enviarMailsReserva(actualizarReserva.IdReserva, 2);
+                            return RedirectToAction("MisReservas", "Reserva");
                         }
                         else
                         {
@@ -456,24 +387,7 @@ namespace CanchasGambeta.Controllers
                 bool resultado = AccesoBD.AD_Reserva.eliminarReserva(idReserva);
                 if (resultado)
                 {
-                    if(sesion.equipo != null)
-                    {
-                        var smtpClient = new SmtpClient("smtp.gmail.com")
-                        {
-                            Port = 587,
-                            Credentials = new NetworkCredential("canchasgambeta@gmail.com", "Canchasgambetafl1997"),
-                            EnableSsl = true,
-                        };
-
-                        List<MailEquipoVM> listaIntegrantesEquipo = AccesoBD.AD_Equipo.obtenerMailsEquipo(sesion.equipo);
-                        string mensaje = "Hola, su compañero de equipo dio de baja la reserva del día " + reservaCliente.Fecha + " a las "
-                                            + reservaCliente.Horario + " en la cancha " + reservaCliente.TipoCancha;
-
-                        foreach (var lista in listaIntegrantesEquipo)
-                        {
-                            smtpClient.Send("canchasgambeta@gmail.com", lista.Email, "Reserva eliminada", mensaje);
-                        }
-                    }
+                    if(sesion.equipo != null) AccesoBD.AD_Reserva.enviarMailsReserva(idReserva, 0, reservaCliente);
                     return RedirectToAction("MisReservas", "Reserva");
                 }
                 else

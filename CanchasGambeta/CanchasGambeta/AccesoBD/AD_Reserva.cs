@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Mail;
+using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
 
@@ -764,6 +766,43 @@ namespace CanchasGambeta.AccesoBD
                 }
             }
             return seActualizoInsumo;
+        }
+
+        public static void enviarMailsReserva(int idReserva, int tipoMensaje, [Optional] DatosReserva datosReservaEliminada)
+        {
+            SmtpClient smtpClient = new SmtpClient();
+            Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
+            DatosReserva reservaCliente = null;
+            if(datosReservaEliminada == null) reservaCliente = obtenerDatosReserva(idReserva);
+            List<MailEquipoVM> listaIntegrantesEquipo = AD_Equipo.obtenerMailsEquipo(sesion.equipo);
+            string mensaje = "";
+            string titulo = "";
+
+            if(tipoMensaje == 1) //Nueva reserva
+            {
+                mensaje = $"Hola, su compañero de equipo hizo una reserva para el día {reservaCliente.Fecha} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha}";
+                titulo = "Nueva reserva!";
+            }
+            else if(tipoMensaje == 2) //Update reserva
+            {
+                mensaje = $"Hola de nuevo! su compañero de equipo hizo una modificación de la reserva y es el día {reservaCliente.Fecha} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha}";
+                titulo = "Reserva modificada";
+            }
+            else if(tipoMensaje == 3) //Update insumos de la reserva
+            {
+                mensaje = "Hola de nuevo! su compañero de equipo hizo una modificación de la reserva y es el día " + reservaCliente.Fecha + " a las " + reservaCliente.Horario + ", agregó o quitó insumos.";
+                titulo = "Reserva modificada";
+            }
+            else //Delete reserva
+            {
+                mensaje = $"Hola, su compañero de equipo dio de baja la reserva del día {datosReservaEliminada.Fecha} a las {datosReservaEliminada.Horario} en la cancha {datosReservaEliminada.TipoCancha}";
+                titulo = "Reserva eliminada";
+            }
+                       
+            foreach (var lista in listaIntegrantesEquipo)
+            {
+                smtpClient.Send("canchasgambeta@gmail.com", lista.Email, titulo, mensaje);
+            }
         }
     }
 }

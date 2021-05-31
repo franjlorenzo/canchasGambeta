@@ -27,25 +27,27 @@
                 <tbody>
                     @foreach (var listado in Model.TablaReservaVM)
                     {
+                        string fecha = listado.Fecha.ToString();
+                        string[] fechaSplit = fecha.Split(' ');
                         <tr class="text-center">
                             @if (listado.Estado == true)
                             {
                                 if (listado.ServicioAsador && listado.ServicioInstrumento)
                                 {
-                                    <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: Si)</td>
+                                    <td>@fechaSplit[0] - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: Si)</td>
                                 }
                                 else if (listado.ServicioAsador && !listado.ServicioInstrumento)
                                 {
-                                    <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: No)</td>
+                                    <td>@fechaSplit[0] - @listado.Horario - @listado.Cancha (Servicio Asador: Si - Servicio Instrumentos: No)</td>
                                 }
                                 else if (!listado.ServicioAsador && listado.ServicioInstrumento)
                                 {
-                                    <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: Si)</td>
+                                    <td>@fechaSplit[0] - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: Si)</td>
 
                                 }
                                 else
                                 {
-                                    <td>@listado.Fecha - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: No)</td>
+                                    <td>@fechaSplit[0] - @listado.Horario - @listado.Cancha (Servicio Asador: No - Servicio Instrumentos: No)</td>
                                 }
                                 <td class="text-center acciones" style="display:none">
                                     <div class="btn-group">
