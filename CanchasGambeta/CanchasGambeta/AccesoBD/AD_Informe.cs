@@ -2,6 +2,7 @@
 using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -112,6 +113,10 @@ namespace CanchasGambeta.AccesoBD
         public static List<CanchasMasReservadasVM> obtenerCanchasMasReservadas()
         {
             List<CanchasMasReservadasVM> listaCanchasMasReservadas = new List<CanchasMasReservadasVM>();
+            /*DataTable datos = new DataTable();
+            datos.Columns.Add(new DataColumn("Canchas", typeof(string)));
+            datos.Columns.Add(new DataColumn("Cantidad de reservas", typeof(string)));
+            string strDatos = "";*/
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
 
@@ -123,7 +128,7 @@ namespace CanchasGambeta.AccesoBD
                                     group by tipoCancha
                                     order by 2 desc";
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
 
                 conexion.Open();
@@ -138,8 +143,29 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.Cancha = lector["tipoCancha"].ToString();
                         auxiliar.Cantidad = int.Parse(lector["Veces utilizada"].ToString());
                         listaCanchasMasReservadas.Add(auxiliar);
+                        //datos.Rows.Add(lector["tipoCancha"].ToString(), int.Parse(lector["Veces utilizada"].ToString()));
                     }
-                }
+
+                    /*strDatos = "[['Canchas', 'Cantidad de reservas'],";
+
+                    int cantidadRows = 1;
+                    foreach (DataRow dr in datos.Rows)
+                    {
+                        if(datos.Rows.Count != cantidadRows)
+                        {
+                            cantidadRows++;
+                            strDatos = strDatos + "[";
+                            strDatos = strDatos + "'" + dr[0] + "'," + dr[1];
+                            strDatos = strDatos + "],";
+                        }
+                        else
+                        {
+                            strDatos = strDatos + "[";
+                            strDatos = strDatos + "'" + dr[0] + "'," + dr[1];
+                            strDatos = strDatos + "]]";
+                        }*                       
+                    }*/                    
+                }                              
             }
             catch (Exception)
             {

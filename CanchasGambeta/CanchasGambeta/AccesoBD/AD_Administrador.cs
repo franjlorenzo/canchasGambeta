@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 
 namespace CanchasGambeta.AccesoBD
@@ -257,11 +258,10 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"update Pedido set proveedor = @proveedor,
-                                                      descripcion = @descripcion
+                string consulta = @"update Pedido set descripcion = @descripcion,
+                                                      fecha = getdate()
                                     where idPedido = @idPedido";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@proveedor", pedido.proveedor);
                 comando.Parameters.AddWithValue("@descripcion", pedido.descripcion);
                 comando.Parameters.AddWithValue("@idPedido", pedido.idPedido);
 
@@ -554,6 +554,85 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return resultado;
+        }
+
+        public static void enviarMailAProveedor(NuevoPedido nuevoPedido, int tipoMensaje, Pedido actualizarPedido, Pedido pedidoEliminado)
+        {
+            SmtpClient smtpClient = new SmtpClient();
+
+            Proveedor proveedor = null;
+            if (nuevoPedido != null) 
+            {
+                nuevoPedido.IdPedido = obtenerIdPedidoPorAtributos(nuevoPedido.Descripcion, nuevoPedido.IdProveedor, nuevoPedido.Fecha);
+                proveedor = obtenerProveedorPorId(nuevoPedido.IdProveedor);
+            }
+            if(actualizarPedido != null) proveedor = obtenerProveedorPorId(actualizarPedido.proveedor);
+            if(pedidoEliminado != null) proveedor = obtenerProveedorPorId(pedidoEliminado.proveedor);
+
+            string mensaje = "";
+            string titulo = "";
+
+            if (tipoMensaje == 1) //Nuevo pedido
+            {
+                mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta ha realizado un pedido nuevo:\n N° {nuevoPedido.IdPedido}\n Descripción: {nuevoPedido.Descripcion}";
+                titulo = "Nuevo pedido";
+            }
+            else if (tipoMensaje == 2) //Update Pedido
+            {
+                mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta le informa que se han realizado modificaciones en el pedido N°{actualizarPedido.idPedido}\n Descripción: {actualizarPedido.descripcion}";
+                titulo = "Pedido modificado";
+            }
+            else //Delete pedido
+            {
+                mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta le informa que el pedido N° {pedidoEliminado.idPedido} ha sido cancelado.\nDescripción: {pedidoEliminado.descripcion}.\nGracias por su atención y disculpe las molestias.";
+                titulo = "Pedido eliminado";
+            }
+
+            smtpClient.Send("canchasgambeta@gmail.com", proveedor.email, titulo, mensaje);
+        }
+
+        public static int obtenerIdPedidoPorAtributos(string descripcion, int idProveedor, DateTime fecha)
+        {
+            int idPedido = 0;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idPedido from Pedido 
+                                    where proveedor = @idProveedor and
+                                    descripcion = @descripcion and
+                                    fecha = @fecha";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idProveedor", idProveedor);
+                comando.Parameters.AddWithValue("@descripcion", descripcion);
+                comando.Parameters.AddWithValue("@fecha", fecha);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                       idPedido = int.Parse(lector["idPedido"].ToString());
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return idPedido;
         }
     }
 }

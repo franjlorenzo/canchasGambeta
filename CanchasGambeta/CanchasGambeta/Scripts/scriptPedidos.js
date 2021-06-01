@@ -72,6 +72,8 @@ function validacionModificarPedido() {
         return false;
     }
 
+    let cboProveedorAtributos = document.getElementById("proveedor");
+    cboProveedorAtributos.removeAttribute("disabled");
     return true;
 }
 

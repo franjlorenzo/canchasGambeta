@@ -776,6 +776,7 @@ namespace CanchasGambeta.AccesoBD
             if(datosReservaEliminada == null) reservaCliente = obtenerDatosReserva(idReserva);
             List<MailEquipoVM> listaIntegrantesEquipo = AD_Equipo.obtenerMailsEquipo(sesion.equipo);
             string mensaje = "";
+            string insumos = "";
             string titulo = "";
 
             if(tipoMensaje == 1) //Nueva reserva
@@ -790,7 +791,12 @@ namespace CanchasGambeta.AccesoBD
             }
             else if(tipoMensaje == 3) //Update insumos de la reserva
             {
-                mensaje = "Hola de nuevo! su compañero de equipo hizo una modificación de la reserva y es el día " + reservaCliente.Fecha + " a las " + reservaCliente.Horario + ", agregó o quitó insumos.";
+                List<Insumo> listaInsumosEnReserva = obtenerInsumosDeLaReserva(idReserva);
+                foreach (var item in listaInsumosEnReserva)
+                {
+                    insumos = insumos + $"- {item.insumo1}({item.cantidad})\n";
+                }
+                mensaje = $"Hola de nuevo! su compañero de equipo hizo una modificación de la reserva y es el día {reservaCliente.Fecha} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha} y con los siguientes insumos:\n{insumos}";
                 titulo = "Reserva modificada";
             }
             else //Delete reserva

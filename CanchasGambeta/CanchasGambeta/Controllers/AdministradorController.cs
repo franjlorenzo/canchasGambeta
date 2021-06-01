@@ -129,7 +129,11 @@ namespace CanchasGambeta.Controllers
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Administrador.nuevoPedido(nuevoPedido);
-                if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                if (resultado)
+                {
+                    AccesoBD.AD_Administrador.enviarMailAProveedor(nuevoPedido, 1, null, null);
+                    return RedirectToAction("MisPedidos", "Administrador");
+                } 
                 else
                 {
                     TempData["ErrorInsertPedido"] = "Ocurrió un error al registrar el pedido, inténtelo nuevamente.";
@@ -201,7 +205,11 @@ namespace CanchasGambeta.Controllers
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Administrador.modificarPedido(pedidoModificado);
-                if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+                if (resultado)
+                {
+                    AccesoBD.AD_Administrador.enviarMailAProveedor(null, 2, pedidoModificado, null);
+                    return RedirectToAction("MisPedidos", "Administrador");
+                }
                 else
                 {
                     ViewBag.ErrorModificarPedido = "Error al modificar el pedido, inténtelo nuevamente.";
@@ -241,9 +249,14 @@ namespace CanchasGambeta.Controllers
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             int idPedido = int.Parse(Request["listado.IdPedido"]);
+            Pedido datosPedido = AccesoBD.AD_Administrador.obtenerPedidoPorId(idPedido);
 
             bool resultado = AccesoBD.AD_Administrador.eliminarPedido(idPedido);
-            if (resultado) return RedirectToAction("MisPedidos", "Administrador");
+            if (resultado)
+            {
+                AccesoBD.AD_Administrador.enviarMailAProveedor(null, 3, null, datosPedido);
+                return RedirectToAction("MisPedidos", "Administrador");
+            }
             else
             {
                 TempData["ErrorEliminarPedido"] = "Ocurrió un error al eliminar el pedido, inténtelo nuevamente.";
