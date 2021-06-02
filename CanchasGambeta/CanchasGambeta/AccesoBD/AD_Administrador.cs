@@ -21,7 +21,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idPedido, fecha, idProveedor, nombreCompleto, telefono, empresa, estado
+                string consulta = @"select idPedido, fecha, descripcion, idProveedor, nombreCompleto, telefono, empresa, estado
                                     from Pedido ped join Proveedor prov on ped.proveedor = prov.idProveedor";
 
                 comando.CommandType = System.Data.CommandType.Text;
@@ -38,6 +38,7 @@ namespace CanchasGambeta.AccesoBD
                         TablaPedido auxiliar = new TablaPedido();
                         auxiliar.IdPedido = int.Parse(lector["idPedido"].ToString());
                         auxiliar.Fecha = DateTime.Parse(lector["fecha"].ToString());
+                        auxiliar.DescripcionPedido = lector["descripcion"].ToString();
                         auxiliar.IdProveedor = int.Parse(lector["idProveedor"].ToString());
                         auxiliar.NombreProveedor = lector["nombreCompleto"].ToString();
                         auxiliar.Telefono = lector["telefono"].ToString();
@@ -151,10 +152,11 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"insert into Pedido (proveedor, fecha, estado) values (@proveedor, @fecha, @estado)";
+                string consulta = @"insert into Pedido (proveedor, fecha, descripcion, estado) values (@proveedor, @fecha, @descripcion, @estado)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@proveedor", nuevoPedido.IdProveedor);
                 comando.Parameters.AddWithValue("@fecha", nuevoPedido.Fecha);
+                comando.Parameters.AddWithValue("@descripcion", nuevoPedido.Descripcion);
                 comando.Parameters.AddWithValue("@estado", 1);
 
                 comando.CommandType = System.Data.CommandType.Text;
@@ -215,7 +217,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idPedido, proveedor, fecha from Pedido where idPedido = @idPedido";
+                string consulta = @"select idPedido, proveedor, descripcion, fecha from Pedido where idPedido = @idPedido";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idPedido", idPedido);
 
@@ -233,6 +235,7 @@ namespace CanchasGambeta.AccesoBD
                         pedido.idPedido = int.Parse(lector["idPedido"].ToString());
                         pedido.proveedor = int.Parse(lector["proveedor"].ToString());
                         pedido.fecha = DateTime.Parse(lector["fecha"].ToString());
+                        pedido.descripcion = lector["descripcion"].ToString();
                     }
                 }
             }
@@ -255,9 +258,11 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"update Pedido set fecha = getdate()
+                string consulta = @"update Pedido set descripcion = @descripcion,
+                                                      fecha = getdate()
                                     where idPedido = @idPedido";
                 comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idPedido", pedido.descripcion);
                 comando.Parameters.AddWithValue("@idPedido", pedido.idPedido);
 
                 comando.CommandType = System.Data.CommandType.Text;
@@ -558,7 +563,7 @@ namespace CanchasGambeta.AccesoBD
             Proveedor proveedor = null;
             if (nuevoPedido != null) 
             {
-                nuevoPedido.IdPedido = obtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha);
+                nuevoPedido.IdPedido = obtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha, nuevoPedido.Descripcion);
                 proveedor = obtenerProveedorPorId(nuevoPedido.IdProveedor);
             }
             if(actualizarPedido != null) proveedor = obtenerProveedorPorId(actualizarPedido.proveedor);
@@ -586,7 +591,7 @@ namespace CanchasGambeta.AccesoBD
             smtpClient.Send("canchasgambeta@gmail.com", proveedor.email, titulo, mensaje);
         }
 
-        public static int obtenerIdPedidoPorAtributos(int idProveedor, DateTime fecha)
+        public static int obtenerIdPedidoPorAtributos(int idProveedor, DateTime fecha, string descripcion)
         {
             int idPedido = 0;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -596,9 +601,11 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consulta = @"select idPedido from Pedido 
                                     where proveedor = @idProveedor and
+                                    descripcion = @descripcion and
                                     fecha = @fecha";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idProveedor", idProveedor);
+                comando.Parameters.AddWithValue("@descripcion", descripcion);
                 comando.Parameters.AddWithValue("@fecha", fecha);
 
                 comando.CommandType = System.Data.CommandType.Text;
@@ -613,7 +620,6 @@ namespace CanchasGambeta.AccesoBD
                     while (lector.Read())
                     {
                        idPedido = int.Parse(lector["idPedido"].ToString());
-
                     }
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using CanchasGambeta.Models;
+using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -198,6 +199,47 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return resultado;
+        }
+
+        public static List<InsumosAPedir> obtenerInsumosPorNombre(string nombreInsumo)
+        {
+            List<InsumosAPedir> listaInsumosEncontrados = new List<InsumosAPedir>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idInsumo, insumo from Insumo where insumo like @nombreInsumo";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@nombreInsumo", "%" + nombreInsumo + "%");
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        InsumosAPedir insumo = new InsumosAPedir();
+                        insumo.IdInsumo = int.Parse(lector["idInsumo"].ToString());
+                        insumo.Insumo = lector["insumo"].ToString();
+                        listaInsumosEncontrados.Add(insumo);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return listaInsumosEncontrados;
         }
     }
 }

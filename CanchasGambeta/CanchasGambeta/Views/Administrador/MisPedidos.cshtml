@@ -5,7 +5,7 @@
     bool pedidoSinConcretar = false;
     foreach (var item in Model.TablaPedido)
     {
-        if(item.Estado == true) { pedidoSinConcretar = true; }
+        if (item.Estado == true) { pedidoSinConcretar = true; }
     }
 }
 
@@ -98,24 +98,24 @@
         @using (Html.BeginForm("NuevoProveedor", "Administrador", FormMethod.Post, new { onsubmit = "return validacionNuevoProveedor();" }))
         {
             <div class="form-horizontal">
-                <div class="form-group">
+                <div class="input-group-sm">
                     <label class="control-label">Nombre del proveedor</label>
                     @Html.TextBoxFor(Model => Model.NuevoProveedor.NombreCompleto, htmlAttributes: new { @class = "form-control", id = "txtNombreProveedor" })
                 </div>
-                <div class="form-group">
+                <div class="input-group-sm">
                     <label class="control-label">Teléfono</label>
                     @Html.TextBoxFor(Model => Model.NuevoProveedor.Telefono, htmlAttributes: new { @class = "form-control", id = "txtTelefono", maxlength = 10 })
                 </div>
-                <div class="form-group">
+                <div class="input-group-sm">
                     <label class="control-label">Correo electrónico</label>
                     @Html.TextBoxFor(Model => Model.NuevoProveedor.Email, htmlAttributes: new { @class = "form-control", id = "txtEmail" })
                 </div>
-                <div class="form-group">
+                <div class="input-group-sm">
                     <label class="control-label">Empresa</label>
                     @Html.TextBoxFor(Model => Model.NuevoProveedor.Empresa, htmlAttributes: new { @class = "form-control", id = "txtEmpresa" })
                 </div>
             </div>
-            <button class="btn btn-success" type="submit">Registrar proveedor</button>
+            <button class="btn btn-success mt-2" type="submit">Registrar proveedor</button>
             <div class="form-label-group text-danger" style="margin-left:10px">
                 @ViewBag.ErrorInsertProveedor
             </div>
@@ -124,32 +124,92 @@
     <div class="col-md-1"></div>
 </div>
 
-<div class="row" style="transform: translateY(70px); color: white">
-    <div class="col-md-1"></div>
-    <div class="col-md-5">
-        <h4 class="p-1">Complete el formulario para realizar un nuevo pedido</h4>
-        @using (Html.BeginForm("NuevoPedido", "Administrador", FormMethod.Post, new { onsubmit = "return validacionNuevoPedido();" }))
-        {
-            @Html.HiddenFor(Model => Model.NuevoPedido.Fecha)
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label">Proveedores</label>
-                    @Html.DropDownList("idProveedor", proveedores, "Seleccione un proveedor", htmlAttributes: new { @class = "form-control" })
+    <div class="row" style="transform: translateY(70px); color: white">
+        <div class="col-md-1"></div>
+        <div class="col-md-5">
+            @using (Html.BeginForm("NuevoPedido", "Administrador", FormMethod.Post, new { onsubmit = "return validacionNuevoPedido();" }))
+            {
+                <h4 class="p-1">Complete el formulario para realizar un nuevo pedido</h4>
+                @Html.HiddenFor(Model => Model.NuevoPedido.Fecha)
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label">Proveedores</label>
+                        @Html.DropDownList("idProveedor", proveedores, "Seleccione un proveedor", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Descripción</label>
+                        @Html.TextAreaFor(Model => Model.NuevoPedido.Descripcion, htmlAttributes: new { @class = "form-control" })
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Descripción</label>
-                    @Html.TextAreaFor(Model => Model.NuevoPedido.Descripcion, htmlAttributes: new { @class = "form-control" })
+                <button class="btn btn-success" type="submit">Enviar Pedido</button>
+                <div class="form-label-group text-danger" style="margin-left:10px">
+                    @ViewBag.ErrorInsertPedido
                 </div>
-            </div>
-            <button class="btn btn-success" type="submit">Enviar Pedido</button>
-            <div class="form-label-group text-danger" style="margin-left:10px">
-                @ViewBag.ErrorInsertPedido
-            </div>
-        }
+            }
+        </div>
+        <div class="col-md-5">
+            @using (Html.BeginForm("MisPedidos", "Administrador", FormMethod.Post, new { onsubmit = "return validacionBuscarInsumo()" }))
+            {
+                <h4 class="p-3">Insumos a pedir</h4>
+                <div class="form-horizontal">
+                    <div class="col-md-12 form-group btn-group">
+                        @Html.TextBox("nombreInsumo", "", htmlAttributes: new { @class = "form-control" })
+                        <button type="submit" class="btn btn-primary ml-2">Buscar</button>
+                    </div>
+                </div>
+            }
+
+            @if (Model.InsumosAPedir.Count != 0)
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Insumo
+                            </th>
+                            <th class="text-center">
+                                Cantidad
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var listado in Model.InsumosAPedir)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @listado.Insumo
+                                </td>
+                                <td class="text-center">
+                                    <input type="number" name="cantidadInsumo" id="idCantidadInsumo" class="form-control" min="0" placeholder="0" style="width:70px;" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Insumo
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">
+                                No existe este insumo
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+
+        </div>
+        <div class="col-md-1"></div>
     </div>
-    <div class="col-md-5"></div>
-    <div class="col-md-1"></div>
-</div>
 
 <div class="row" style="transform: translateY(60px); color: white">
     <div class="col-md-1"></div>

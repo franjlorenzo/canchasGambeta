@@ -107,6 +107,7 @@
     <Property Name="estado" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="DetallePedido" Relationship="Self.FK_DetallePedido_Pedido" FromRole="Pedido" ToRole="DetallePedido" />
     <NavigationProperty Name="Proveedor1" Relationship="Self.FK_Pedido_Proveedor" FromRole="Pedido" ToRole="Proveedor" />
+    <Property Name="descripcion" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Proveedor">
     <Key>

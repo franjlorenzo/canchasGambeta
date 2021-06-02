@@ -6,26 +6,31 @@
     <edmx:Diagrams>
       <Diagram DiagramId="5b03c741c83e4864a5616efd62c2bbed" Name="Diagram1">
         <EntityTypeShape EntityType="Canchas_GambetaModel.Cancha" Width="1.5" PointX="6" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.DetallePedido" Width="1.5" PointX="10.5" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.DetallePedido" Width="1.5" PointX="12.875" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.Email" Width="1.5" PointX="0.75" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.Equipo" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.EquipoMails" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.Horario" Width="1.5" PointX="8.25" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Horario" Width="1.5" PointX="10.5" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.HorarioReservas" Width="1.5" PointX="10.5" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.Instrumento" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.InstrumentoRoto" Width="1.5" PointX="3" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.Insumo" Width="1.5" PointX="8.25" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.Pedido" Width="1.5" PointX="3" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.Proveedor" Width="1.5" PointX="0.75" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Instrumento" Width="1.5" PointX="1.5" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.InstrumentoRoto" Width="1.5" PointX="3.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Insumo" Width="1.5" PointX="10.5" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Pedido" Width="1.5" PointX="12.875" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Proveedor" Width="1.5" PointX="12.875" PointY="7.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.Reserva" Width="1.5" PointX="8.25" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.ReservaInsumos" Width="1.5" PointX="10.5" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.ReservaInsumos" Width="1.5" PointX="8.25" PointY="1.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.Rol" Width="1.5" PointX="3.75" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.sysdiagrams" Width="1.5" PointX="6.625" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.Usuario" Width="1.5" PointX="6" PointY="4.5" IsExpanded="true" />
         <AssociationConnector Association="Canchas_GambetaModel.FK_Reserva_Cancha" ManuallyRouted="false" />
         <AssociationConnector Association="Canchas_GambetaModel.FK_DetallePedido_Insumo" ManuallyRouted="false" />
         <AssociationConnector Association="Canchas_GambetaModel.FK_DetallePedido_Pedido" ManuallyRouted="false" />
-        <AssociationConnector Association="Canchas_GambetaModel.FK_EquipoMails_Email" ManuallyRouted="false" />
+        <AssociationConnector Association="Canchas_GambetaModel.FK_EquipoMails_Email" ManuallyRouted="true" >
+          <ConnectorPoint PointX="2.2500000000000004" PointY="3.72068359375" />
+          <ConnectorPoint PointX="2.625" PointY="4.09568359375" />
+          <ConnectorPoint PointX="2.625" PointY="6.2376810364583335" />
+          <ConnectorPoint PointX="3" PointY="6.2376810364583335" />
+        </AssociationConnector>
         <AssociationConnector Association="Canchas_GambetaModel.FK_Cliente_Equipo" ManuallyRouted="false" />
         <AssociationConnector Association="Canchas_GambetaModel.FK_EquipoMails_Equipo" ManuallyRouted="false" />
         <AssociationConnector Association="Canchas_GambetaModel.FK_HorarioReservas_Horario" ManuallyRouted="false" />

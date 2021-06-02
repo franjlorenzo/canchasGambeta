@@ -115,7 +115,37 @@ namespace CanchasGambeta.Controllers
             if (TempData["ErrorInsertProveedor"] != null) ViewBag.ErrorInsertProveedor = TempData["ErrorInsertProveedor"].ToString();
             if (TempData["ErrorEliminarProveedor"] != null) ViewBag.ErrorEliminarProveedor = TempData["ErrorEliminarProveedor"].ToString();
             if (TempData["ErrorPedidosSinConcretar"] != null) ViewBag.ErrorPedidosSinConcretar = TempData["ErrorPedidosSinConcretar"].ToString();
-            return View( new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = new NuevoPedido(), NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedoresTabla() });
+            return View( new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = new NuevoPedido(), NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedoresTabla(), InsumosAPedir = new List<InsumosAPedir>() });
+        }
+
+        [HttpPost]
+        public ActionResult MisPedidos(NuevoPedido nuevoPedido, string nombreInsumo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            List<Proveedor> proveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedores();
+            List<SelectListItem> listaProveedores = proveedores.ConvertAll(d =>
+            {
+                return new SelectListItem()
+                {
+                    Text = d.nombreCompleto + " - (" + d.empresa + ")",
+                    Value = d.idProveedor.ToString(),
+                    Selected = false
+                };
+            });
+            foreach (var item in listaProveedores)
+            {
+                if (item.Value.Equals(nuevoPedido.IdProveedor.ToString()))
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+
+            ViewBag.proveedores = listaProveedores;
+            List<InsumosAPedir> listaInsumosBuscados = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo);
+            return View(new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = nuevoPedido, NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedoresTabla(), InsumosAPedir = listaInsumosBuscados });
         }
 
         [HttpPost]
