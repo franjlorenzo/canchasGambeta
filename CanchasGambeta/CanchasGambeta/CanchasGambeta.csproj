@@ -157,97 +157,70 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cancha.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DetallePedido.cs">
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Email.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Equipo.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EquipoMails.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Horario.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\HorarioReservas.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Instrumento.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InstrumentoRoto.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Insumo.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ModelBDNotebook.Context.cs">
+    <Compile Include="Models\ModeloBDCanchasGambeta.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ModelBDNotebook.Context.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ModelBDNotebook.cs">
+    <Compile Include="Models\ModeloBDCanchasGambeta.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ModelBDNotebook.Designer.cs">
+    <Compile Include="Models\ModeloBDCanchasGambeta.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ModelBDNotebook.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ModeloBD.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModeloBD.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ModeloBD.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModeloBD.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ModeloBD.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModeloBD.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ModelPC.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelPC.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ModelPC.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelPC.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ModelPC.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelPC.edmx</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Pedido.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Proveedor.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Reserva.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ReservaInsumos.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Rol.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagrams.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Usuario.cs">
-      <DependentUpon>ModelBDNotebook.tt</DependentUpon>
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CanchasMasReservadasVM.cs" />
@@ -278,59 +251,25 @@
     <Content Include="Images\padel-wallpaper.jpg" />
     <Content Include="Images\tenis-wallpaper-2.jpg" />
     <Content Include="Images\tenis-wallpaper.jpg" />
-    <Content Include="Models\ModelBDNotebook.Context.tt">
+    <Content Include="Models\ModeloBDCanchasGambeta.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelBDNotebook.edmx</DependentUpon>
-      <LastGenOutput>ModelBDNotebook.Context.cs</LastGenOutput>
+      <DependentUpon>ModeloBDCanchasGambeta.edmx</DependentUpon>
+      <LastGenOutput>ModeloBDCanchasGambeta.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\ModelBDNotebook.tt">
+    <Content Include="Models\ModeloBDCanchasGambeta.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelBDNotebook.edmx</DependentUpon>
-      <LastGenOutput>ModelBDNotebook.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\ModeloBD.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModeloBD.edmx</DependentUpon>
-      <LastGenOutput>ModeloBD.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\ModeloBD.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModeloBD.edmx</DependentUpon>
-      <LastGenOutput>ModeloBD.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\ModelPC.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelPC.edmx</DependentUpon>
-      <LastGenOutput>ModelPC.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\ModelPC.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelPC.edmx</DependentUpon>
-      <LastGenOutput>ModelPC.cs</LastGenOutput>
+      <DependentUpon>ModeloBDCanchasGambeta.edmx</DependentUpon>
+      <LastGenOutput>ModeloBDCanchasGambeta.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\ModeloBD.edmx">
+    <EntityDeploy Include="Models\ModeloBDCanchasGambeta.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModeloBD.Designer.cs</LastGenOutput>
+      <LastGenOutput>ModeloBDCanchasGambeta.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\ModeloBD.edmx.diagram">
-      <DependentUpon>ModeloBD.edmx</DependentUpon>
-    </Content>
-    <EntityDeploy Include="Models\ModelBDNotebook.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModelBDNotebook.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\ModelBDNotebook.edmx.diagram">
-      <DependentUpon>ModelBDNotebook.edmx</DependentUpon>
-    </Content>
-    <EntityDeploy Include="Models\ModelPC.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModelPC.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\ModelPC.edmx.diagram">
-      <DependentUpon>ModelPC.edmx</DependentUpon>
+    <Content Include="Models\ModeloBDCanchasGambeta.edmx.diagram">
+      <DependentUpon>ModeloBDCanchasGambeta.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

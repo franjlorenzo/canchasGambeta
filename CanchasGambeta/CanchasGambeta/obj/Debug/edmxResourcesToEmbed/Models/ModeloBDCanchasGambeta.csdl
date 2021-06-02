@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="Canchas_GambetaModel2" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+<Schema Namespace="Canchas_GambetaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityType Name="Cancha">
     <Key>
       <PropertyRef Name="idCancha" />
@@ -7,6 +7,19 @@
     <Property Name="idCancha" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="tipoCancha" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Reserva" Relationship="Self.FK_Reserva_Cancha" FromRole="Cancha" ToRole="Reserva" />
+  </EntityType>
+  <EntityType Name="DetallePedido">
+    <Key>
+      <PropertyRef Name="idDetallePedido" />
+    </Key>
+    <Property Name="idDetallePedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="pedido" Type="Int32" Nullable="false" />
+    <Property Name="insumo" Type="Int32" Nullable="false" />
+    <Property Name="cantidadPedida" Type="Int32" Nullable="false" />
+    <Property Name="cantidadRecibida" Type="Int32" />
+    <Property Name="fechaRecibido" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Insumo1" Relationship="Self.FK_DetallePedido_Insumo" FromRole="DetallePedido" ToRole="Insumo" />
+    <NavigationProperty Name="Pedido1" Relationship="Self.FK_DetallePedido_Pedido" FromRole="DetallePedido" ToRole="Pedido" />
   </EntityType>
   <EntityType Name="Email">
     <Key>
@@ -29,7 +42,7 @@
     <Key>
       <PropertyRef Name="idEquipoMails" />
     </Key>
-    <Property Name="idEquipoMails" Type="Int32" Nullable="false" />
+    <Property Name="idEquipoMails" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="email" Type="Int32" Nullable="false" />
     <Property Name="equipo" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Email1" Relationship="Self.FK_EquipoMails_Email" FromRole="EquipoMails" ToRole="Email" />
@@ -53,6 +66,25 @@
     <NavigationProperty Name="Horario1" Relationship="Self.FK_HorarioReservas_Horario" FromRole="HorarioReservas" ToRole="Horario" />
     <NavigationProperty Name="Reserva1" Relationship="Self.FK_HorarioReservas_Reserva" FromRole="HorarioReservas" ToRole="Reserva" />
   </EntityType>
+  <EntityType Name="Instrumento">
+    <Key>
+      <PropertyRef Name="idInstrumento" />
+    </Key>
+    <Property Name="idInstrumento" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="instrumento1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="fechaCompra" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="InstrumentoRoto" Relationship="Self.FK_InstrumentoRoto_Instrumento" FromRole="Instrumento" ToRole="InstrumentoRoto" />
+  </EntityType>
+  <EntityType Name="InstrumentoRoto">
+    <Key>
+      <PropertyRef Name="idInstrumentoRoto" />
+    </Key>
+    <Property Name="idInstrumentoRoto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="instrumento" Type="Int32" Nullable="false" />
+    <Property Name="fechaRotura" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="Instrumento1" Relationship="Self.FK_InstrumentoRoto_Instrumento" FromRole="InstrumentoRoto" ToRole="Instrumento" />
+  </EntityType>
   <EntityType Name="Insumo">
     <Key>
       <PropertyRef Name="idInsumo" />
@@ -61,9 +93,31 @@
     <Property Name="insumo1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="precio" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
     <Property Name="stock" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="ReservaInsumos" Relationship="Self.FK_ReservaInsumos_Insumo" FromRole="Insumo" ToRole="ReservaInsumos" />
     <Property Name="estado" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="DetallePedido" Relationship="Canchas_GambetaModel2.FK_DetallePedido_Insumo" FromRole="Insumo" ToRole="DetallePedido" />
+    <NavigationProperty Name="DetallePedido" Relationship="Self.FK_DetallePedido_Insumo" FromRole="Insumo" ToRole="DetallePedido" />
+    <NavigationProperty Name="ReservaInsumos" Relationship="Self.FK_ReservaInsumos_Insumo" FromRole="Insumo" ToRole="ReservaInsumos" />
+  </EntityType>
+  <EntityType Name="Pedido">
+    <Key>
+      <PropertyRef Name="idPedido" />
+    </Key>
+    <Property Name="idPedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="proveedor" Type="Int32" Nullable="false" />
+    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="DetallePedido" Relationship="Self.FK_DetallePedido_Pedido" FromRole="Pedido" ToRole="DetallePedido" />
+    <NavigationProperty Name="Proveedor1" Relationship="Self.FK_Pedido_Proveedor" FromRole="Pedido" ToRole="Proveedor" />
+  </EntityType>
+  <EntityType Name="Proveedor">
+    <Key>
+      <PropertyRef Name="idProveedor" />
+    </Key>
+    <Property Name="idProveedor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombreCompleto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="empresa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="telefono" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Proveedor" FromRole="Proveedor" ToRole="Pedido" />
   </EntityType>
   <EntityType Name="Reserva">
     <Key>
@@ -101,6 +155,16 @@
     <Property Name="rol1" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Usuario" Relationship="Self.FK_Usuario_Rol" FromRole="Rol" ToRole="Usuario" />
   </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
   <EntityType Name="Usuario">
     <Key>
       <PropertyRef Name="idUsuario" />
@@ -125,6 +189,30 @@
       </Principal>
       <Dependent Role="Reserva">
         <PropertyRef Name="cancha" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DetallePedido_Insumo">
+    <End Role="Insumo" Type="Self.Insumo" Multiplicity="1" />
+    <End Role="DetallePedido" Type="Self.DetallePedido" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Insumo">
+        <PropertyRef Name="idInsumo" />
+      </Principal>
+      <Dependent Role="DetallePedido">
+        <PropertyRef Name="insumo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DetallePedido_Pedido">
+    <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
+    <End Role="DetallePedido" Type="Self.DetallePedido" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pedido">
+        <PropertyRef Name="idPedido" />
+      </Principal>
+      <Dependent Role="DetallePedido">
+        <PropertyRef Name="pedido" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -188,6 +276,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_InstrumentoRoto_Instrumento">
+    <End Role="Instrumento" Type="Self.Instrumento" Multiplicity="1" />
+    <End Role="InstrumentoRoto" Type="Self.InstrumentoRoto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Instrumento">
+        <PropertyRef Name="idInstrumento" />
+      </Principal>
+      <Dependent Role="InstrumentoRoto">
+        <PropertyRef Name="instrumento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_ReservaInsumos_Insumo">
     <End Role="Insumo" Type="Self.Insumo" Multiplicity="1" />
     <End Role="ReservaInsumos" Type="Self.ReservaInsumos" Multiplicity="*" />
@@ -197,6 +297,18 @@
       </Principal>
       <Dependent Role="ReservaInsumos">
         <PropertyRef Name="insumo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pedido_Proveedor">
+    <End Role="Proveedor" Type="Self.Proveedor" Multiplicity="1" />
+    <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="idProveedor" />
+      </Principal>
+      <Dependent Role="Pedido">
+        <PropertyRef Name="proveedor" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -236,21 +348,35 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="Canchas_GambetaEntities2" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="Canchas_GambetaEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Cancha" EntityType="Self.Cancha" />
+    <EntitySet Name="DetallePedido" EntityType="Self.DetallePedido" />
     <EntitySet Name="Email" EntityType="Self.Email" />
     <EntitySet Name="Equipo" EntityType="Self.Equipo" />
     <EntitySet Name="EquipoMails" EntityType="Self.EquipoMails" />
     <EntitySet Name="Horario" EntityType="Self.Horario" />
     <EntitySet Name="HorarioReservas" EntityType="Self.HorarioReservas" />
+    <EntitySet Name="Instrumento" EntityType="Self.Instrumento" />
+    <EntitySet Name="InstrumentoRoto" EntityType="Self.InstrumentoRoto" />
     <EntitySet Name="Insumo" EntityType="Self.Insumo" />
+    <EntitySet Name="Pedido" EntityType="Self.Pedido" />
+    <EntitySet Name="Proveedor" EntityType="Self.Proveedor" />
     <EntitySet Name="Reserva" EntityType="Self.Reserva" />
     <EntitySet Name="ReservaInsumos" EntityType="Self.ReservaInsumos" />
     <EntitySet Name="Rol" EntityType="Self.Rol" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
     <EntitySet Name="Usuario" EntityType="Self.Usuario" />
     <AssociationSet Name="FK_Reserva_Cancha" Association="Self.FK_Reserva_Cancha">
       <End Role="Cancha" EntitySet="Cancha" />
       <End Role="Reserva" EntitySet="Reserva" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DetallePedido_Insumo" Association="Self.FK_DetallePedido_Insumo">
+      <End Role="Insumo" EntitySet="Insumo" />
+      <End Role="DetallePedido" EntitySet="DetallePedido" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DetallePedido_Pedido" Association="Self.FK_DetallePedido_Pedido">
+      <End Role="Pedido" EntitySet="Pedido" />
+      <End Role="DetallePedido" EntitySet="DetallePedido" />
     </AssociationSet>
     <AssociationSet Name="FK_EquipoMails_Email" Association="Self.FK_EquipoMails_Email">
       <End Role="Email" EntitySet="Email" />
@@ -272,9 +398,17 @@
       <End Role="Reserva" EntitySet="Reserva" />
       <End Role="HorarioReservas" EntitySet="HorarioReservas" />
     </AssociationSet>
+    <AssociationSet Name="FK_InstrumentoRoto_Instrumento" Association="Self.FK_InstrumentoRoto_Instrumento">
+      <End Role="Instrumento" EntitySet="Instrumento" />
+      <End Role="InstrumentoRoto" EntitySet="InstrumentoRoto" />
+    </AssociationSet>
     <AssociationSet Name="FK_ReservaInsumos_Insumo" Association="Self.FK_ReservaInsumos_Insumo">
       <End Role="Insumo" EntitySet="Insumo" />
       <End Role="ReservaInsumos" EntitySet="ReservaInsumos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pedido_Proveedor" Association="Self.FK_Pedido_Proveedor">
+      <End Role="Proveedor" EntitySet="Proveedor" />
+      <End Role="Pedido" EntitySet="Pedido" />
     </AssociationSet>
     <AssociationSet Name="FK_Reserva_Cliente" Association="Self.FK_Reserva_Cliente">
       <End Role="Usuario" EntitySet="Usuario" />
@@ -288,128 +422,5 @@
       <End Role="Rol" EntitySet="Rol" />
       <End Role="Usuario" EntitySet="Usuario" />
     </AssociationSet>
-    <EntitySet Name="Instrumento" EntityType="Canchas_GambetaModel2.Instrumento" />
-    <EntitySet Name="InstrumentoRoto" EntityType="Canchas_GambetaModel2.InstrumentoRoto" />
-    <AssociationSet Name="FK_InstrumentoRoto_Instrumento" Association="Canchas_GambetaModel2.FK_InstrumentoRoto_Instrumento">
-      <End Role="Instrumento" EntitySet="Instrumento" />
-      <End Role="InstrumentoRoto" EntitySet="InstrumentoRoto" />
-    </AssociationSet>
-    <EntitySet Name="DetallePedido" EntityType="Canchas_GambetaModel2.DetallePedido" />
-    <AssociationSet Name="FK_DetallePedido_Insumo" Association="Canchas_GambetaModel2.FK_DetallePedido_Insumo">
-      <End Role="Insumo" EntitySet="Insumo" />
-      <End Role="DetallePedido" EntitySet="DetallePedido" />
-    </AssociationSet>
-    <EntitySet Name="Pedido" EntityType="Canchas_GambetaModel2.Pedido" />
-    <EntitySet Name="Proveedor" EntityType="Canchas_GambetaModel2.Proveedor" />
-    <AssociationSet Name="FK_DetallePedido_Pedido" Association="Canchas_GambetaModel2.FK_DetallePedido_Pedido">
-      <End Role="Pedido" EntitySet="Pedido" />
-      <End Role="DetallePedido" EntitySet="DetallePedido" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Pedido_Proveedor" Association="Canchas_GambetaModel2.FK_Pedido_Proveedor">
-      <End Role="Proveedor" EntitySet="Proveedor" />
-      <End Role="Pedido" EntitySet="Pedido" />
-    </AssociationSet>
   </EntityContainer>
-  <EntityType Name="Instrumento">
-    <Key>
-      <PropertyRef Name="idInstrumento" />
-    </Key>
-    <Property Name="idInstrumento" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="instrumento1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="fechaCompra" Type="DateTime" Nullable="false" Precision="0" />
-    <NavigationProperty Name="InstrumentoRoto" Relationship="Canchas_GambetaModel2.FK_InstrumentoRoto_Instrumento" FromRole="Instrumento" ToRole="InstrumentoRoto" />
-    <Property Name="estado" Type="Boolean" Nullable="false" />
-  </EntityType>
-  <EntityType Name="InstrumentoRoto">
-    <Key>
-      <PropertyRef Name="idInstrumentoRoto" />
-    </Key>
-    <Property Name="idInstrumentoRoto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="instrumento" Type="Int32" Nullable="false" />
-    <Property Name="fechaRotura" Type="DateTime" Nullable="false" Precision="0" />
-    <NavigationProperty Name="Instrumento1" Relationship="Canchas_GambetaModel2.FK_InstrumentoRoto_Instrumento" FromRole="InstrumentoRoto" ToRole="Instrumento" />
-  </EntityType>
-  <Association Name="FK_InstrumentoRoto_Instrumento">
-    <End Type="Canchas_GambetaModel2.Instrumento" Role="Instrumento" Multiplicity="1" />
-    <End Type="Canchas_GambetaModel2.InstrumentoRoto" Role="InstrumentoRoto" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Instrumento">
-        <PropertyRef Name="idInstrumento" />
-      </Principal>
-      <Dependent Role="InstrumentoRoto">
-        <PropertyRef Name="instrumento" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="DetallePedido">
-    <Key>
-      <PropertyRef Name="idDetallePedido" />
-    </Key>
-    <Property Name="idDetallePedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="pedido" Type="Int32" Nullable="false" />
-    <Property Name="insumo" Type="Int32" Nullable="false" />
-    <Property Name="cantidadPedida" Type="Int32" Nullable="false" />
-    <Property Name="cantidadRecibida" Type="Int32" />
-    <Property Name="fechaRecibido" Type="DateTime" Precision="0" />
-    <NavigationProperty Name="Insumo1" Relationship="Canchas_GambetaModel2.FK_DetallePedido_Insumo" FromRole="DetallePedido" ToRole="Insumo" />
-    <NavigationProperty Name="Pedido1" Relationship="Canchas_GambetaModel2.FK_DetallePedido_Pedido" FromRole="DetallePedido" ToRole="Pedido" />
-  </EntityType>
-  <Association Name="FK_DetallePedido_Insumo">
-    <End Type="Canchas_GambetaModel2.Insumo" Role="Insumo" Multiplicity="1" />
-    <End Type="Canchas_GambetaModel2.DetallePedido" Role="DetallePedido" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Insumo">
-        <PropertyRef Name="idInsumo" />
-      </Principal>
-      <Dependent Role="DetallePedido">
-        <PropertyRef Name="insumo" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Pedido">
-    <Key>
-      <PropertyRef Name="idPedido" />
-    </Key>
-    <Property Name="idPedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="proveedor" Type="Int32" Nullable="false" />
-    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
-    <Property Name="estado" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="DetallePedido" Relationship="Canchas_GambetaModel2.FK_DetallePedido_Pedido" FromRole="Pedido" ToRole="DetallePedido" />
-    <NavigationProperty Name="Proveedor1" Relationship="Canchas_GambetaModel2.FK_Pedido_Proveedor" FromRole="Pedido" ToRole="Proveedor" />
-  </EntityType>
-  <EntityType Name="Proveedor">
-    <Key>
-      <PropertyRef Name="idProveedor" />
-    </Key>
-    <Property Name="idProveedor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="nombreCompleto" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="empresa" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="telefono" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-    <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Pedido" Relationship="Canchas_GambetaModel2.FK_Pedido_Proveedor" FromRole="Proveedor" ToRole="Pedido" />
-  </EntityType>
-  <Association Name="FK_DetallePedido_Pedido">
-    <End Type="Canchas_GambetaModel2.Pedido" Role="Pedido" Multiplicity="1" />
-    <End Type="Canchas_GambetaModel2.DetallePedido" Role="DetallePedido" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Pedido">
-        <PropertyRef Name="idPedido" />
-      </Principal>
-      <Dependent Role="DetallePedido">
-        <PropertyRef Name="pedido" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Pedido_Proveedor">
-    <End Type="Canchas_GambetaModel2.Proveedor" Role="Proveedor" Multiplicity="1" />
-    <End Type="Canchas_GambetaModel2.Pedido" Role="Pedido" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Proveedor">
-        <PropertyRef Name="idProveedor" />
-      </Principal>
-      <Dependent Role="Pedido">
-        <PropertyRef Name="proveedor" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
 </Schema>

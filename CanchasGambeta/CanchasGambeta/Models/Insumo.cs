@@ -17,6 +17,7 @@ namespace CanchasGambeta.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Insumo()
         {
+            this.DetallePedido = new HashSet<DetallePedido>();
             this.ReservaInsumos = new HashSet<ReservaInsumos>();
         }
     
@@ -27,6 +28,8 @@ namespace CanchasGambeta.Models
         public bool estado { get; set; }
         public int cantidad { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DetallePedido> DetallePedido { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ReservaInsumos> ReservaInsumos { get; set; }
     }

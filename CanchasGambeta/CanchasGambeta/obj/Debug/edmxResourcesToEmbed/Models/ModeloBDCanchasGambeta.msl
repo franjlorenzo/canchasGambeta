@@ -1,16 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="Canchas_GambetaModel2StoreContainer" CdmEntityContainer="Canchas_GambetaEntities2">
+  <EntityContainerMapping StorageEntityContainer="Canchas_GambetaModelStoreContainer" CdmEntityContainer="Canchas_GambetaEntities">
     <EntitySetMapping Name="Cancha">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Cancha">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Cancha">
         <MappingFragment StoreEntitySet="Cancha">
           <ScalarProperty Name="idCancha" ColumnName="idCancha" />
           <ScalarProperty Name="tipoCancha" ColumnName="tipoCancha" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="DetallePedido">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.DetallePedido">
+        <MappingFragment StoreEntitySet="DetallePedido">
+          <ScalarProperty Name="idDetallePedido" ColumnName="idDetallePedido" />
+          <ScalarProperty Name="pedido" ColumnName="pedido" />
+          <ScalarProperty Name="insumo" ColumnName="insumo" />
+          <ScalarProperty Name="cantidadPedida" ColumnName="cantidadPedida" />
+          <ScalarProperty Name="cantidadRecibida" ColumnName="cantidadRecibida" />
+          <ScalarProperty Name="fechaRecibido" ColumnName="fechaRecibido" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Email">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Email">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Email">
         <MappingFragment StoreEntitySet="Email">
           <ScalarProperty Name="idEmail" ColumnName="idEmail" />
           <ScalarProperty Name="email1" ColumnName="email" />
@@ -18,7 +30,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Equipo">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Equipo">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Equipo">
         <MappingFragment StoreEntitySet="Equipo">
           <ScalarProperty Name="idEquipo" ColumnName="idEquipo" />
           <ScalarProperty Name="nombreEquipo" ColumnName="nombreEquipo" />
@@ -26,7 +38,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="EquipoMails">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.EquipoMails">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.EquipoMails">
         <MappingFragment StoreEntitySet="EquipoMails">
           <ScalarProperty Name="idEquipoMails" ColumnName="idEquipoMails" />
           <ScalarProperty Name="email" ColumnName="email" />
@@ -35,7 +47,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Horario">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Horario">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Horario">
         <MappingFragment StoreEntitySet="Horario">
           <ScalarProperty Name="idHorario" ColumnName="idHorario" />
           <ScalarProperty Name="horario1" ColumnName="horario" />
@@ -43,7 +55,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="HorarioReservas">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.HorarioReservas">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.HorarioReservas">
         <MappingFragment StoreEntitySet="HorarioReservas">
           <ScalarProperty Name="idHorarioReserva" ColumnName="idHorarioReserva" />
           <ScalarProperty Name="horario" ColumnName="horario" />
@@ -51,19 +63,59 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Insumo">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Insumo">
-        <MappingFragment StoreEntitySet="Insumo">
+    <EntitySetMapping Name="Instrumento">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Instrumento">
+        <MappingFragment StoreEntitySet="Instrumento">
+          <ScalarProperty Name="idInstrumento" ColumnName="idInstrumento" />
+          <ScalarProperty Name="instrumento1" ColumnName="instrumento" />
+          <ScalarProperty Name="fechaCompra" ColumnName="fechaCompra" />
           <ScalarProperty Name="estado" ColumnName="estado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InstrumentoRoto">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.InstrumentoRoto">
+        <MappingFragment StoreEntitySet="InstrumentoRoto">
+          <ScalarProperty Name="idInstrumentoRoto" ColumnName="idInstrumentoRoto" />
+          <ScalarProperty Name="instrumento" ColumnName="instrumento" />
+          <ScalarProperty Name="fechaRotura" ColumnName="fechaRotura" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Insumo">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Insumo">
+        <MappingFragment StoreEntitySet="Insumo">
           <ScalarProperty Name="idInsumo" ColumnName="idInsumo" />
           <ScalarProperty Name="insumo1" ColumnName="insumo" />
           <ScalarProperty Name="precio" ColumnName="precio" />
           <ScalarProperty Name="stock" ColumnName="stock" />
+          <ScalarProperty Name="estado" ColumnName="estado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pedido">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Pedido">
+        <MappingFragment StoreEntitySet="Pedido">
+          <ScalarProperty Name="idPedido" ColumnName="idPedido" />
+          <ScalarProperty Name="proveedor" ColumnName="proveedor" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+          <ScalarProperty Name="estado" ColumnName="estado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Proveedor">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Proveedor">
+        <MappingFragment StoreEntitySet="Proveedor">
+          <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
+          <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
+          <ScalarProperty Name="empresa" ColumnName="empresa" />
+          <ScalarProperty Name="telefono" ColumnName="telefono" />
+          <ScalarProperty Name="email" ColumnName="email" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Reserva">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Reserva">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Reserva">
         <MappingFragment StoreEntitySet="Reserva">
           <ScalarProperty Name="idReserva" ColumnName="idReserva" />
           <ScalarProperty Name="cliente" ColumnName="cliente" />
@@ -77,7 +129,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ReservaInsumos">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.ReservaInsumos">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.ReservaInsumos">
         <MappingFragment StoreEntitySet="ReservaInsumos">
           <ScalarProperty Name="idReservaInsumos" ColumnName="idReservaInsumos" />
           <ScalarProperty Name="reserva" ColumnName="reserva" />
@@ -87,15 +139,26 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Rol">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Rol">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Rol">
         <MappingFragment StoreEntitySet="Rol">
           <ScalarProperty Name="idRol" ColumnName="idRol" />
           <ScalarProperty Name="rol1" ColumnName="rol" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Usuario">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Usuario">
+      <EntityTypeMapping TypeName="Canchas_GambetaModel.Usuario">
         <MappingFragment StoreEntitySet="Usuario">
           <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
           <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
@@ -104,58 +167,6 @@
           <ScalarProperty Name="password" ColumnName="password" />
           <ScalarProperty Name="equipo" ColumnName="equipo" />
           <ScalarProperty Name="rol" ColumnName="rol" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Instrumento">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Instrumento">
-        <MappingFragment StoreEntitySet="Instrumento">
-          <ScalarProperty Name="estado" ColumnName="estado" />
-          <ScalarProperty Name="fechaCompra" ColumnName="fechaCompra" />
-          <ScalarProperty Name="instrumento1" ColumnName="instrumento" />
-          <ScalarProperty Name="idInstrumento" ColumnName="idInstrumento" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="InstrumentoRoto">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.InstrumentoRoto">
-        <MappingFragment StoreEntitySet="InstrumentoRoto">
-          <ScalarProperty Name="fechaRotura" ColumnName="fechaRotura" />
-          <ScalarProperty Name="instrumento" ColumnName="instrumento" />
-          <ScalarProperty Name="idInstrumentoRoto" ColumnName="idInstrumentoRoto" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="DetallePedido">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.DetallePedido">
-        <MappingFragment StoreEntitySet="DetallePedido">
-          <ScalarProperty Name="fechaRecibido" ColumnName="fechaRecibido" />
-          <ScalarProperty Name="cantidadRecibida" ColumnName="cantidadRecibida" />
-          <ScalarProperty Name="cantidadPedida" ColumnName="cantidadPedida" />
-          <ScalarProperty Name="insumo" ColumnName="insumo" />
-          <ScalarProperty Name="pedido" ColumnName="pedido" />
-          <ScalarProperty Name="idDetallePedido" ColumnName="idDetallePedido" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Pedido">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Pedido">
-        <MappingFragment StoreEntitySet="Pedido">
-          <ScalarProperty Name="estado" ColumnName="estado" />
-          <ScalarProperty Name="fecha" ColumnName="fecha" />
-          <ScalarProperty Name="proveedor" ColumnName="proveedor" />
-          <ScalarProperty Name="idPedido" ColumnName="idPedido" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Proveedor">
-      <EntityTypeMapping TypeName="Canchas_GambetaModel2.Proveedor">
-        <MappingFragment StoreEntitySet="Proveedor">
-          <ScalarProperty Name="email" ColumnName="email" />
-          <ScalarProperty Name="telefono" ColumnName="telefono" />
-          <ScalarProperty Name="empresa" ColumnName="empresa" />
-          <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
-          <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -16,7 +16,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+            Canchas_GambetaEntities db = new Canchas_GambetaEntities();
             NuevaReservaVM modelo = new NuevaReservaVM();
             foreach (var cancha in db.Cancha)
             {
@@ -41,7 +41,7 @@ namespace CanchasGambeta.Controllers
                 /*Solo se cambia la fecha, cancha no seleccionada. Se devuelve la vista con la fecha cambiada y con viewbag actualizado*/
                 if(nuevaReserva.fecha != fechaElegida && nuevaReserva.idCancha == idCanchaElegida && nuevaReserva.idCancha == 0)
                 {
-                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     NuevaReservaVM modelo = new NuevaReservaVM();
                     foreach (var cancha in db.Cancha)
                     {
@@ -54,7 +54,7 @@ namespace CanchasGambeta.Controllers
                 /*Solo se cambia la cancha, pero antes no habia cancha seleccionada. Se devuelven los horarios disponibles de esa cancha en ese dia*/
                 if(nuevaReserva.fecha == fechaElegida && nuevaReserva.idCancha != idCanchaElegida && idCanchaElegida == 0)
                 {
-                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
                     {
                         nuevaReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
@@ -75,7 +75,7 @@ namespace CanchasGambeta.Controllers
                 /*Se cambia la fecha y hay una cancha seleccionada anteriormente. Se devuelven los horarios actualizados para esa fecha*/
                 if(nuevaReserva.fecha != fechaElegida && nuevaReserva.idCancha == idCanchaElegida && nuevaReserva.idCancha != 0)
                 {
-                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
                     {
                         nuevaReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
@@ -96,7 +96,7 @@ namespace CanchasGambeta.Controllers
                 /*Se cambia la cancha y ya se estaban mostrando los horarios. Se devuelven los horarios actualizados para esa cancha*/
                 if(nuevaReserva.fecha == fechaElegida && nuevaReserva.idCancha != idCanchaElegida && idCanchaElegida != 0)
                 {
-                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
                     {
                         nuevaReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
@@ -136,7 +136,7 @@ namespace CanchasGambeta.Controllers
                     else
                     {
                         ViewBag.ErrorInsertReserva = "Ocurrió un error al registrar la reserva, inténtelo nuevamente.";
-                        Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                        Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                         foreach (var cancha in db.Cancha)
                         {
                             nuevaReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
@@ -168,7 +168,7 @@ namespace CanchasGambeta.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex;
-                Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                 NuevaReservaVM modelo = new NuevaReservaVM();
                 foreach (var cancha in db.Cancha)
                 {
@@ -188,7 +188,7 @@ namespace CanchasGambeta.Controllers
             ActualizarReservaVM actualizarReserva = AccesoBD.AD_Reserva.obtenerReservaPorId(idReserva);
             actualizarReserva.ListaInsumosEnLaReserva = AccesoBD.AD_Reserva.obtenerInsumosDeLaReserva(idReserva);
 
-            Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+            Canchas_GambetaEntities db = new Canchas_GambetaEntities();
 
             foreach (var canchas in db.Cancha)
             {
@@ -229,7 +229,7 @@ namespace CanchasGambeta.Controllers
                 /*El usuario cambió la fecha, se devuelven los horarios y los viewbag actualizados*/
                 if ((actualizarReserva.Fecha != fechaReserva && idHorarioReserva == actualizarReserva.IdHorario) || (actualizarReserva.Fecha != fechaReserva && idHorarioReserva != actualizarReserva.IdHorario))
                 {
-                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
                     {
                         actualizarReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
@@ -250,7 +250,7 @@ namespace CanchasGambeta.Controllers
                 /*El usuario cambió la cancha, se devuelven los horarios y los viewbag actualizados*/
                 if((actualizarReserva.IdCancha != idCanchaReserva && actualizarReserva.IdHorario == idHorarioReserva) || (actualizarReserva.IdCancha != idCanchaReserva && actualizarReserva.IdHorario != idHorarioReserva))
                 {
-                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
                     {
                         actualizarReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
@@ -271,7 +271,7 @@ namespace CanchasGambeta.Controllers
                 /*El usuario cambió algo de la reserva y luego no seleccionó un horario*/
                 if(actualizarReserva.Fecha == fechaReserva && actualizarReserva.IdCancha == idCanchaReserva && actualizarReserva.IdHorario == idHorarioReserva && actualizarReserva.IdHorario == 0)
                 {
-                    Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                    Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
                     {
                         actualizarReserva.Canchas.Add(new SelectListItem { Text = cancha.tipoCancha, Value = cancha.idCancha.ToString() });
@@ -349,7 +349,7 @@ namespace CanchasGambeta.Controllers
             }
             catch(Exception ex)
             {
-                Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3();
+                Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                 foreach (var canchas in db.Cancha)
                 {
                     actualizarReserva.Canchas.Add(new SelectListItem { Text = canchas.tipoCancha, Value = canchas.idCancha.ToString() });

@@ -32,11 +32,9 @@ namespace CanchasGambeta.ViewModels
     {
         private int idPedido;
         private int idProveedor;
-        private string descripcion;
         private DateTime fecha = DateTime.Today;
 
         public int IdPedido { get => idPedido; set => idPedido = value; }
-        public string Descripcion { get => descripcion; set => descripcion = value; }
         public DateTime Fecha { get => fecha; set => fecha = value; }
         public int IdProveedor { get => idProveedor; set => idProveedor = value; }
     }

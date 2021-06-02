@@ -14,12 +14,19 @@ namespace CanchasGambeta.Models
     
     public partial class Pedido
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Pedido()
+        {
+            this.DetallePedido = new HashSet<DetallePedido>();
+        }
+    
         public int idPedido { get; set; }
         public int proveedor { get; set; }
-        public string descripcion { get; set; }
         public System.DateTime fecha { get; set; }
         public bool estado { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DetallePedido> DetallePedido { get; set; }
         public virtual Proveedor Proveedor1 { get; set; }
     }
 }

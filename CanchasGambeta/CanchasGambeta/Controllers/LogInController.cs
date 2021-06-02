@@ -19,7 +19,7 @@ namespace CanchasGambeta.Controllers
         {
             try
             {
-                using (Models.Canchas_GambetaEntities3 db = new Models.Canchas_GambetaEntities3())
+                using (Models.Canchas_GambetaEntities db = new Models.Canchas_GambetaEntities())
                 {
                     var oUser = (from data in db.Usuario
                                  where data.email == Email.Trim() && data.password == Password.Trim()

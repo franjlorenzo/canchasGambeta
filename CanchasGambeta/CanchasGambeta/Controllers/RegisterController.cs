@@ -23,7 +23,7 @@ namespace CanchasGambeta.Controllers
                 bool resultado = AccesoBD.AD_Usuario.nuevoUsuario(usuario);
                 if (resultado)
                 {
-                    using (Canchas_GambetaEntities3 db = new Canchas_GambetaEntities3())
+                    using (Canchas_GambetaEntities db = new Canchas_GambetaEntities())
                     {
                         var oUser = (from data in db.Usuario
                                      where data.email == Email.Trim() && data.password == Password.Trim()
