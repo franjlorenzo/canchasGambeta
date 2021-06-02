@@ -1,0 +1,101 @@
+﻿@model IEnumerable<CanchasGambeta.Models.Insumo>
+@using CanchasGambeta.Models
+@{
+    ViewBag.Title = "InsumosMasConsumidos";
+    string fechaInicio = "fechaInicio";
+    string fechaFin = "fechaFin";
+}
+
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-md-12 text-center">
+        <h3>Insumos más consumidos entre fechas deseadas</h3>
+    </div>
+</div>
+@using (Html.BeginForm("InsumosMasConsumidos", "Informe", FormMethod.Post, new { onsubmit = "return validacionInsumosMasConsumidos();" }))
+{
+    <div class="row" style="transform: translateY(70px); color:white">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Desde</label>
+                    @Html.TextBox(fechaInicio, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Hasta</label>
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 text-center">
+            <br />
+            <button type="submit" class="btn btn-primary btn-block mt-2">Buscar</button>
+            <div class="form-label-group text-danger" style="margin-left:10px">
+                @ViewBag.ErrorBuscarInsumos
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+}
+
+<hr />
+<div class="row" style="transform: translateY(80px); color:white">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        @if (Model != null)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                        <th class="text-center">
+                            Cantidad
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @listado.insumo1
+                            </td>
+                            <td class="text-center">
+                                @listado.cantidad
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No hay insumos consumidos entre las fechas seleccionadas
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+

@@ -343,6 +343,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\scriptCanchasMasReservadas.js" />
     <Content Include="Scripts\scriptEquipo.js" />
     <Content Include="Scripts\scriptInstrumentos.js" />
     <Content Include="Scripts\scriptInsumos.js" />
@@ -385,9 +386,9 @@
     <Content Include="Views\Informe\ClientesConMasReservas.cshtml" />
     <Content Include="Views\Informe\HorariosMasReservados.cshtml" />
     <Content Include="Views\Informe\InstrumentosDisponibles.cshtml" />
-    <Content Include="Views\Informe\InstrumentosRotos.cshtml" />
     <Content Include="Views\Equipo\CambiarNombreEquipo.cshtml" />
     <Content Include="Views\Administrador\ModificarProveedor.cshtml" />
+    <Content Include="Views\Informe\InsumosMasConsumidos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

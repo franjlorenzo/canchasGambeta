@@ -27,7 +27,7 @@ namespace CanchasGambeta.AccesoBD
                                     where fecha >= GETDATE()-1 and estado = 1
                                     order by fecha";
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
 
                 conexion.Open();
@@ -77,7 +77,7 @@ namespace CanchasGambeta.AccesoBD
                                     where fecha >= GETDATE()-1 and estado = 0
                                     order by fecha";
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
 
                 conexion.Open();
@@ -192,7 +192,7 @@ namespace CanchasGambeta.AccesoBD
                                     group by nombreCompleto, email, telefono
                                     order by 4 desc";
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
 
                 conexion.Open();
@@ -236,7 +236,7 @@ namespace CanchasGambeta.AccesoBD
                                     group by h.horario
                                     order by 2 desc";
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
 
                 conexion.Open();
@@ -265,9 +265,9 @@ namespace CanchasGambeta.AccesoBD
             return listaHorariosMasReservados;
         }
 
-        public static List<Instrumento> obtenerInstrumentosDisponibles()
+        public static List<InstrumentoDisponible> obtenerInstrumentosDisponibles()
         {
-            List<Instrumento> listaInstrumentosDisponibles = new List<Instrumento>();
+            List<InstrumentoDisponible> listaInstrumentosDisponibles = new List<InstrumentoDisponible>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
 
@@ -277,7 +277,7 @@ namespace CanchasGambeta.AccesoBD
                                     from Instrumento
                                     where estado = 1";
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
 
                 conexion.Open();
@@ -288,10 +288,10 @@ namespace CanchasGambeta.AccesoBD
                 {
                     while (lector.Read())
                     {
-                        Instrumento auxiliar = new Instrumento();
-                        auxiliar.idInstrumento = int.Parse(lector["idInstrumento"].ToString());
-                        auxiliar.instrumento1 = lector["instrumento"].ToString();
-                        auxiliar.fechaCompra = DateTime.Parse(lector["fechaCompra"].ToString());
+                        InstrumentoDisponible auxiliar = new InstrumentoDisponible();
+                        auxiliar.IdInstrumento = int.Parse(lector["idInstrumento"].ToString());
+                        auxiliar.Instrumento = lector["instrumento"].ToString();
+                        auxiliar.FechaCompra = DateTime.Parse(lector["fechaCompra"].ToString());
                         listaInstrumentosDisponibles.Add(auxiliar);
                     }
                 }
@@ -307,7 +307,7 @@ namespace CanchasGambeta.AccesoBD
             return listaInstrumentosDisponibles;
         }
 
-        public static bool nuevoInstrumento(Instrumento nuevoInstrumento)
+        public static bool nuevoInstrumento(InstrumentoDisponible nuevoInstrumento)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -317,11 +317,11 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consultaInsertInstrumento = "insert into Instrumento (instrumento, fechaCompra, estado) values (@instrumento, @fechaCompra, @estado)";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@instrumento", nuevoInstrumento.instrumento1);
-                comando.Parameters.AddWithValue("@fechaCompra", nuevoInstrumento.fechaCompra);
+                comando.Parameters.AddWithValue("@instrumento", nuevoInstrumento.Instrumento);
+                comando.Parameters.AddWithValue("@fechaCompra", nuevoInstrumento.FechaCompra);
                 comando.Parameters.AddWithValue("@estado", 1);
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consultaInsertInstrumento;
 
                 conexion.Open();
@@ -354,7 +354,7 @@ namespace CanchasGambeta.AccesoBD
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idInstrumento", idInstrumento);
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consultaUpdateInstrumento;
 
                 conexion.Open();
@@ -392,7 +392,7 @@ namespace CanchasGambeta.AccesoBD
                 string consulta = @"select ir.instrumento 'idInstrumento', i.instrumento, fechaRotura 
                                     from Instrumento i join InstrumentoRoto ir on i.idInstrumento = ir.instrumento";
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
 
                 conexion.Open();
@@ -434,7 +434,7 @@ namespace CanchasGambeta.AccesoBD
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idInstrumento", idInstrumento);
 
-                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandType = CommandType.Text;
                 comando.CommandText = consultaEliminarInstrumentoRoto;
 
                 conexion.Open();
@@ -459,6 +459,54 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return resultado;
+        }
+
+        public static List<Insumo> obtenerInsumosConsumidosEntreFechas(DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<Insumo> listaInsumosConsumidos = new List<Insumo>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select i.insumo, sum(cantidad) 'Cantidad vendida'
+                                    from Insumo i join ReservaInsumos ri on ri.insumo = i.idInsumo
+	                                     join Reserva r on r.idReserva = ri.reserva
+                                    where fecha between @fechaInicio and @fechaFin
+                                    group by i.insumo
+                                    order by 2 desc";
+
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                comando.Parameters.AddWithValue("@fechaFin", fechaFin);
+
+                comando.CommandType = CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        Insumo auxiliar = new Insumo();
+                        auxiliar.insumo1 = lector["insumo"].ToString();
+                        auxiliar.cantidad = int.Parse(lector["Cantidad vendida"].ToString());
+                        listaInsumosConsumidos.Add(auxiliar);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return listaInsumosConsumidos;
         }
     }
 }

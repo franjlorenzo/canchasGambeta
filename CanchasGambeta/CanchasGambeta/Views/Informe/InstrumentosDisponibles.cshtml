@@ -1,5 +1,4 @@
-﻿@model IEnumerable<CanchasGambeta.Models.Instrumento>
-@using CanchasGambeta.Models
+﻿@model CanchasGambeta.ViewModels.VistaInstrumentos
 @{
     ViewBag.Title = "InstrumentosDisponibles";
 }
@@ -8,7 +7,7 @@
     <div class="col-md-1"></div>
     <div class="col-md-6">
         <h3 class="text-center">Instrumentos de Canchas gambeta</h3>
-        @if (Model.Count() != 0)
+        @if (Model.TablaInstrumentosDisponibles.Count() != 0)
         {
             <table class="table table-bordered table-striped">
                 <thead>
@@ -25,20 +24,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var listado in Model)
+                    @foreach (var listado in Model.TablaInstrumentosDisponibles)
                     {
+                        string fecha = listado.FechaCompra.ToString();
+                        string[] fechaSplit = fecha.Split(' ');
                         <tr>
                             <td class="text-center">
-                                @listado.instrumento1
+                                @listado.Instrumento
                             </td>
                             <td class="text-center">
-                                @listado.fechaCompra
+                                @fechaSplit[0]
                             </td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     @using (Html.BeginForm("NuevoInstrumentoRoto", "Informe", FormMethod.Post, new { onsubmit = "return confirmacionNuevoInstrumentoRoto();" }))
                                     {
-                                        <input type="hidden" name="idInstrumento" value="@listado.idInstrumento" />
+                                        <input type="hidden" name="idInstrumento" value="@listado.IdInstrumento" />
                                         <button type="submit" class="btn btn-danger m-1">Roto</button>
                                     }
                                 </div>
@@ -78,7 +79,7 @@
             <div class="form-horizontal">
                 <div class="form-group">
                     <label class="control-label">Instrumento</label>
-                    <input type="text" class="form-control" id="txtInstrumento" name="instrumento1" />
+                    <input type="text" class="form-control" id="txtInstrumento" name="Instrumento" />
                 </div>
                 <div class="form-group">
                     <label class="control-label">Fecha de adquisición</label>
@@ -89,6 +90,78 @@
             <div class="form-label-group text-danger" style="margin-left:10px">
                 @ViewBag.ErrorInsertInstrumento
             </div>
+        }
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+<div class="row" style="transform: translateY(70px); color: white">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <h3 class="text-center">Instrumentos rotos</h3>
+        @if (Model.TablaInstrumentosRotos.Count() != 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Instrumento
+                        </th>
+                        <th class="text-center">
+                            Fecha rotura
+                        </th>
+                        <th class="text-center">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.TablaInstrumentosRotos)
+                    {
+                        string fecha = listado.FechaRotura.ToString();
+                        string[] fechaSplit = fecha.Split(' ');
+                        <tr>
+                            <td class="text-center">
+                                @listado.Instrumento
+                            </td>
+                            <td class="text-center">
+                                @fechaSplit[0]
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    @using (Html.BeginForm("EliminarInstrumentoRoto", "Informe", FormMethod.Post, new { onsubmit = "return confirmacionEliminarInstrumentoRoto();" }))
+                                    {
+                                        <input type="hidden" name="idInstrumento" value="@listado.IdInstrumento" />
+                                        <button type="submit" class="btn btn-primary m-1">Repuesto</button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="form-label-group text-danger" style="margin-left:10px">
+                @ViewBag.ErrorEliminarInstrumentoRoto
+            </div>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Instrumentos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No hay instrumentos rotos
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         }
     </div>
     <div class="col-md-1"></div>

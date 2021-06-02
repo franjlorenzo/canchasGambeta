@@ -53,13 +53,13 @@ namespace CanchasGambeta.Controllers
 
             if (TempData["ErrorInsertInstrumento"] != null) ViewBag.ErrorInsertInstrumento = TempData["ErrorInsertInstrumento"].ToString();
             if (TempData["ErrorInsertInstrumentoRoto"] != null) ViewBag.ErrorInsertInstrumentoRoto = TempData["ErrorInsertInstrumentoRoto"].ToString();
+            if (TempData["ErrorEliminarInstrumentoRoto"] != null) ViewBag.ErrorEliminarInstrumentoRoto = TempData["ErrorEliminarInstrumentoRoto"].ToString();
 
-            List<Instrumento> listaInstrumentosDisponibles = AccesoBD.AD_Informe.obtenerInstrumentosDisponibles();
-            return View(listaInstrumentosDisponibles);
+            return View(new VistaInstrumentos { TablaInstrumentosDisponibles = AccesoBD.AD_Informe.obtenerInstrumentosDisponibles(), TablaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotos(), InstrumentoNuevo = new InstrumentoDisponible() });
         }
 
         [HttpPost]
-        public ActionResult NuevoInstrumento(Instrumento nuevoInstrumento)
+        public ActionResult NuevoInstrumento(InstrumentoDisponible nuevoInstrumento)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
@@ -96,17 +96,6 @@ namespace CanchasGambeta.Controllers
             return View();
         }
 
-        public ActionResult InstrumentosRotos()
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            if (TempData["ErrorEliminarInstrumentoRoto"] != null) ViewBag.ErrorEliminarInstrumentoRoto = TempData["ErrorEliminarInstrumentoRoto"].ToString();
-
-            List<InstrumentoRotoVM> listaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotos();
-            return View(listaInstrumentosRotos);
-        }
-
         [HttpPost]
         public ActionResult EliminarInstrumentoRoto(int idInstrumento)
         {
@@ -116,14 +105,32 @@ namespace CanchasGambeta.Controllers
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Informe.eliminarInstrumentoRoto(idInstrumento);
-                if (resultado) return RedirectToAction("InstrumentosRotos", "Informe");
+                if (resultado) return RedirectToAction("InstrumentosDisponibles", "Informe");
                 else
                 {
                     TempData["ErrorEliminarInstrumentoRoto"] = "Ocurrió un error al eliminar el instrumento roto, inténtelo nuevamente.";
-                    return RedirectToAction("InstrumentosRotos", "Informe");
+                    return RedirectToAction("InstrumentosDisponibles", "Informe");
                 }
             }
             return View();
+        }
+
+        public ActionResult InsumosMasConsumidos()
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult InsumosMasConsumidos(DateTime fechaInicio, DateTime fechaFin)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            List<Insumo> listaInsumosConsumidos = AccesoBD.AD_Informe.obtenerInsumosConsumidosEntreFechas(fechaInicio, fechaFin);
+            return View(listaInsumosConsumidos);
         }
     }
 }

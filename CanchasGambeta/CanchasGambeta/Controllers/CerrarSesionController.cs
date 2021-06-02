@@ -129,7 +129,7 @@ namespace CanchasGambeta.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult InstrumentosRotos()
+        public ActionResult InsumosMasConsumidos()
         {
             Session.Clear();
             return RedirectToAction("Index", "Home");
