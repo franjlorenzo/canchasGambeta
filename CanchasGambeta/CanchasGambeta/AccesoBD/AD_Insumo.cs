@@ -201,15 +201,15 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<InsumosAPedir> obtenerInsumosPorNombre(string nombreInsumo)
+        public static List<BuscarInsumos> obtenerInsumosPorNombre(string nombreInsumo)
         {
-            List<InsumosAPedir> listaInsumosEncontrados = new List<InsumosAPedir>();
+            List<BuscarInsumos> listaInsumosEncontrados = new List<BuscarInsumos>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
 
             try
             {
-                string consulta = @"select idInsumo, insumo from Insumo where insumo like @nombreInsumo";
+                string consulta = @"select idInsumo, insumo from Insumo where insumo like @nombreInsumo and estado = 1";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@nombreInsumo", "%" + nombreInsumo + "%");
 
@@ -224,7 +224,7 @@ namespace CanchasGambeta.AccesoBD
                 {
                     while (lector.Read())
                     {
-                        InsumosAPedir insumo = new InsumosAPedir();
+                        BuscarInsumos insumo = new BuscarInsumos();
                         insumo.IdInsumo = int.Parse(lector["idInsumo"].ToString());
                         insumo.Insumo = lector["insumo"].ToString();
                         listaInsumosEncontrados.Add(insumo);

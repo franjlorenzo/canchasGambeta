@@ -115,37 +115,52 @@ namespace CanchasGambeta.Controllers
             if (TempData["ErrorInsertProveedor"] != null) ViewBag.ErrorInsertProveedor = TempData["ErrorInsertProveedor"].ToString();
             if (TempData["ErrorEliminarProveedor"] != null) ViewBag.ErrorEliminarProveedor = TempData["ErrorEliminarProveedor"].ToString();
             if (TempData["ErrorPedidosSinConcretar"] != null) ViewBag.ErrorPedidosSinConcretar = TempData["ErrorPedidosSinConcretar"].ToString();
-            return View( new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = new NuevoPedido(), NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedoresTabla(), InsumosAPedir = new List<InsumosAPedir>() });
+            return View( new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = new NuevoPedido(), NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedoresTabla() });
         }
 
         [HttpPost]
-        public ActionResult MisPedidos(NuevoPedido nuevoPedido, string nombreInsumo)
+        public ActionResult MisPedidos(NuevoPedido nuevoPedido, string nombreInsumo, string idProveedor)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            List<Proveedor> proveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedores();
-            List<SelectListItem> listaProveedores = proveedores.ConvertAll(d =>
-            {
-                return new SelectListItem()
-                {
-                    Text = d.nombreCompleto + " - (" + d.empresa + ")",
-                    Value = d.idProveedor.ToString(),
-                    Selected = false
-                };
-            });
-            foreach (var item in listaProveedores)
-            {
-                if (item.Value.Equals(nuevoPedido.IdProveedor.ToString()))
-                {
-                    item.Selected = true;
-                    break;
-                }
-            }
+            return View();
+        }
 
-            ViewBag.proveedores = listaProveedores;
-            List<InsumosAPedir> listaInsumosBuscados = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo);
-            return View(new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = nuevoPedido, NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedoresTabla(), InsumosAPedir = listaInsumosBuscados });
+        public ActionResult AgregarInsumosAlPedido()
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            List<BuscarInsumos> buscarInsumos = new List<BuscarInsumos>();
+            return View(new VistaPedirInsumos { BuscarInsumos = new List<BuscarInsumos>(), InsumosAPedir = new List<InsumosAPedir>() });
+        }
+
+        [HttpPost]
+        public ActionResult AgregarInsumosAlPedido(string nombreInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            //El usuario no proporciona una palabra para buscar, se devuelve error
+            if(nombreInsumo == "" && listaNombreInsumo == null && cantidadInsumo == null)
+            {
+                ViewBag.ErrorBuscarInsumo = "Debe proporcionar una letra o palabra para buscar un insumo";
+                List<BuscarInsumos> buscarInsumos = new List<BuscarInsumos>();
+                return View(buscarInsumos);
+            }
+            //El usuario proporciona una palabra para buscar y la tabla está vacia o el usuario proporciona una palabra para buscar y la tabla contiene elementos
+            if ((nombreInsumo != "" && listaNombreInsumo == null && cantidadInsumo == null) || (nombreInsumo != "" && listaNombreInsumo != null && cantidadInsumo != null))
+            {
+                List<BuscarInsumos> listaInsumoEncontrado = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo);
+                return View(listaInsumoEncontrado);
+            }
+            //
+            if(nombreInsumo == "" && listaNombreInsumo != null && cantidadInsumo != null)
+            {
+
+            }
+            return View();
         }
 
         [HttpPost]

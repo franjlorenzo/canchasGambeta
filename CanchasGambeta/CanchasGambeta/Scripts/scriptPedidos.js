@@ -38,8 +38,8 @@ const mostrarPedidosConcretados = () => {
 }
 
 function validacionNuevoPedido() {
-    let txtDescripcion = document.getElementById("NuevoPedido_Descripcion").value;
     let cboProveedor = document.getElementById("idProveedor").value;
+    let txtDescripcion = document.getElementById("NuevoPedido_Descripcion").value;
 
     if (cboProveedor == "" | !txtDescripcion) {
         alert("Faltan campos obligatorios para realizar un pedido.");
