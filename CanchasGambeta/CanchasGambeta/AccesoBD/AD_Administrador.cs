@@ -633,5 +633,21 @@ namespace CanchasGambeta.AccesoBD
             }
             return idPedido;
         }
+
+        public static List<InsumosAPedir> armarListaInsumosSeleccionados(List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo)
+        {
+            List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
+
+            for (int i = 0; i < listaIdInsumo.Count; i++)
+            {
+                InsumosAPedir insumo = new InsumosAPedir();
+                insumo.IdInsumo = listaIdInsumo[i];
+                insumo.Insumo = listaNombreInsumo[i];
+                insumo.Cantidad = cantidadInsumo[i];
+                listaInsumosAPedir.Add(insumo);
+            }
+
+            return listaInsumosAPedir;
+        }
     }
 }

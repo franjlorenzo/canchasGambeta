@@ -119,7 +119,7 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult MisPedidos(NuevoPedido nuevoPedido, string nombreInsumo, string idProveedor)
+        public ActionResult MisPedidos(NuevoPedido nuevoPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
@@ -132,33 +132,82 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            List<BuscarInsumos> buscarInsumos = new List<BuscarInsumos>();
             return View(new VistaPedirInsumos { BuscarInsumos = new List<BuscarInsumos>(), InsumosAPedir = new List<InsumosAPedir>() });
         }
 
         [HttpPost]
-        public ActionResult AgregarInsumosAlPedido(string nombreInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo)
+        public ActionResult AgregarInsumosAlPedido(string nombreInsumo, List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
+            List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
+            if (listaCantidadInsumoAlPedido != null && listaIdInsumoAlPedido != null && listaNombreInsumoAlPedido != null)
+            {
+                listaInsumosAPedir = AccesoBD.AD_Administrador.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
+            }
+
             //El usuario no proporciona una palabra para buscar, se devuelve error
-            if(nombreInsumo == "" && listaNombreInsumo == null && cantidadInsumo == null)
+            if (nombreInsumo == "" && listaNombreInsumo == null && cantidadInsumo == null)
             {
                 ViewBag.ErrorBuscarInsumo = "Debe proporcionar una letra o palabra para buscar un insumo";
-                List<BuscarInsumos> buscarInsumos = new List<BuscarInsumos>();
-                return View(buscarInsumos);
+                return View(new VistaPedirInsumos { BuscarInsumos = new List<BuscarInsumos>(), InsumosAPedir = listaInsumosAPedir });
             }
             //El usuario proporciona una palabra para buscar y la tabla está vacia o el usuario proporciona una palabra para buscar y la tabla contiene elementos
             if ((nombreInsumo != "" && listaNombreInsumo == null && cantidadInsumo == null) || (nombreInsumo != "" && listaNombreInsumo != null && cantidadInsumo != null))
             {
-                List<BuscarInsumos> listaInsumoEncontrado = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo);
-                return View(listaInsumoEncontrado);
+                return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo), InsumosAPedir = listaInsumosAPedir });
             }
-            //
+            //El usuario presiona el botón "Agregar al pedido"
             if(nombreInsumo == "" && listaNombreInsumo != null && cantidadInsumo != null)
             {
+                //Se verifica que las cantidades no estén vacias, de lo contrario se devuelve un error
+                bool cantidadDiferenteACero = false;
+                List<InsumosAPedir> insumosSeleccionados = AccesoBD.AD_Administrador.armarListaInsumosSeleccionados(listaIdInsumo ,listaNombreInsumo, cantidadInsumo);
+                List<InsumosAPedir> listaComparacionCantidades = new List<InsumosAPedir>();
+                
+                //Si hay cantidades diferentes, se verifica que el insumo no esté en la lista de InsumosAPedir, si es así, se agrega la cantidad a la ya existente, si no se agrega el insumo a la lista
+                for (int i = 0; i < insumosSeleccionados.Count; i++)
+                {
+                    if (insumosSeleccionados[i].Cantidad != 0)
+                    {
+                        cantidadDiferenteACero = true;
+                        listaComparacionCantidades.Add(insumosSeleccionados[i]);
+                        //listaInsumosAPedir.Add(insumosSeleccionados[i]);
+                    }
+                }
 
+                if(listaInsumosAPedir.Count != 0)
+                {
+                    foreach (var insumosAPedir in listaInsumosAPedir)
+                    {
+                        foreach (var comparacionCantidades in listaComparacionCantidades)
+                        {
+                            if (insumosAPedir.IdInsumo == comparacionCantidades.IdInsumo)
+                            {
+                                insumosAPedir.Cantidad = insumosAPedir.Cantidad + comparacionCantidades.Cantidad;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var item in listaComparacionCantidades)
+                    {
+                        if(!listaInsumosAPedir.Contains(item)) listaInsumosAPedir.Add(item); //probar logica con contains
+                    }
+                }
+
+           
+                if (cantidadDiferenteACero)
+                {
+                    return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo), InsumosAPedir = listaInsumosAPedir });
+                }
+                else
+                {
+                    ViewBag.NoSeModificaronCantidades = "No se modificaron las cantidades.";
+                    return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo), InsumosAPedir = listaInsumosAPedir });
+                }
             }
             return View();
         }

@@ -36,6 +36,9 @@
                         @foreach (var listado in Model.BuscarInsumos)
                         {
                             <tr>
+                                <td style="display:none">
+                                    <input type="hidden" name="listaIdInsumo" value="@listado.IdInsumo" />
+                                </td>
                                 <td class="text-center">
                                     <input type="text" name="listaNombreInsumo" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                                 </td>
@@ -47,6 +50,17 @@
                     </tbody>
                 </table>
                 <button type="submit" class="btn btn-info" onclick="agregarInsumoAPedido();">Agregar al pedido</button>
+                <div class="form-label-group text-danger pb-2">
+                    @ViewBag.NoSeModificaronCantidades
+                </div>
+                <div style="display:none">
+                    @foreach (var listado in Model.InsumosAPedir)
+                    {
+                        <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
+                        <input type="text" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:70px;" />
+                    }
+                </div>
             }
             else
             {
@@ -66,6 +80,14 @@
                         </tr>
                     </tbody>
                 </table>
+                <div>
+                    @foreach (var listado in Model.InsumosAPedir)
+                    {
+                        <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
+                        <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                        <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:70px;" />
+                    }
+                </div>
             }
         }
     </div>
@@ -89,14 +111,17 @@
                     <tbody>
                         @foreach (var listado in Model.InsumosAPedir)
                         {
-                            <tr>
-                                <td class="text-center">
-                                    <input type="text" name="listaNombreInsumo" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
-                                </td>
-                                <td class="text-center">
-                                    <input type="number" name="cantidadInsumo" id="idCantidadInsumo" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" readonly style="width:70px;" />
-                                </td>
-                            </tr>
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
+                            </td>
+                            <td class="text-center">
+                                <input type="text" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                            </td>
+                            <td class="text-center">
+                                <input type="number" name="listaCantidadInsumoAlPedido" id="idCantidadInsumo" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" readonly style="width:70px;" />
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
