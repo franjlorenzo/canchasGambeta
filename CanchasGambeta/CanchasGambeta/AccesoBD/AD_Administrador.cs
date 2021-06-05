@@ -152,7 +152,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"insert into Pedido (proveedor, fecha, descripcion, estado) values (@proveedor, @fecha, @descripcion, @estado)";
+                string consultaInsertPedido = @"insert into Pedido (proveedor, fecha, descripcion, estado) values (@proveedor, @fecha, @descripcion, @estado)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@proveedor", nuevoPedido.IdProveedor);
                 comando.Parameters.AddWithValue("@fecha", nuevoPedido.Fecha);
@@ -160,11 +160,24 @@ namespace CanchasGambeta.AccesoBD
                 comando.Parameters.AddWithValue("@estado", 1);
 
                 comando.CommandType = System.Data.CommandType.Text;
-                comando.CommandText = consulta;
+                comando.CommandText = consultaInsertPedido;
 
                 conexion.Open();
                 comando.Connection = conexion;
                 comando.ExecuteNonQuery();
+
+                string consultaInsertDetallePedido = @"insert into DetallePedido (pedido, insumo, cantidadPedida) values (@pedido, @insumo, @cantidadPedida)";
+                comando.CommandText = consultaInsertDetallePedido;
+
+                foreach (var lista in nuevoPedido.InsumosPedido)
+                {
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@pedido", obtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha, nuevoPedido.Descripcion));
+                    comando.Parameters.AddWithValue("@insumo", lista.IdInsumo);
+                    comando.Parameters.AddWithValue("@cantidadPedida", lista.Cantidad);                   
+                    comando.ExecuteNonQuery();
+                }
+                
                 resultado = true;
             }
             catch (Exception)
@@ -292,16 +305,20 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"delete from Pedido where idPedido = @idPedido";
+                string consultaDeletePedido = @"delete from Pedido where idPedido = @idPedido";
+                string consultaDeleteDetallePedido = @"delete from DetallePedido where pedido = @idPedido";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idPedido", idPedido);
 
                 comando.CommandType = System.Data.CommandType.Text;
-                comando.CommandText = consulta;
-
                 conexion.Open();
                 comando.Connection = conexion;
+
+                comando.CommandText = consultaDeleteDetallePedido;
                 comando.ExecuteNonQuery();
+                comando.CommandText = consultaDeletePedido;
+                comando.ExecuteNonQuery();
+
                 resultado = true;
             }
             catch (Exception)
@@ -648,6 +665,18 @@ namespace CanchasGambeta.AccesoBD
             }
 
             return listaInsumosAPedir;
+        }
+
+        public static string armarDescripcionPedido(List<InsumosAPedir> listaInsumosAPedir)
+        {
+            string descripcion = "";
+
+            foreach (var listado in listaInsumosAPedir)
+            {
+                descripcion = descripcion + $"{listado.Insumo} - Cantidad: {listado.Cantidad}\n";
+            }
+
+            return descripcion;
         }
     }
 }

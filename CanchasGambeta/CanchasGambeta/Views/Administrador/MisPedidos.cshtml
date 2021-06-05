@@ -124,7 +124,7 @@
     <div class="col-md-1"></div>
 </div>
 
-@using (Html.BeginForm("NuevoPedido", "Administrador", FormMethod.Post, new { onsubmit = "return validacionNuevoPedido();" }))
+@using (Html.BeginForm("MisPedidos", "Administrador", FormMethod.Post, new { onsubmit = "return validacionNuevoPedido();" }))
 {
     <div class="row" style="transform: translateY(70px); color: white">
         <div class="col-md-1"></div>
@@ -140,6 +140,14 @@
                     <label class="control-label">Descripción</label>
                     @Html.TextAreaFor(Model => Model.NuevoPedido.Descripcion, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                 </div>
+            </div>
+            <div>
+                @foreach (var listado in Model.InsumosAPedir)
+                {
+                    <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
+                    <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                    <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
+                }
             </div>
             <button class="btn btn-success" type="submit">Enviar Pedido</button>
             <a href="@Url.Action("AgregarInsumosAlPedido", "Administrador")" class="btn btn-warning m-1">Agregar insumos</a>

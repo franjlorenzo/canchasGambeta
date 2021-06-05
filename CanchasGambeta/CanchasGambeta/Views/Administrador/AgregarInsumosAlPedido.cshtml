@@ -11,6 +11,7 @@
         {
             <div class="form-horizontal">
                 <div class="col-md-12 form-group btn-group">
+                    <input type="hidden"  name="nombreInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
                     <input type="text" id="nombreInsumo" name="nombreInsumo" class="form-control" />
                     <button type="submit" class="btn btn-primary ml-2" id="botonBuscar">Buscar</button>
                 </div>
@@ -43,7 +44,7 @@
                                     <input type="text" name="listaNombreInsumo" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                                 </td>
                                 <td class="text-center">
-                                    <input type="number" name="cantidadInsumo" id="idCantidadInsumo" class="form-control cantidadInsumo" min="0" placeholder="0" style="width:70px;" />
+                                    <input type="number" name="cantidadInsumo" id="idCantidadInsumo" class="form-control cantidadInsumo" min="0" placeholder="0" style="width:90px;" />
                                 </td>
                             </tr>
                         }
@@ -58,7 +59,7 @@
                     {
                         <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
                         <input type="text" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
-                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:70px;" />
+                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
                     }
                 </div>
             }
@@ -85,12 +86,13 @@
                     {
                         <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
                         <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
-                        <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:70px;" />
+                        <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
                     }
                 </div>
             }
         }
     </div>
+
     <div class="col-md-5">
         <h4>Lista final de insumos y cantidades</h4>
         @using (Html.BeginForm("AgregarInsumos", "Administrador", FormMethod.Post, new { onsubmit = "" }))
@@ -119,7 +121,7 @@
                                 <input type="text" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                             </td>
                             <td class="text-center">
-                                <input type="number" name="listaCantidadInsumoAlPedido" id="idCantidadInsumo" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" readonly style="width:70px;" />
+                                <input type="number" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" value="@listado.Cantidad" readonly style="width:90px;" />
                             </td>
                         </tr>
                         }

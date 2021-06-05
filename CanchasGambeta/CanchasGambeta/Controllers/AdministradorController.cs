@@ -108,21 +108,46 @@ namespace CanchasGambeta.Controllers
                 };
             });
 
+            NuevoPedido nuevoPedido = new NuevoPedido();
+            List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
             ViewBag.proveedores = listaProveedores;
+            if (TempData["listaInsumosAPedir"] != null)
+            {
+                listaInsumosAPedir = (List<InsumosAPedir>)TempData["listaInsumosAPedir"];
+                nuevoPedido.Descripcion = AccesoBD.AD_Administrador.armarDescripcionPedido(listaInsumosAPedir);
+            }
             if (TempData["ErrorInsertPedido"] != null) ViewBag.ErrorInsertPedido = TempData["ErrorInsertPedido"].ToString();
             if (TempData["ErrorConcretarPedido"] != null) ViewBag.ErrorConcretarPedido = TempData["ErrorConcretarPedido"].ToString();
             if (TempData["ErrorEliminarPedido"] != null) ViewBag.ErrorEliminarPedido = TempData["ErrorEliminarPedido"].ToString();
             if (TempData["ErrorInsertProveedor"] != null) ViewBag.ErrorInsertProveedor = TempData["ErrorInsertProveedor"].ToString();
             if (TempData["ErrorEliminarProveedor"] != null) ViewBag.ErrorEliminarProveedor = TempData["ErrorEliminarProveedor"].ToString();
             if (TempData["ErrorPedidosSinConcretar"] != null) ViewBag.ErrorPedidosSinConcretar = TempData["ErrorPedidosSinConcretar"].ToString();
-            return View( new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = new NuevoPedido(), NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedoresTabla() });
+            return View( new VistaMisPedidos { TablaPedido = AccesoBD.AD_Administrador.obtenerTodosLosPedidos(), NuevoPedido = nuevoPedido, NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Administrador.obtenerTodosLosProveedoresTabla(), InsumosAPedir = listaInsumosAPedir });
         }
 
         [HttpPost]
-        public ActionResult MisPedidos(NuevoPedido nuevoPedido)
+        public ActionResult MisPedidos(NuevoPedido nuevoPedido, string idProveedor, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            nuevoPedido.IdProveedor = int.Parse(idProveedor);
+            nuevoPedido.InsumosPedido = AccesoBD.AD_Administrador.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
+
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Administrador.nuevoPedido(nuevoPedido);
+                if (resultado)
+                {
+                    //AccesoBD.AD_Administrador.enviarMailAProveedor(nuevoPedido, 1, null, null);
+                    return RedirectToAction("MisPedidos", "Administrador");
+                }
+                else
+                {
+                    TempData["ErrorInsertPedido"] = "Ocurrió un error al registrar el pedido, inténtelo nuevamente.";
+                    return RedirectToAction("MisPedidos", "Administrador");
+                }
+            }
 
             return View();
         }
@@ -141,6 +166,8 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
+            if (nombreInsumo == "" || nombreInsumo == " ") nombreInsumo = null;
+
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
             if (listaCantidadInsumoAlPedido != null && listaIdInsumoAlPedido != null && listaNombreInsumoAlPedido != null)
             {
@@ -148,18 +175,29 @@ namespace CanchasGambeta.Controllers
             }
 
             //El usuario no proporciona una palabra para buscar, se devuelve error
-            if (nombreInsumo == "" && listaNombreInsumo == null && cantidadInsumo == null)
+            if ((nombreInsumo == null && listaNombreInsumo == null && cantidadInsumo == null && Request["nombreInsumoAnterior"] == "") || (nombreInsumo == null && listaNombreInsumo != null && cantidadInsumo != null && Request["nombreInsumoAnterior"] == ""))
             {
-                ViewBag.ErrorBuscarInsumo = "Debe proporcionar una letra o palabra para buscar un insumo";
-                return View(new VistaPedirInsumos { BuscarInsumos = new List<BuscarInsumos>(), InsumosAPedir = listaInsumosAPedir });
+                if(Request["nombreInsumoAnterior"] == "")
+                {
+                    ViewBag.ErrorBuscarInsumo = "Debe proporcionar una letra o palabra para buscar un insumo";
+                    return View(new VistaPedirInsumos { BuscarInsumos = new List<BuscarInsumos>(), InsumosAPedir = listaInsumosAPedir });
+                }
+                else
+                {
+                    string nombreInsumoAnterior = Request["nombreInsumoAnterior"];
+                    ViewBag.nombreInsumo = nombreInsumoAnterior;
+                    ViewBag.ErrorBuscarInsumo = "Debe proporcionar una letra o palabra para buscar un insumo";
+                    return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumoAnterior), InsumosAPedir = listaInsumosAPedir });
+                }              
             }
             //El usuario proporciona una palabra para buscar y la tabla está vacia o el usuario proporciona una palabra para buscar y la tabla contiene elementos
-            if ((nombreInsumo != "" && listaNombreInsumo == null && cantidadInsumo == null) || (nombreInsumo != "" && listaNombreInsumo != null && cantidadInsumo != null))
+            if ((nombreInsumo != null && listaNombreInsumo == null && cantidadInsumo == null) || (nombreInsumo != null && listaNombreInsumo != null && cantidadInsumo != null))
             {
+                ViewBag.nombreInsumo = nombreInsumo;
                 return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo), InsumosAPedir = listaInsumosAPedir });
             }
             //El usuario presiona el botón "Agregar al pedido"
-            if(nombreInsumo == "" && listaNombreInsumo != null && cantidadInsumo != null)
+            if(nombreInsumo == null && listaNombreInsumo != null && cantidadInsumo != null)
             {
                 //Se verifica que las cantidades no estén vacias, de lo contrario se devuelve un error
                 bool cantidadDiferenteACero = false;
@@ -177,34 +215,28 @@ namespace CanchasGambeta.Controllers
                     }
                 }
 
+                //Si la lista de insumos a pedir esta vacia se agregan los insumos en el ELSE, de lo contrario se entra el IF
                 if(listaInsumosAPedir.Count != 0)
                 {
-                    foreach (var insumosAPedir in listaInsumosAPedir)
+                    foreach (var comparacionCantidades in listaComparacionCantidades)
                     {
-                        foreach (var comparacionCantidades in listaComparacionCantidades)
+                        //Se recorre la lista de cantidades y si existe un insumo que ya está en la lista de pedidos se suma la cantidad nueva a la existente, de lo contrario se agrega el insumo nuevo a la lista
+                        if (listaInsumosAPedir.Exists(insumo => insumo.IdInsumo == comparacionCantidades.IdInsumo))
                         {
-                            if (insumosAPedir.IdInsumo == comparacionCantidades.IdInsumo)
-                            {
-                                insumosAPedir.Cantidad = insumosAPedir.Cantidad + comparacionCantidades.Cantidad;
-                            }
+                            foreach (var insumosAPedir in listaInsumosAPedir) if (insumosAPedir.IdInsumo == comparacionCantidades.IdInsumo) insumosAPedir.Cantidad = insumosAPedir.Cantidad + comparacionCantidades.Cantidad;
                         }
+                        else listaInsumosAPedir.Add(comparacionCantidades);
                     }
                 }
-                else
-                {
-                    foreach (var item in listaComparacionCantidades)
-                    {
-                        if(!listaInsumosAPedir.Contains(item)) listaInsumosAPedir.Add(item); //probar logica con contains
-                    }
-                }
-
-           
+                else foreach (var item in listaComparacionCantidades) listaInsumosAPedir.Add(item);
+       
                 if (cantidadDiferenteACero)
                 {
-                    return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo), InsumosAPedir = listaInsumosAPedir });
+                    string nombreInsumoAnterior = Request["nombreInsumoAnterior"];
+                    return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumoAnterior), InsumosAPedir = listaInsumosAPedir });
                 }
                 else
-                {
+                {                  
                     ViewBag.NoSeModificaronCantidades = "No se modificaron las cantidades.";
                     return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(nombreInsumo), InsumosAPedir = listaInsumosAPedir });
                 }
@@ -213,29 +245,14 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult NuevoPedido(NuevoPedido nuevoPedido, string idProveedor)
+        public ActionResult AgregarInsumos(List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            nuevoPedido.IdProveedor = int.Parse(idProveedor);
-
-            if (ModelState.IsValid)
-            {
-                bool resultado = AccesoBD.AD_Administrador.nuevoPedido(nuevoPedido);
-                if (resultado)
-                {
-                    AccesoBD.AD_Administrador.enviarMailAProveedor(nuevoPedido, 1, null, null);
-                    return RedirectToAction("MisPedidos", "Administrador");
-                } 
-                else
-                {
-                    TempData["ErrorInsertPedido"] = "Ocurrió un error al registrar el pedido, inténtelo nuevamente.";
-                    return RedirectToAction("MisPedidos", "Administrador");
-                }
-            }
-
-            return View();
+            List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Administrador.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
+            TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+            return RedirectToAction("MisPedidos");
         }
 
         [HttpPost]
@@ -301,7 +318,7 @@ namespace CanchasGambeta.Controllers
                 bool resultado = AccesoBD.AD_Administrador.modificarPedido(pedidoModificado);
                 if (resultado)
                 {
-                    AccesoBD.AD_Administrador.enviarMailAProveedor(null, 2, pedidoModificado, null);
+                    //AccesoBD.AD_Administrador.enviarMailAProveedor(null, 2, pedidoModificado, null);
                     return RedirectToAction("MisPedidos", "Administrador");
                 }
                 else
@@ -348,7 +365,7 @@ namespace CanchasGambeta.Controllers
             bool resultado = AccesoBD.AD_Administrador.eliminarPedido(idPedido);
             if (resultado)
             {
-                AccesoBD.AD_Administrador.enviarMailAProveedor(null, 3, null, datosPedido);
+                //AccesoBD.AD_Administrador.enviarMailAProveedor(null, 3, null, datosPedido);
                 return RedirectToAction("MisPedidos", "Administrador");
             }
             else

@@ -35,13 +35,13 @@ namespace CanchasGambeta.ViewModels
         private int idProveedor;
         private DateTime fecha = DateTime.Today;
         private string descripcion;
-        private List<Insumo> insumosPedido;
+        private List<InsumosAPedir> insumosPedido;
 
         public int IdPedido { get => idPedido; set => idPedido = value; }
         public DateTime Fecha { get => fecha; set => fecha = value; }
         public int IdProveedor { get => idProveedor; set => idProveedor = value; }
         public string Descripcion { get => descripcion; set => descripcion = value; }
-        public List<Insumo> InsumosPedido { get => insumosPedido; set => insumosPedido = value; }
+        public List<InsumosAPedir> InsumosPedido { get => insumosPedido; set => insumosPedido = value; }
     }
 
     public class NuevoProveedor
@@ -102,6 +102,7 @@ namespace CanchasGambeta.ViewModels
         public NuevoPedido NuevoPedido { get; set; }
         public NuevoProveedor NuevoProveedor { get; set; }
         public List<TablaProveedores> TablaProveedores { get; set; }
+        public List<InsumosAPedir> InsumosAPedir { get; set; }
     }
 
     public class VistaPedirInsumos
