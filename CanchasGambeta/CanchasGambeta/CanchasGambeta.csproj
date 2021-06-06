@@ -134,7 +134,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccesoBD\AD_Administrador.cs" />
+    <Compile Include="AccesoBD\AD_Pedido.cs" />
     <Compile Include="AccesoBD\AD_Equipo.cs" />
     <Compile Include="AccesoBD\AD_Informe.cs" />
     <Compile Include="AccesoBD\AD_Insumo.cs" />
@@ -151,6 +151,7 @@
     <Compile Include="Controllers\InformeController.cs" />
     <Compile Include="Controllers\InsumoController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
+    <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\ReservaController.cs" />
     <Compile Include="Global.asax.cs">
@@ -318,8 +319,8 @@
     <Content Include="Views\Insumo\MisInsumos.cshtml" />
     <Content Include="Views\Insumo\ModificarInsumo.cshtml" />
     <Content Include="Views\Reserva\MisReservas.cshtml" />
-    <Content Include="Views\Administrador\MisPedidos.cshtml" />
-    <Content Include="Views\Administrador\ModificarPedido.cshtml" />
+    <Content Include="Views\Pedido\MisPedidos.cshtml" />
+    <Content Include="Views\Pedido\ModificarPedido.cshtml" />
     <Content Include="Views\Reserva\ModificarReserva.cshtml" />
     <Content Include="Views\Informe\ReservasActivasYCanceladas.cshtml" />
     <Content Include="Views\Informe\CanchasMasUtilizadas.cshtml" />
@@ -327,9 +328,9 @@
     <Content Include="Views\Informe\HorariosMasReservados.cshtml" />
     <Content Include="Views\Informe\InstrumentosDisponibles.cshtml" />
     <Content Include="Views\Equipo\CambiarNombreEquipo.cshtml" />
-    <Content Include="Views\Administrador\ModificarProveedor.cshtml" />
+    <Content Include="Views\Pedido\ModificarProveedor.cshtml" />
     <Content Include="Views\Informe\InsumosMasConsumidos.cshtml" />
-    <Content Include="Views\Administrador\AgregarInsumosAlPedido.cshtml" />
+    <Content Include="Views\Pedido\AgregarInsumosAlPedido.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

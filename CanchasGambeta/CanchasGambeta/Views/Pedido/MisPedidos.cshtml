@@ -53,8 +53,8 @@
                             </td>
                             <td class="text-center accionesProveedores" style="display:none">
                                 <div class="btn-group">
-                                    <a href="@Url.Action("ModificarProveedor", "Administrador", new {idProveedor = listado.IdProveedor})" class="btn btn-warning m-1">Modificar</a>
-                                    @using (Html.BeginForm("EliminarProveedor", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminarProveedor();" }))
+                                    <a href="@Url.Action("ModificarProveedor", "Pedido", new {idProveedor = listado.IdProveedor})" class="btn btn-warning m-1">Modificar</a>
+                                    @using (Html.BeginForm("EliminarProveedor", "Pedido", FormMethod.Post, new { onsubmit = "return confirmacionEliminarProveedor();" }))
                                     {
                                         <input type="hidden" name="idProveedor" value="@listado.IdProveedor" />
                                         <button type="submit" class="btn btn-danger m-1">Eliminar</button>
@@ -95,7 +95,7 @@
     </div>
     <div class="col-md-4">
         <h4>Complete el formulario para registrar un nuevo proveedor</h4>
-        @using (Html.BeginForm("NuevoProveedor", "Administrador", FormMethod.Post, new { onsubmit = "return validacionNuevoProveedor();" }))
+        @using (Html.BeginForm("NuevoProveedor", "Pedido", FormMethod.Post, new { onsubmit = "return validacionNuevoProveedor();" }))
         {
             <div class="form-horizontal">
                 <div class="input-group-sm">
@@ -124,7 +124,7 @@
     <div class="col-md-1"></div>
 </div>
 
-@using (Html.BeginForm("MisPedidos", "Administrador", FormMethod.Post, new { onsubmit = "return validacionNuevoPedido();" }))
+@using (Html.BeginForm("MisPedidos", "Pedido", FormMethod.Post, new { onsubmit = "return validacionNuevoPedido();" }))
 {
     <div class="row" style="transform: translateY(70px); color: white">
         <div class="col-md-1"></div>
@@ -150,7 +150,7 @@
                 }
             </div>
             <button class="btn btn-success" type="submit">Enviar Pedido</button>
-            <a href="@Url.Action("AgregarInsumosAlPedido", "Administrador")" class="btn btn-warning m-1">Agregar insumos</a>
+            <a href="@Url.Action("AgregarInsumosAlPedido", "Pedido")" class="btn btn-warning m-1">Agregar insumos</a>
             <div class="form-label-group text-danger">
                 @ViewBag.ErrorInsertPedido
             </div>
@@ -217,7 +217,7 @@
                                     </td>
                                     <td class="text-center accionesPedidos" style="display:none">
                                         <div class="btn-group">
-                                            @using (Html.BeginForm("ConcretarPedido", "Administrador", FormMethod.Post))
+                                            @using (Html.BeginForm("ConcretarPedido", "Pedido", FormMethod.Post))
                                             {
                                                 @Html.HiddenFor(Model => listado.IdPedido)
                                                 <button type="submit" class="btn btn-success m-1">Concretar</button>
@@ -225,8 +225,8 @@
 
                                             @if (listado.Fecha > DateTime.Today.AddDays(-2))
                                             {
-                                                <a href="@Url.Action("ModificarPedido", "Administrador", new { idPedido = listado.IdPedido })" class="btn btn-warning m-1">Modificar</a>
-                                                using (Html.BeginForm("EliminarPedido", "Administrador", FormMethod.Post, new { onsubmit = "return confirmacionEliminarPedido();" }))
+                                                <a href="@Url.Action("ModificarPedido", "Pedido", new { idPedido = listado.IdPedido })" class="btn btn-warning m-1">Modificar</a>
+                                                using (Html.BeginForm("EliminarPedido", "Pedido", FormMethod.Post, new { onsubmit = "return confirmacionEliminarPedido();" }))
                                                 {
                                                     @Html.HiddenFor(Model => listado.IdPedido)
                                                     <button type="submit" class="btn btn-danger m-1">Eliminar</button>
@@ -234,7 +234,7 @@
                                             }
                                             else
                                             {
-                                                <a href="@Url.Action("ModificarPedido", "Administrador", new { idPedido = listado.IdPedido })" class="btn btn-warning m-1 disabled">Modificar</a>
+                                                <a href="@Url.Action("ModificarPedido", "Pedido", new { idPedido = listado.IdPedido })" class="btn btn-warning m-1 disabled">Modificar</a>
                                                 <a class="btn btn-danger m-1 disabled">Eliminar</a>
                                             }
                                         </div>

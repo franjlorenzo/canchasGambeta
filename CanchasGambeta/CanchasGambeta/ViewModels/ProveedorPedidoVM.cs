@@ -94,6 +94,18 @@ namespace CanchasGambeta.ViewModels
         public int IdInsumo { get => idInsumo; set => idInsumo = value; }
         public string Insumo { get => insumo; set => insumo = value; }
         public int Cantidad { get => cantidad; set => cantidad = value; }
+
+        public InsumosAPedir(int idInsumo, string insumo, int cantidad)
+        {
+            this.IdInsumo = idInsumo;
+            this.Insumo = insumo;
+            this.Cantidad = cantidad;
+        }
+
+        public InsumosAPedir()
+        {
+
+        }
     }
 
     public class VistaMisPedidos

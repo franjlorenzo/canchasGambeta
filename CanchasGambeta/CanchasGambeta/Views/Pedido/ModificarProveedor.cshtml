@@ -7,7 +7,7 @@
     <div class="col-md-3"></div>
     <div class="col-md-6">
         <h3 class="text-center">Modifique los datos del proveedor</h3>
-        @using (Html.BeginForm("ModificarProveedor", "Administrador", FormMethod.Post, new { onsubmit = "return validacionModificarProveedor();" }))
+        @using (Html.BeginForm("ModificarProveedor", "Pedido", FormMethod.Post, new { onsubmit = "return validacionModificarProveedor();" }))
         {
             @Html.HiddenFor(Model => Model.idProveedor)
             <div class="form-horizontal">
@@ -31,7 +31,7 @@
                     <button class="btn btn-success" type="submit">
                         Confirmar cambios
                     </button>
-                    @Html.ActionLink("Cancelar", "MisPedidos", "Administrador", null, new { @class = "text-center btn btn-warning" })
+                    @Html.ActionLink("Cancelar", "MisPedidos", "Pedido", null, new { @class = "text-center btn btn-warning" })
                 </div>
                 <div class="form-label-group text-danger">
                     @ViewBag.ErrorModificarProveedor

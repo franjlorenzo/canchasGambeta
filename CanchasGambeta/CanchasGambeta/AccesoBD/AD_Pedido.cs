@@ -9,7 +9,7 @@ using System.Web;
 
 namespace CanchasGambeta.AccesoBD
 {
-    public class AD_Administrador
+    public class AD_Pedido
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
 
