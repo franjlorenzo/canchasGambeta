@@ -108,6 +108,53 @@ namespace CanchasGambeta.ViewModels
         }
     }
 
+    public class ConcretarPedido
+    {
+        private int idPedido;
+        private int idProveedor;
+        private string nombreProveedor;
+        private DateTime fechaRealizado;
+        private DateTime fechaRecibido;
+        private List<InsumosAPedir> listaInsumosPedidos;
+        private List<InsumosAPedir> listaCantidadesRecibidas;
+
+        public int IdPedido { get => idPedido; set => idPedido = value; }
+        public int IdProveedor { get => idProveedor; set => idProveedor = value; }
+        public string NombreProveedor { get => nombreProveedor; set => nombreProveedor = value; }
+        public DateTime FechaRealizado { get => fechaRealizado; set => fechaRealizado = value; }
+        public DateTime FechaRecibido { get => fechaRecibido; set => fechaRecibido = value; }
+        public List<InsumosAPedir> ListaInsumosPedidos { get => listaInsumosPedidos; set => listaInsumosPedidos = value; }
+        public List<InsumosAPedir> ListaCantidadesRecibidas { get => listaCantidadesRecibidas; set => listaCantidadesRecibidas = value; }
+    }
+
+    public class InsumosPedidosRecibidos
+    {
+        private int idInsumo;
+        private string insumo;
+        private int cantidadPedida;
+        private int cantidadRecibida;
+
+        public int IdInsumo { get => idInsumo; set => idInsumo = value; }
+        public string Insumo { get => insumo; set => insumo = value; }
+        public int CantidadPedida { get => cantidadPedida; set => cantidadPedida = value; }
+        public int CantidadRecibida { get => cantidadRecibida; set => cantidadRecibida = value; }
+    }
+
+    public class DetallePedidoConcretado
+    {
+        private int idPedido;
+        private string nombreProveedor;
+        private DateTime fechaRealizado;
+        private DateTime fechaRecibido;
+        private List<InsumosPedidosRecibidos> listaInsumosPedidosrecibidos;
+
+        public int IdPedido { get => idPedido; set => idPedido = value; }
+        public string NombreProveedor { get => nombreProveedor; set => nombreProveedor = value; }
+        public DateTime FechaRealizado { get => fechaRealizado; set => fechaRealizado = value; }
+        public DateTime FechaRecibido { get => fechaRecibido; set => fechaRecibido = value; }
+        public List<InsumosPedidosRecibidos> ListaInsumosPedidosrecibidos { get => listaInsumosPedidosrecibidos; set => listaInsumosPedidosrecibidos = value; }
+    }
+
     public class VistaMisPedidos
     {
         public List<TablaPedido> TablaPedido { get; set; }

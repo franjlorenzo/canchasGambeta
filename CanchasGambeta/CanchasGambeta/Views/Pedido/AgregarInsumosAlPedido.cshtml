@@ -4,9 +4,9 @@
 }
 
 <div class="row" style="transform: translateY(60px); color: white">
-    <div class="col-md-1"></div>
-    <div class="col-md-5">
-        <h4>Insumos a pedir</h4>
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <h4 class="text-center">Insumos a pedir</h4>
         @using (Html.BeginForm("BuscarInsumo", "Pedido", FormMethod.Post, new { onsubmit = "" }))
         {
             <div class="form-horizontal">
@@ -35,7 +35,14 @@
                 }
             </div>
         }
+    </div>
+    <div class="col-md-3"></div>
+</div>
 
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <h4 class="text-center">Insumos encontrados</h4>
             @if (Model.BuscarInsumos.Count != 0)
             {
                 <table class="table table-bordered table-striped">
@@ -45,7 +52,7 @@
                                 Insumo
                             </th>
                             <th class="text-center">
-                                
+                                Acciones
                             </th>
                         </tr>
                     </thead>
@@ -108,10 +115,78 @@
     </div>
 
     <div class="col-md-5">
-        <h4>Lista final de insumos y cantidades</h4>
-        @using (Html.BeginForm("AgregarInsumos", "Pedido", FormMethod.Post, new { @id = "AgregarInsumos" }))
+        <h4 class="text-center">Insumos a pedir</h4>
+        @if (Model.InsumosAPedir.Count != 0)
         {
-            if (Model.InsumosAPedir.Count != 0)
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                        <th class="text-center">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.InsumosAPedir)
+                    {
+                        using (Html.BeginForm("QuitarInsumo", "Pedido", FormMethod.Post, new { @id = "QuitarInsumo" }))
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" />
+                                    <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                </td>
+                                <!--<td class="text-center">
+                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" placeholder="listado.Cantidad" style="width:90px;" />
+                                </td>-->
+                                <td class="text-center">
+                                    @foreach (var item in Model.InsumosAPedir)
+                                    {
+                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
+                                        <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
+                                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                    }
+                                    <button type="submit" class="btn btn-warning">Quitar</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No hay insumos guardados todavía
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<hr />
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-center">
+        @if (Model.InsumosAPedir.Count != 0)
+        {
+            <h4 class="text-center">Agregar cantidades y finalizar</h4>
+            using (Html.BeginForm("AgregarInsumos", "Pedido", FormMethod.Post, new { @id = "AgregarInsumos" }))
             {
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -122,63 +197,31 @@
                             <th class="text-center">
                                 Cantidad
                             </th>
-                            <th class="text-center">
-
-                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var listado in Model.InsumosAPedir)
                         {
-                            using (Html.BeginForm("QuitarInsumo", "Pedido", FormMethod.Post, new { onsubmit = "", @id = "QuitarInsumo" }))
-                            {
-                                <tr>
-                                    <td class="text-center">
-                                        <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
-                                        <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
-                                    </td>
-                                    <td class="text-center">
-                                        <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" style="width:90px;" />
-                                    </td>
-                                    <td class="text-center">
-                                        @foreach (var item in Model.InsumosAPedir)
-                                        {
-                                            <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
-                                            <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
-                                            <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
-                                        }
-                                        <button type="submit" onclick="document.getElementById('QuitarInsumo').submit()" class="btn btn-warning">Quitar</button>
-                                    </td>
-                                </tr>
-                            }
+                            <tr>
+                                <td class="text-center">
+                                    <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
+                                    <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                </td>
+                                <td class="text-center">
+                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" style="width:90px;" />
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
-                <button type="submit" onclick="document.getElementById('AgregarInsumos').submit()" class="btn btn-success">Finalizar</button>
-            }
-            else
-            {
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                Insumo
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center">
-                                No hay insumos guardados todavía
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <button type="submit" class="btn btn-success">Finalizar</button>
+                <div class="form-label-group text-danger pb-2">
+                    @ViewBag.cantidadIgualCero
+                </div>
             }
         }
-
     </div>
-    <div class="col-md-1"></div>
+    <div class="col-md-3"></div>
 </div>
 
 <script src="~/Scripts/scriptAgregarInsumosAlPedido.js"></script>

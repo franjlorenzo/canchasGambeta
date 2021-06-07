@@ -229,7 +229,7 @@
     <Compile Include="ViewModels\HorariosMasReservados.cs" />
     <Compile Include="ViewModels\InstrumentoRotoVM.cs" />
     <Compile Include="ViewModels\MailEquipoVM.cs" />
-    <Compile Include="ViewModels\ProveedorPedidoVM.cs" />
+    <Compile Include="ViewModels\PedidosVM.cs" />
     <Compile Include="ViewModels\ReservasActivasYCanceladasVM.cs" />
     <Compile Include="ViewModels\ReservaVM.cs" />
   </ItemGroup>
@@ -331,6 +331,7 @@
     <Content Include="Views\Pedido\ModificarProveedor.cshtml" />
     <Content Include="Views\Informe\InsumosMasConsumidos.cshtml" />
     <Content Include="Views\Pedido\AgregarInsumosAlPedido.cshtml" />
+    <Content Include="Views\Pedido\ConcretarPedido.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

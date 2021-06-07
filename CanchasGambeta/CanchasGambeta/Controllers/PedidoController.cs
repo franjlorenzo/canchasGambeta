@@ -85,6 +85,7 @@ namespace CanchasGambeta.Controllers
             if (TempData["ErrorBuscarInsumo"] != null) ViewBag.ErrorBuscarInsumo = TempData["ErrorBuscarInsumo"].ToString();
             if (TempData["nombreInsumo"] != null) ViewBag.nombreInsumo = TempData["nombreInsumo"].ToString();
             if (TempData["nombreInsumoAnterior"] != null) ViewBag.nombreInsumo = TempData["nombreInsumoAnterior"].ToString();
+            if (TempData["cantidadIgualCero"] != null) ViewBag.cantidadIgualCero = TempData["cantidadIgualCero"].ToString();
 
             return View(vistaPedirInsumos);
         }
@@ -130,17 +131,28 @@ namespace CanchasGambeta.Controllers
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
+
+            foreach (var item in listaInsumosAPedir)
+            {
+                if(item.Cantidad == 0)
+                {
+                    TempData["cantidadIgualCero"] = "No se puede pedir un insumo con cantidad cero(0)";
+                    TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                    return RedirectToAction("AgregarInsumosAlPedido");
+                }
+            }
+
             TempData["listaInsumosAPedir"] = listaInsumosAPedir;
             return RedirectToAction("MisPedidos");
         }
 
         [HttpPost]
-        public ActionResult QuitarInsumo(int IdInsumoAlPedido, string NombreInsumoAlPedido, int CantidadInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
+        public ActionResult QuitarInsumo(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
+            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0);
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
 
             if (listaInsumosAPedir.Exists(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo))
@@ -188,17 +200,26 @@ namespace CanchasGambeta.Controllers
             return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]), InsumosAPedir = listaInsumosAPedir });
         }
 
-        [HttpPost]
-        public ActionResult ConcretarPedido()
+        public ActionResult ConcretarPedido(int idPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            int idPedido = int.Parse(Request["listado.IdPedido"]);
+            ConcretarPedido concretarPedido = AccesoBD.AD_Pedido.obtenerDatosPedidoAConcretar(idPedido);
+            return View(concretarPedido);
+        }
+
+        [HttpPost]
+        public ActionResult ConcretarPedido(ConcretarPedido concretarPedido, List<int> idInsumo, List<string> nombreInsumo, List<int> cantidadRecibida)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            concretarPedido.ListaCantidadesRecibidas = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(idInsumo, nombreInsumo, cantidadRecibida);
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Pedido.concretarUnPedido(idPedido);
+                bool resultado = AccesoBD.AD_Pedido.concretarUnPedido(concretarPedido);
                 if (resultado) return RedirectToAction("MisPedidos", "Pedido");
                 else
                 {
@@ -379,6 +400,15 @@ namespace CanchasGambeta.Controllers
                 TempData["ErrorPedidosSinConcretar"] = "Todavía hay pedidos sin concretar al proveedor que quiere eliminar, concretelos para poder eliminar";
                 return RedirectToAction("MisPedidos", "Pedido");
             }
+        }
+
+        public ActionResult VerDetallePedido(int idPedido)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            DetallePedidoConcretado detallePedido = AccesoBD.AD_Pedido.obtenerDetallePedidoPorId(idPedido);
+            return View(detallePedido);
         }
     }
 }

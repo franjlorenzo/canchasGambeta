@@ -191,7 +191,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool concretarUnPedido(int idPedido)
+        public static bool concretarUnPedido(ConcretarPedido concretarPedido)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -199,16 +199,43 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"update Pedido set estado = 0 where idPedido = @idPedido";
+                string consultaUpdateEstado = @"update Pedido set estado = 0 where idPedido = @idPedido";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@idPedido", idPedido);
+                comando.Parameters.AddWithValue("@idPedido", concretarPedido.IdPedido);
 
                 comando.CommandType = System.Data.CommandType.Text;
-                comando.CommandText = consulta;
+                comando.CommandText = consultaUpdateEstado;
 
                 conexion.Open();
                 comando.Connection = conexion;
                 comando.ExecuteNonQuery();
+
+                string consultaCompletarDetalle = @"update DetallePedido set fechaRecibido = @fechaRecibido,
+                                                                             cantidadRecibida = @cantidadRecibida
+                                                    where pedido = @idPedido";
+                comando.CommandText = consultaCompletarDetalle;
+
+                foreach (var item in concretarPedido.ListaCantidadesRecibidas)
+                {
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@fechaRecibido", concretarPedido.FechaRecibido);
+                    comando.Parameters.AddWithValue("@cantidadRecibida", item.Cantidad);
+                    comando.Parameters.AddWithValue("@idPedido", concretarPedido.IdPedido);
+                    comando.ExecuteNonQuery();
+                }
+
+                string consultaUpdateStock = @"update Insumo set stock = stock + @cantidadRecibida
+                                               where idInsumo = @idInsumo";
+                comando.CommandText = consultaUpdateStock;
+
+                foreach (var item in concretarPedido.ListaCantidadesRecibidas)
+                {
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@cantidadRecibida", item.Cantidad);
+                    comando.Parameters.AddWithValue("@idInsumo", item.IdInsumo);
+                    comando.ExecuteNonQuery();
+                }
+
                 resultado = true;
             }
             catch (Exception)
@@ -678,5 +705,157 @@ namespace CanchasGambeta.AccesoBD
 
             return descripcion;
         }
+
+        public static ConcretarPedido obtenerDatosPedidoAConcretar(int idPedido)
+        {
+            ConcretarPedido pedidoAConcretar = new ConcretarPedido();
+            pedidoAConcretar.FechaRecibido = DateTime.Now;
+            pedidoAConcretar.ListaCantidadesRecibidas = new List<InsumosAPedir>();
+            pedidoAConcretar.ListaInsumosPedidos = new List<InsumosAPedir>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consultaObtenerDatosPedido = @"select idPedido, proveedor, nombreCompleto, fecha
+                                                      from Pedido pe join Proveedor pr on pr.idProveedor = pe.proveedor
+                                                      where idPedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consultaObtenerDatosPedido;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        pedidoAConcretar.IdPedido = idPedido;
+                        pedidoAConcretar.IdProveedor = int.Parse(lector["proveedor"].ToString());
+                        pedidoAConcretar.NombreProveedor = lector["nombreCompleto"].ToString();
+                        pedidoAConcretar.FechaRealizado = DateTime.Parse(lector["fecha"].ToString());
+                    }
+                }
+                lector.Close();
+
+                string consultaObtenerInsumosDelPedido = @"select dp.insumo 'idInsumo', i.insumo, cantidadPedida from DetallePedido dp join Insumo i on i.idInsumo = dp.insumo
+                                                           where pedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
+
+                comando.CommandText = consultaObtenerInsumosDelPedido;
+                SqlDataReader lector2 = comando.ExecuteReader();
+                if (lector2 != null)
+                {
+                    while (lector2.Read())
+                    {
+                        InsumosAPedir insumoPedido = new InsumosAPedir();
+                        insumoPedido.IdInsumo = int.Parse(lector2["idInsumo"].ToString());
+                        insumoPedido.Insumo = lector2["insumo"].ToString();
+                        insumoPedido.Cantidad = int.Parse(lector2["cantidadPedida"].ToString());
+                        pedidoAConcretar.ListaInsumosPedidos.Add(insumoPedido);
+                    }
+                }
+                lector2.Close();
+
+                string consultaObtenerInsumosAConcretar = @"select dp.insumo 'idInsumo', i.insumo from DetallePedido dp join Insumo i on i.idInsumo = dp.insumo
+                                                            where pedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
+                
+                comando.CommandText = consultaObtenerInsumosAConcretar;
+                SqlDataReader lector3 = comando.ExecuteReader();
+                if (lector3 != null)
+                {
+                    while (lector3.Read())
+                    {
+                        InsumosAPedir insumoAConcretar = new InsumosAPedir();
+                        insumoAConcretar.IdInsumo = int.Parse(lector3["idInsumo"].ToString());
+                        insumoAConcretar.Insumo = lector3["insumo"].ToString();
+                        insumoAConcretar.Cantidad = 0;
+                        pedidoAConcretar.ListaCantidadesRecibidas.Add(insumoAConcretar);
+                    }
+                }
+                lector3.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return pedidoAConcretar;
+        }
+
+        public static DetallePedidoConcretado obtenerDetallePedidoPorId(int idPedido)
+        {
+            DetallePedidoConcretado detallePedido = new DetallePedidoConcretado();
+            detallePedido.ListaInsumosPedidosrecibidos = new List<InsumosPedidosRecibidos>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select distinct nombreCompleto, fecha, fechaRecibido
+                                    from Proveedor pr join Pedido pe on pr.idProveedor = pe.proveedor
+                                         join DetallePedido dp on pe.idPedido = dp.pedido
+                                    where idPedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        detallePedido.NombreProveedor = lector["nombreCompleto"].ToString();
+                        detallePedido.FechaRealizado = DateTime.Parse(lector["fecha"].ToString());
+                        detallePedido.FechaRecibido = DateTime.Parse(lector["fechaRecibido"].ToString());
+                    }
+                }
+                lector.Close();
+
+                string consultaObtenerInsumosDetalle = @"select i.insumo, cantidadPedida, cantidadRecibida
+                                                         from DetallePedido dp join Insumo i on dp.insumo = i.idInsumo
+                                                         where pedido = @idPedido";
+                comando.CommandText = consultaObtenerInsumosDetalle;
+
+                SqlDataReader lector2 = comando.ExecuteReader();
+                if (lector2 != null)
+                {
+                    while (lector2.Read())
+                    {
+                        InsumosPedidosRecibidos insumo = new InsumosPedidosRecibidos();
+                        insumo.Insumo = lector2["insumo"].ToString();
+                        insumo.CantidadPedida = int.Parse(lector2["cantidadPedida"].ToString());
+                        insumo.CantidadRecibida = int.Parse(lector2["cantidadRecibida"].ToString());
+                        detallePedido.ListaInsumosPedidosrecibidos.Add(insumo);
+                    }
+                }
+                lector2.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return detallePedido;
+        }
+    }
     }
 }

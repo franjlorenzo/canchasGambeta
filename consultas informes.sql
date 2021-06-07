@@ -39,3 +39,24 @@ select h.horario, count(*) 'Cant reservas'
 from Horario h join HorarioReservas hr on h.idHorario = hr.horario
 group by h.horario
 order by 2 desc
+
+select idPedido, proveedor, nombreCompleto, fecha
+from Pedido pe join Proveedor pr on pr.idProveedor = pe.proveedor
+where idPedido = 3
+
+select dp.insumo 'idInsumo', i.insumo, cantidadPedida
+from DetallePedido dp join Insumo i on i.idInsumo = dp.insumo
+where pedido = 3
+
+select dp.insumo 'idInsumo', i.insumo
+from DetallePedido dp join Insumo i on i.idInsumo = dp.insumo
+where pedido = 3
+
+select distinct nombreCompleto, fecha, fechaRecibido
+from Proveedor pr join Pedido pe on pr.idProveedor = pe.proveedor
+     join DetallePedido dp on pe.idPedido = dp.pedido
+where idPedido = 3
+
+select i.insumo, cantidadPedida, cantidadRecibida
+from DetallePedido dp join Insumo i on dp.insumo = i.idInsumo
+where pedido = 3

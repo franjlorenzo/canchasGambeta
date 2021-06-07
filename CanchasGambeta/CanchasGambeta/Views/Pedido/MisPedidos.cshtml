@@ -217,12 +217,7 @@
                                     </td>
                                     <td class="text-center accionesPedidos" style="display:none">
                                         <div class="btn-group">
-                                            @using (Html.BeginForm("ConcretarPedido", "Pedido", FormMethod.Post))
-                                            {
-                                                @Html.HiddenFor(Model => listado.IdPedido)
-                                                <button type="submit" class="btn btn-success m-1">Concretar</button>
-                                            }
-
+                                            <a href="@Url.Action("ConcretarPedido", "Pedido", new { idPedido = listado.IdPedido })" class="btn btn-success m-1">Concretar</a>
                                             @if (listado.Fecha > DateTime.Today.AddDays(-2))
                                             {
                                                 <a href="@Url.Action("ModificarPedido", "Pedido", new { idPedido = listado.IdPedido })" class="btn btn-warning m-1">Modificar</a>
@@ -316,6 +311,7 @@
                             </td>
                             <td class="text-center">
                                 Concretado
+                                <a href="@Url.Action("VerDetallePedido", "Pedido", new { idPedido = listado.IdPedido })" class="btn btn-info m-1">Ver detalle</a>
                             </td>
                         </tr>
                     }
