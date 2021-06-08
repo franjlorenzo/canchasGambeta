@@ -157,7 +157,7 @@ namespace CanchasGambeta.AccesoBD
                 comando.Parameters.AddWithValue("@proveedor", nuevoPedido.IdProveedor);
                 comando.Parameters.AddWithValue("@fecha", nuevoPedido.Fecha);
                 comando.Parameters.AddWithValue("@descripcion", nuevoPedido.Descripcion);
-                comando.Parameters.AddWithValue("@estado", 1);
+                comando.Parameters.AddWithValue("@estado", true);
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consultaInsertPedido;
@@ -212,7 +212,7 @@ namespace CanchasGambeta.AccesoBD
 
                 string consultaCompletarDetalle = @"update DetallePedido set fechaRecibido = @fechaRecibido,
                                                                              cantidadRecibida = @cantidadRecibida
-                                                    where pedido = @idPedido";
+                                                    where pedido = @idPedido and insumo = @idInsumo";
                 comando.CommandText = consultaCompletarDetalle;
 
                 foreach (var item in concretarPedido.ListaCantidadesRecibidas)
@@ -221,6 +221,7 @@ namespace CanchasGambeta.AccesoBD
                     comando.Parameters.AddWithValue("@fechaRecibido", concretarPedido.FechaRecibido);
                     comando.Parameters.AddWithValue("@cantidadRecibida", item.Cantidad);
                     comando.Parameters.AddWithValue("@idPedido", concretarPedido.IdPedido);
+                    comando.Parameters.AddWithValue("@idInsumo", item.IdInsumo);
                     comando.ExecuteNonQuery();
                 }
 
@@ -249,15 +250,17 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static Pedido obtenerPedidoPorId(int idPedido)
+        public static List<InsumosAPedir> obtenerInsumosDelPedido(int idPedido)
         {
-            Pedido pedido = new Pedido();
+            List<InsumosAPedir> insumosEnElPedido = new List<InsumosAPedir>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
 
             try
             {
-                string consulta = @"select idPedido, proveedor, descripcion, fecha from Pedido where idPedido = @idPedido";
+                string consulta = @"select dp.insumo 'idInsumo', i.insumo, cantidadPedida
+                                    from DetallePedido dp join Insumo i on i.idInsumo = dp.insumo
+                                    where pedido = @idPedido";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idPedido", idPedido);
 
@@ -272,10 +275,11 @@ namespace CanchasGambeta.AccesoBD
                 {
                     while (lector.Read())
                     {
-                        pedido.idPedido = int.Parse(lector["idPedido"].ToString());
-                        pedido.proveedor = int.Parse(lector["proveedor"].ToString());
-                        pedido.fecha = DateTime.Parse(lector["fecha"].ToString());
-                        pedido.descripcion = lector["descripcion"].ToString();
+                        InsumosAPedir insumo = new InsumosAPedir();
+                        insumo.IdInsumo = int.Parse(lector["idInsumo"].ToString());
+                        insumo.Insumo = lector["insumo"].ToString();
+                        insumo.Cantidad = int.Parse(lector["cantidadPedida"].ToString());
+                        insumosEnElPedido.Add(insumo);
                     }
                 }
             }
@@ -287,10 +291,10 @@ namespace CanchasGambeta.AccesoBD
             {
                 conexion.Close();
             }
-            return pedido;
+            return insumosEnElPedido;
         }
 
-        public static bool modificarPedido(Pedido pedido)
+        public static bool modificarPedido(int idPedido, List<InsumosAPedir> insumosAPedir)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -298,19 +302,37 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"update Pedido set descripcion = @descripcion,
-                                                      fecha = getdate()
-                                    where idPedido = @idPedido";
+                string consultaDeleteDetalle = @"delete from DetallePedido where pedido = @idPedido";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@idPedido", pedido.descripcion);
-                comando.Parameters.AddWithValue("@idPedido", pedido.idPedido);
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
 
                 comando.CommandType = System.Data.CommandType.Text;
-                comando.CommandText = consulta;
+                comando.CommandText = consultaDeleteDetalle;
 
                 conexion.Open();
                 comando.Connection = conexion;
                 comando.ExecuteNonQuery();
+
+                string consultaInsertNuevosInsumos = @"insert into DetallePedido (pedido, insumo, cantidadPedida) values (@idPedido, @insumo, @cantidadPedida)";
+                comando.CommandText = consultaInsertNuevosInsumos;
+
+                foreach (var item in insumosAPedir)
+                {
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@idPedido", idPedido);
+                    comando.Parameters.AddWithValue("@insumo", item.IdInsumo);
+                    comando.Parameters.AddWithValue("@cantidadPedida", item.Cantidad);
+                    comando.ExecuteNonQuery();
+                }
+
+                string consultaUpdateDescripcion = @"update Pedido set descripcion = @descripcion where idPedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@descripcion", armarDescripcionPedido(insumosAPedir));
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
+
+                comando.CommandText = consultaUpdateDescripcion;
+                comando.ExecuteNonQuery();
+
                 resultado = true;
             }
             catch (Exception)
@@ -524,6 +546,48 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
+        public static NuevoPedido obtenerPedidoPorId(int idPedido)
+        {
+            NuevoPedido pedido = new NuevoPedido();
+            pedido.InsumosPedido = new List<InsumosAPedir>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select proveedor, descripcion, fecha from Pedido where idPedido = @idPedido";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idPedido", idPedido);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        pedido.IdPedido = idPedido;
+                        pedido.Descripcion = lector["descripcion"].ToString();
+                        pedido.IdProveedor = int.Parse(lector["proveedor"].ToString());
+                        pedido.Fecha = DateTime.Parse(lector["fecha"].ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return pedido;
+        }
+
         public static bool modificarProveedor(Proveedor proveedor)
         {
             bool resultado = false;
@@ -600,7 +664,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static void enviarMailAProveedor(NuevoPedido nuevoPedido, int tipoMensaje, Pedido actualizarPedido, Pedido pedidoEliminado)
+        public static void enviarMailAProveedor(NuevoPedido nuevoPedido, int tipoMensaje, List<InsumosAPedir> listaInsumosActualizados, NuevoPedido pedidoSinModificar, NuevoPedido pedidoEliminado)
         {
             SmtpClient smtpClient = new SmtpClient();
 
@@ -610,25 +674,36 @@ namespace CanchasGambeta.AccesoBD
                 nuevoPedido.IdPedido = obtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha, nuevoPedido.Descripcion);
                 proveedor = obtenerProveedorPorId(nuevoPedido.IdProveedor);
             }
-            if(actualizarPedido != null) proveedor = obtenerProveedorPorId(actualizarPedido.proveedor);
-            if(pedidoEliminado != null) proveedor = obtenerProveedorPorId(pedidoEliminado.proveedor);
+            if(pedidoSinModificar != null) proveedor = obtenerProveedorPorId(pedidoSinModificar.IdProveedor);
+            if(pedidoEliminado != null) proveedor = obtenerProveedorPorId(pedidoEliminado.IdProveedor);
 
             string mensaje = "";
             string titulo = "";
 
             if (tipoMensaje == 1) //Nuevo pedido
             {
-                mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta ha realizado un pedido nuevo:\n N° {nuevoPedido.IdPedido}";
+                mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta ha realizado un pedido nuevo:\n" +
+                          $"Identificador N°{nuevoPedido.IdPedido}\n" +
+                          $"Insumos pedidos:\n" +
+                          $"{nuevoPedido.Descripcion}";
                 titulo = "Nuevo pedido";
             }
             else if (tipoMensaje == 2) //Update Pedido
             {
-                mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta le informa que se han realizado modificaciones en el pedido N°{actualizarPedido.idPedido}";
+                string descripcion = armarDescripcionPedido(listaInsumosActualizados);
+                mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta le informa que se han realizado modificaciones en el pedido N°{pedidoSinModificar.IdPedido}\n" +
+                          $"El pedido antes de modificarse era:\n" +
+                          $"{pedidoSinModificar.Descripcion}\n" +
+                          $"El pedido actualmente es:\n" +
+                          $"{descripcion}";
                 titulo = "Pedido modificado";
             }
             else //Delete pedido
             {
-                mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta le informa que el pedido N° {pedidoEliminado.idPedido} ha sido cancelado.\nGracias por su atención y disculpe las molestias.";
+                mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta le informa que el pedido N°{pedidoEliminado.IdPedido} ha sido cancelado.\n" +
+                          $"El pedido contenia los siguientes items:\n" +
+                          $"{pedidoEliminado.Descripcion}" +
+                          $"Gracias por su atención y disculpe las molestias.";
                 titulo = "Pedido eliminado";
             }
 
@@ -820,6 +895,7 @@ namespace CanchasGambeta.AccesoBD
                 {
                     while (lector.Read())
                     {
+                        detallePedido.IdPedido = idPedido;
                         detallePedido.NombreProveedor = lector["nombreCompleto"].ToString();
                         detallePedido.FechaRealizado = DateTime.Parse(lector["fecha"].ToString());
                         detallePedido.FechaRecibido = DateTime.Parse(lector["fechaRecibido"].ToString());
@@ -856,6 +932,5 @@ namespace CanchasGambeta.AccesoBD
             }
             return detallePedido;
         }
-    }
     }
 }

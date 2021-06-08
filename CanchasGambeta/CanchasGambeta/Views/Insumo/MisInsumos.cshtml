@@ -8,7 +8,10 @@
 <div class="row" style="transform: translateY(60px); color: white">
     <div class="col-md-1"></div>
     <div class="col-md-5">
-        <h3 class="text-center" style="color:white">INSUMOS</h3>
+        <div class="btn-group">
+            <h3 class="text-center" style="color:white">INSUMOS</h3>
+            <button id="btnModificarInsumos" class="btn btn-info ml-3 mb-3" onclick="botones()">Modificar insumos</button>
+        </div>    
         @if (Model.Count() != 0)
         {
             <table class="table table-bordered table-striped">
@@ -57,9 +60,6 @@
             </table>
             <div class="form-label-group text-danger" style="margin-left:10px">
                 @ViewBag.ErrorEliminarInsumo
-            </div>
-            <div>
-                <button id="btnModificarInsumos" class="btn btn-info" onclick="botones()">Modificar insumos</button>
             </div>
         }
         else

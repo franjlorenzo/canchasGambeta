@@ -1,4 +1,4 @@
-﻿@model CanchasGambeta.Models.Pedido
+﻿@model CanchasGambeta.ViewModels.VistaPedirInsumos
 @{
     List<SelectListItem> proveedores = (List<SelectListItem>)ViewBag.proveedores;
     ViewBag.Title = "ModificarPedido";
@@ -7,29 +7,227 @@
 <div class="row" style="transform: translateY(60px); color:white">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        <h3 class="text-center" style="color:white">Modificar pedido Nº @Model.idPedido</h3>
-        @using (Html.BeginForm("ModificarPedido", "Pedido", FormMethod.Post, new { onsubmit = "return validacionModificarPedido();" }))
+        <h4 class="text-center">Modificar pedido Nº @ViewBag.idPedido</h4>
+        @using (Html.BeginForm("BuscarInsumoModificar", "Pedido", FormMethod.Post))
         {
-            @Html.HiddenFor(Model => Model.idPedido)
+            <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
             <div class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-6 control-label">Proveedores</label>
-                    @Html.DropDownList("proveedor", proveedores, "Seleccione un proveedor", htmlAttributes: new { @disabled = "disabled", @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Descripción</label>
-                    @Html.TextAreaFor(Model => Model.descripcion, htmlAttributes: new { @class = "form-control" })
+                <div class="col-md-12 form-group btn-group">
+                    <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
+                    @if (ViewBag.nombreInsumo != null)
+                    {
+                        <input type="text" id="buscarInsumo" name="buscarInsumo" value="@ViewBag.nombreInsumo" class="form-control" />
+                    }
+                    else
+                    {
+                        <input type="text" id="buscarInsumo" name="buscarInsumo" class="form-control" />
+                    }
+                    <button type="submit" class="btn btn-primary ml-2" id="botonBuscar">Buscar</button>
                 </div>
             </div>
-            <button class="btn btn-success" type="submit">Modificar Pedido</button>
-            @Html.ActionLink("Cancelar", "MisPedidos", "Pedido", null, new { @class = "text-center btn btn-warning" })
-            <div class="form-label-group text-danger" style="margin-left:10px">
-                @ViewBag.ErrorModificarPedido
+            <div class="form-label-group text-danger pb-2">
+                @ViewBag.ErrorBuscarInsumo
+            </div>
+            <div style="display:none">
+                @foreach (var item in Model.InsumosAPedir)
+                {
+                    <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
+                    <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly />
+                    <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly />
+                }
             </div>
         }
     </div>
     <div class="col-md-3"></div>
 </div>
 
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <h4 class="text-center">Insumos encontrados</h4>
+        @if (Model.BuscarInsumos.Count != 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                        <th class="text-center">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.BuscarInsumos)
+                    {
+                        using (Html.BeginForm("AgregarInsumosAlPedidoModificar", "Pedido", FormMethod.Post))
+                        {
+                            
+                            <tr>
+                                <td>
+                                    <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
+                                    <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
+                                    <input type="hidden" name="idInsumo" value="@listado.IdInsumo" />
+                                    <input type="text" name="nombreInsumo" class="form-control" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                </td>
+                                <td class="text-center">
+                                    @foreach (var item in Model.InsumosAPedir)
+                                    {
+                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
+                                        <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
+                                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                    }
+                                    <button type="submit" class="btn btn-warning">Agregar</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div class="form-label-group text-danger pb-2">
+                @ViewBag.insumoYaExiste
+            </div>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No existe este insumo
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                @foreach (var listado in Model.InsumosAPedir)
+                {
+                    <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
+                    <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
+                    <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                    <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
+                }
+            </div>
+        }
+    </div>
+    <div class="col-md-5">
+        <h4 class="text-center">Insumos a pedir</h4>
+        @if (Model.InsumosAPedir.Count != 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                        <th class="text-center">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.InsumosAPedir)
+                    {
+                        using (Html.BeginForm("QuitarInsumoModificar", "Pedido", FormMethod.Post))
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
+                                    <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" />
+                                    <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                </td>
+                                <td class="text-center">
+                                    @foreach (var item in Model.InsumosAPedir)
+                                    {
+                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
+                                        <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
+                                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                    }
+                                    <button type="submit" class="btn btn-warning">Quitar</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No hay insumos guardados todavía
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+<hr />
+
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-center">
+        @if (Model.InsumosAPedir.Count != 0)
+        {
+            <h4 class="text-center">Agregar cantidades y finalizar</h4>
+            using (Html.BeginForm("ModificarPedido", "Pedido", FormMethod.Post))
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Insumo
+                            </th>
+                            <th class="text-center">
+                                Cantidad
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var listado in Model.InsumosAPedir)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
+                                    <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
+                                    <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                </td>
+                                <td class="text-center">
+                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" style="width:90px;" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-success">Finalizar</button>
+                <div class="form-label-group text-danger pb-2">
+                    @ViewBag.cantidadIgualCero
+                    @ViewBag.ErrorModificarPedido
+                </div>
+            }
+        }
+    </div>
+    <div class="col-md-3"></div>
+</div>
 <script src="~/Scripts/scriptPedidos.js"></script>
 

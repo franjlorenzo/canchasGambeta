@@ -12,6 +12,7 @@ namespace CanchasGambeta.Controllers
     public class PedidoController : Controller
     {
         // GET: Pedido
+        //-----------------------------------------VER PEDIDOS---------------------------------------------------------
         public ActionResult MisPedidos()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -45,6 +46,7 @@ namespace CanchasGambeta.Controllers
             return View(new VistaMisPedidos { TablaPedido = AccesoBD.AD_Pedido.obtenerTodosLosPedidos(), NuevoPedido = nuevoPedido, NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Pedido.obtenerTodosLosProveedoresTabla(), InsumosAPedir = listaInsumosAPedir });
         }
 
+        //-----------------------------------------INSERT PEDIDO---------------------------------------------------------
         [HttpPost]
         public ActionResult MisPedidos(NuevoPedido nuevoPedido, string idProveedor, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
@@ -59,7 +61,7 @@ namespace CanchasGambeta.Controllers
                 bool resultado = AccesoBD.AD_Pedido.nuevoPedido(nuevoPedido);
                 if (resultado)
                 {
-                    //AccesoBD.AD_Administrador.enviarMailAProveedor(nuevoPedido, 1, null, null);
+                    AccesoBD.AD_Pedido.enviarMailAProveedor(nuevoPedido, 1, null, null, null);
                     return RedirectToAction("MisPedidos", "Pedido");
                 }
                 else
@@ -80,6 +82,7 @@ namespace CanchasGambeta.Controllers
             VistaPedirInsumos vistaPedirInsumos = new VistaPedirInsumos();
             vistaPedirInsumos.BuscarInsumos = new List<BuscarInsumos>();
             vistaPedirInsumos.InsumosAPedir = new List<InsumosAPedir>();
+
             if (TempData["buscarInsumos"] != null) vistaPedirInsumos.BuscarInsumos = (List<BuscarInsumos>)TempData["buscarInsumos"];
             if (TempData["listaInsumosAPedir"] != null) vistaPedirInsumos.InsumosAPedir = (List<InsumosAPedir>)TempData["listaInsumosAPedir"];
             if (TempData["ErrorBuscarInsumo"] != null) ViewBag.ErrorBuscarInsumo = TempData["ErrorBuscarInsumo"].ToString();
@@ -200,6 +203,7 @@ namespace CanchasGambeta.Controllers
             return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]), InsumosAPedir = listaInsumosAPedir });
         }
 
+        //-----------------------------------------CONCRETAR PEDIDO---------------------------------------------------------
         public ActionResult ConcretarPedido(int idPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -231,82 +235,149 @@ namespace CanchasGambeta.Controllers
             return View();
         }
 
-        public ActionResult ModificarPedido(int idPedido)
+        //-----------------------------------------MODIFICAR PEDIDO---------------------------------------------------------
+        public ActionResult ModificarPedido([Optional]int idPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            List<Proveedor> proveedores = AccesoBD.AD_Pedido.obtenerTodosLosProveedores();
-            List<SelectListItem> listaProveedores = proveedores.ConvertAll(d =>
-            {
-                return new SelectListItem()
-                {
-                    Text = d.nombreCompleto + " - (" + d.empresa + ")",
-                    Value = d.idProveedor.ToString(),
-                    Selected = false
-                };
-            });
+            VistaPedirInsumos modificarPedido = new VistaPedirInsumos();
+            modificarPedido.BuscarInsumos = new List<BuscarInsumos>();
+            if(idPedido != 0) modificarPedido.InsumosAPedir = AccesoBD.AD_Pedido.obtenerInsumosDelPedido(idPedido);
 
-            ViewBag.proveedores = listaProveedores;
-            Pedido pedido = AccesoBD.AD_Pedido.obtenerPedidoPorId(idPedido);
+            if (TempData["buscarInsumos"] != null) modificarPedido.BuscarInsumos = (List<BuscarInsumos>)TempData["buscarInsumos"];
+            if (TempData["listaInsumosAPedir"] != null) modificarPedido.InsumosAPedir = (List<InsumosAPedir>)TempData["listaInsumosAPedir"];
+            if (TempData["ErrorBuscarInsumo"] != null) ViewBag.ErrorBuscarInsumo = TempData["ErrorBuscarInsumo"].ToString();
+            if (TempData["nombreInsumo"] != null) ViewBag.nombreInsumo = TempData["nombreInsumo"].ToString();
+            if (TempData["insumoYaExiste"] != null) ViewBag.insumoYaExiste = TempData["insumoYaExiste"].ToString();
+            if (TempData["nombreInsumoAnterior"] != null) ViewBag.nombreInsumo = TempData["nombreInsumoAnterior"].ToString();
+            if (TempData["ErrorModificarPedido"] != null) ViewBag.ErrorModificarPedido = TempData["ErrorModificarPedido"].ToString();
+            ViewBag.idPedido = idPedido;
 
-            foreach (var item in listaProveedores)
-            {
-                if (item.Value.Equals(pedido.proveedor.ToString()))
-                {
-                    item.Selected = true;
-                    break;
-                }
-            }
-            return View(pedido);
+            return View(modificarPedido);
         }
 
         [HttpPost]
-        public ActionResult ModificarPedido(Pedido pedidoModificado)
+        public ActionResult BuscarInsumoModificar(string buscarInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
+            if (buscarInsumo == "" || buscarInsumo == " ") buscarInsumo = null;
+            List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
+            if (listaCantidadInsumoAlPedido != null && listaIdInsumoAlPedido != null && listaNombreInsumoAlPedido != null) //Verifico si ya existe una lista en la vista y si es así, la armo con los datos existentes
+            {
+                listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
+            }
+
+            if (buscarInsumo != null)
+            {
+                TempData["nombreInsumo"] = buscarInsumo;
+                TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(buscarInsumo);
+                TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
+            }
+            if (Request["nombreInsumoAnterior"] == "")
+            {
+                TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
+                return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
+            }
+            else
+            {
+                TempData["nombreInsumoAnterior"] = Request["nombreInsumoAnterior"];
+                TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
+                TempData["buscarInsumos"] = null;
+                return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult QuitarInsumoModificar(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0);
+            List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
+
+            if (listaInsumosAPedir.Exists(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo))
+            {
+                var insumoAEliminar = listaInsumosAPedir.Single(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo);
+                listaInsumosAPedir.Remove(insumoAEliminar);
+            }
+
+            TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+            return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
+        }
+
+        [HttpPost]
+        public ActionResult AgregarInsumosAlPedidoModificar(int idInsumo, string nombreInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0); //creo un nuevo insumo a agregar a la lista de InsumosAPedir
+            List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>(); //creo una lista de los insumos a pedir
+            if (listaCantidadInsumoAlPedido != null && listaIdInsumoAlPedido != null && listaNombreInsumoAlPedido != null) //Verifico si ya existe una lista en la vista y si es así, la armo con los datos existentes
+            {
+                listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
+            }
+
+            bool existeInsumoEnLista = false;
+            if (listaInsumosAPedir.Count != 0)
+            {
+                //Recorro la lista de insumos y verifico si el nuevo insumo ya existe en la misma
+                foreach (var lista in listaInsumosAPedir) if (lista.IdInsumo == nuevoInsumo.IdInsumo) existeInsumoEnLista = true;
+
+                if (existeInsumoEnLista) //Si el insumo existe en la lista, no lo agrego a la misma y muestro un mensaje
+                {
+                    TempData["insumoYaExiste"] = "Este insumo ya está en la lista para pedir";
+                    TempData["nombreInsumoAnterior"] = Request["buscarInsumoAnterior"];
+                    TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+                    TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                    return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
+                }
+            }
+
+            //Si el insumo no existe en la lista o la lista está vacia se agrega el insumo a la lista
+            listaInsumosAPedir.Add(nuevoInsumo);
+            TempData["nombreInsumoAnterior"] = Request["buscarInsumoAnterior"];
+            TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+            TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+            return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
+        }
+
+        [HttpPost]
+        public ActionResult ModificarPedido(int idPedido, List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
+            NuevoPedido pedidoSinModificar = AccesoBD.AD_Pedido.obtenerPedidoPorId(idPedido);
+
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Pedido.modificarPedido(pedidoModificado);
+                bool resultado = AccesoBD.AD_Pedido.modificarPedido(idPedido, listaInsumosAPedir);
                 if (resultado)
                 {
-                    //AccesoBD.AD_Administrador.enviarMailAProveedor(null, 2, pedidoModificado, null);
+                    AccesoBD.AD_Pedido.enviarMailAProveedor(null, 2, listaInsumosAPedir, pedidoSinModificar, null);
                     return RedirectToAction("MisPedidos", "Pedido");
                 }
                 else
                 {
-                    ViewBag.ErrorModificarPedido = "Error al modificar el pedido, inténtelo nuevamente.";
-                    List<Proveedor> proveedores = AccesoBD.AD_Pedido.obtenerTodosLosProveedores();
-                    List<SelectListItem> listaProveedores = proveedores.ConvertAll(d =>
-                    {
-                        return new SelectListItem()
-                        {
-                            Text = d.nombreCompleto + " - (" + d.empresa + ")",
-                            Value = d.idProveedor.ToString(),
-                            Selected = false
-                        };
-                    });
+                    TempData["ErrorModificarPedido"] = "Error al modificar el pedido, inténtelo nuevamente.";
+                    TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                    TempData["buscarInsumos"] = null;
 
-                    ViewBag.proveedores = listaProveedores;
-                    Pedido pedido = AccesoBD.AD_Pedido.obtenerPedidoPorId(pedidoModificado.idPedido);
-
-                    foreach (var item in listaProveedores)
-                    {
-                        if (item.Value.Equals(pedido.proveedor.ToString()))
-                        {
-                            item.Selected = true;
-                            break;
-                        }
-                    }
-                    return View(pedido);
+                    return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
                 }
             }
 
-            return View(pedidoModificado);
+            return View();
         }
 
+        //-----------------------------------------ELIMINAR PEDIDO---------------------------------------------------------
         [HttpPost]
         public ActionResult EliminarPedido()
         {
@@ -314,12 +385,12 @@ namespace CanchasGambeta.Controllers
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             int idPedido = int.Parse(Request["listado.IdPedido"]);
-            Pedido datosPedido = AccesoBD.AD_Pedido.obtenerPedidoPorId(idPedido);
+            NuevoPedido datosPedido = AccesoBD.AD_Pedido.obtenerPedidoPorId(idPedido);
 
             bool resultado = AccesoBD.AD_Pedido.eliminarPedido(idPedido);
             if (resultado)
             {
-                //AccesoBD.AD_Administrador.enviarMailAProveedor(null, 3, null, datosPedido);
+                AccesoBD.AD_Pedido.enviarMailAProveedor(null, 3, null, null, datosPedido);
                 return RedirectToAction("MisPedidos", "Pedido");
             }
             else
@@ -329,6 +400,17 @@ namespace CanchasGambeta.Controllers
             }
         }
 
+        //-----------------------------------------DETALLE PEDIDO---------------------------------------------------------
+        public ActionResult VerDetallePedido(int idPedido)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            DetallePedidoConcretado detallePedido = AccesoBD.AD_Pedido.obtenerDetallePedidoPorId(idPedido);
+            return View(detallePedido);
+        }
+
+        //-----------------------------------------ABM PROVEEDOR---------------------------------------------------------
         [HttpPost]
         public ActionResult NuevoProveedor(NuevoProveedor nuevoProveedor)
         {
@@ -402,13 +484,6 @@ namespace CanchasGambeta.Controllers
             }
         }
 
-        public ActionResult VerDetallePedido(int idPedido)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            DetallePedidoConcretado detallePedido = AccesoBD.AD_Pedido.obtenerDetallePedidoPorId(idPedido);
-            return View(detallePedido);
-        }
+        
     }
 }

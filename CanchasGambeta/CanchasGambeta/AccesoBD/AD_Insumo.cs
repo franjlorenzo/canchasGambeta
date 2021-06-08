@@ -21,7 +21,8 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consulta = @"select idInsumo, insumo, precio, stock
                                     from Insumo
-                                    where estado = 1";
+                                    where estado = 1
+                                    order by 4 asc";
                 comando.Parameters.Clear();
 
                 comando.CommandType = System.Data.CommandType.Text;

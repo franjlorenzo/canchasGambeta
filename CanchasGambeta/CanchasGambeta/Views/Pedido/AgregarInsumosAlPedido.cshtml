@@ -7,7 +7,7 @@
     <div class="col-md-3"></div>
     <div class="col-md-6">
         <h4 class="text-center">Insumos a pedir</h4>
-        @using (Html.BeginForm("BuscarInsumo", "Pedido", FormMethod.Post, new { onsubmit = "" }))
+        @using (Html.BeginForm("BuscarInsumo", "Pedido", FormMethod.Post))
         {
             <div class="form-horizontal">
                 <div class="col-md-12 form-group btn-group">
@@ -59,7 +59,7 @@
                     <tbody>
                         @foreach (var listado in Model.BuscarInsumos)
                         {
-                            using (Html.BeginForm("AgregarInsumosAlPedido", "Pedido", FormMethod.Post, new { onsubmit = "" }))
+                            using (Html.BeginForm("AgregarInsumosAlPedido", "Pedido", FormMethod.Post))
                             {
                                 <tr>
                                     <td>
@@ -132,16 +132,13 @@
                 <tbody>
                     @foreach (var listado in Model.InsumosAPedir)
                     {
-                        using (Html.BeginForm("QuitarInsumo", "Pedido", FormMethod.Post, new { @id = "QuitarInsumo" }))
+                        using (Html.BeginForm("QuitarInsumo", "Pedido", FormMethod.Post))
                         {
                             <tr>
                                 <td class="text-center">
                                     <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" />
                                     <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                                 </td>
-                                <!--<td class="text-center">
-                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" placeholder="listado.Cantidad" style="width:90px;" />
-                                </td>-->
                                 <td class="text-center">
                                     @foreach (var item in Model.InsumosAPedir)
                                     {
@@ -179,14 +176,16 @@
     </div>
     <div class="col-md-1"></div>
 </div>
+
 <hr />
+
 <div class="row" style="transform: translateY(60px); color: white">
     <div class="col-md-3"></div>
     <div class="col-md-6 text-center">
         @if (Model.InsumosAPedir.Count != 0)
         {
             <h4 class="text-center">Agregar cantidades y finalizar</h4>
-            using (Html.BeginForm("AgregarInsumos", "Pedido", FormMethod.Post, new { @id = "AgregarInsumos" }))
+            using (Html.BeginForm("AgregarInsumos", "Pedido", FormMethod.Post))
             {
                 <table class="table table-bordered table-striped">
                     <thead>

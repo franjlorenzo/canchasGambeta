@@ -1,0 +1,83 @@
+﻿@model CanchasGambeta.ViewModels.DetallePedidoConcretado
+@{
+    ViewBag.Title = "VerDetallePedido";
+}
+
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <h4>Detalles del pedido N° @Model.IdPedido</h4>
+        <hr />
+        <table class="table">
+            <tr>
+                <th class="text-center">
+                    Proveedor
+                </th>
+                <td>
+                    @Model.NombreProveedor
+                </td>
+            </tr>
+            <tr>
+                <th class="text-center">
+                    Realizado el
+                </th>
+                <td>
+                    @{
+                        string fechaRealizado = Model.FechaRealizado.ToString();
+                        string[] fechaSplit = fechaRealizado.Split(' ');
+                    } 
+                    @fechaSplit[0]
+                </td>
+            </tr>
+            <tr>
+                <th class="text-center">
+                    Recibido el
+                </th>
+                <td>
+                    @{
+                        string fechaRecibido = Model.FechaRecibido.ToString();
+                        string[] fechaSplit2 = fechaRecibido.Split(' ');
+                    }
+                    @fechaSplit2[0]
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-5">
+        <h4>Insumos pedidos</h4>
+        <hr />
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        Insumo
+                    </th>
+                    <th class="text-center">
+                        Cantidad pedida
+                    </th>
+                    <th class="text-center">
+                        Cantidad recibida
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ListaInsumosPedidosrecibidos)
+                {
+                    <tr>
+                        <th class="text-center">
+                            @item.Insumo
+                        </th>
+                        <th class="text-center">
+                            @item.CantidadPedida
+                        </th>
+                        <th class="text-center">
+                            @item.CantidadRecibida
+                        </th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+

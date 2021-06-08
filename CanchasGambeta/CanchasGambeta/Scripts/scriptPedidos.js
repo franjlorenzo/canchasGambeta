@@ -102,3 +102,31 @@ function confirmacionEliminarPedido() {
     if (eliminar) return true;
     return false;
 }
+
+function validacionConcretarPedido() {
+
+    let inputs = document.getElementsByName('cantidadRecibida');
+    let cantidades = [];
+    let hayInsumoIgualCero = false;
+
+
+    for (var i = 0; i < inputs.length; i++) {
+        let valor = inputs[i].value;
+        cantidades.push(valor);
+    }
+
+    for (var i = 0; i < cantidades.length; i++) {
+        if (cantidades[i] == "") {
+            hayInsumoIgualCero = true;
+            break;
+        }
+    }
+
+    if (hayInsumoIgualCero) {
+        let confirmarConcretar = confirm("Algunas cantidades son iguales a cero(0). ¿Está seguro de que quiere concretar el pedido?")
+        if (confirmarConcretar) return true;
+        return false;
+    }
+    
+    return true;
+}

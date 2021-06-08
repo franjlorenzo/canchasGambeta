@@ -69,7 +69,7 @@
     </div>
     <div class="col-md-5">
         <h5 class="text-center">Complete los siguinetes campos</h5>
-        @using (Html.BeginForm("ConcretarPedido", "Pedido", FormMethod.Post))
+        @using (Html.BeginForm("ConcretarPedido", "Pedido", FormMethod.Post, new { onsubmit = "return validacionConcretarPedido();", @name = "concretarPedido" }))
         {
             <input type="hidden" name="idPedido" value="@Model.IdPedido" />
             <div class="form-horizontal">
@@ -97,7 +97,7 @@
                                 <input type="hidden" name="idInsumo" value="@item.IdInsumo"/>
                                 <input type="text" name="nombreInsumo" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly />
                             </td>
-                            <td class="text-center">
+                            <td class="text-center cantidadRecibida">
                                 <input type="number" name="cantidadRecibida" class="form-control" min="0" placeholder="@item.Cantidad" />
                             </td>
                         </tr>
@@ -110,5 +110,7 @@
     </div>
     <div class="col-md-1"></div>
 </div>
+
+<script src="~/Scripts/scriptPedidos.js"></script>
 
 
