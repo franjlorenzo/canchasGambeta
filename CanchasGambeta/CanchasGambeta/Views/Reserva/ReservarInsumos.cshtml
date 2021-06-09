@@ -1,14 +1,16 @@
-﻿@model CanchasGambeta.ViewModels.VistaPedirInsumos
+﻿@model CanchasGambeta.ViewModels.VistaReservarInsumos
 @{
-    ViewBag.Title = "AgregarInsumosAlPedido";
+    ViewBag.Title = "ReservarInsumos";
 }
 
 <div class="row" style="transform: translateY(60px); color: white">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        <h4 class="text-center">Insumos a pedir</h4>
-        @using (Html.BeginForm("BuscarInsumo", "Pedido", FormMethod.Post))
+        <h4 class="text-center">Reserva registrada con exito! ¿Desea reservar algún insumo del kiosko?</h4>
+        @using (Html.BeginForm("BuscarInsumo", "Reserva", FormMethod.Post))
         {
+            @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
+            @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
             <div class="form-horizontal">
                 <div class="col-md-12 form-group btn-group">
                     <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
@@ -43,79 +45,83 @@
     <div class="col-md-1"></div>
     <div class="col-md-5">
         <h4 class="text-center">Insumos encontrados</h4>
-            @if (Model.BuscarInsumos.Count != 0)
-            {
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                Insumo
-                            </th>
-                            <th class="text-center">
-                                Acciones
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var listado in Model.BuscarInsumos)
-                        {
-                            using (Html.BeginForm("AgregarInsumosAlPedido", "Pedido", FormMethod.Post))
-                            {
-                                <tr>
-                                    <td>
-                                        <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
-                                        <input type="hidden" name="idInsumo" value="@listado.IdInsumo" />
-                                        <input type="text" name="nombreInsumo" class="form-control" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
-                                    </td>
-                                    <td class="text-center">
-                                        @foreach (var item in Model.InsumosAPedir)
-                                        {
-                                            <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo"/>
-                                            <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
-                                            <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
-                                        }
-                                        <button type="submit" class="btn btn-warning">Agregar</button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-                <div class="form-label-group text-danger pb-2">
-                    @ViewBag.insumoYaExiste
-                </div>
-            }
-            else
-            {
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                Insumo
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center">
-                                No existe este insumo
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div>
-                    @foreach (var listado in Model.InsumosAPedir)
+        @if (Model.BuscarInsumos.Count != 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                        <th class="text-center">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.BuscarInsumos)
                     {
-                        <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
-                        <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
-                        <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
+                        using (Html.BeginForm("AgregarInsumos", "Reserva", FormMethod.Post))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
+                                    @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
+                                    <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
+                                    <input type="hidden" name="idInsumo" value="@listado.IdInsumo" />
+                                    <input type="text" name="nombreInsumo" class="form-control" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                </td>
+                                <td class="text-center">
+                                    @foreach (var item in Model.InsumosAPedir)
+                                    {
+                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
+                                        <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
+                                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                    }
+                                    <button type="submit" class="btn btn-warning">Agregar</button>
+                                </td>
+                            </tr>
+                        }
                     }
-                </div>
-            }
+                </tbody>
+            </table>
+            <div class="form-label-group text-danger pb-2">
+                @ViewBag.insumoYaExiste
+            </div>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Insumo
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No existe este insumo
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                @foreach (var listado in Model.InsumosAPedir)
+                {
+                    @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
+                    @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
+                    <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
+                    <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                    <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
+                }
+            </div>
+        }
     </div>
 
     <div class="col-md-5">
-        <h4 class="text-center">Insumos a pedir</h4>
+        <h4 class="text-center">Insumos a reservar</h4>
         @if (Model.InsumosAPedir.Count != 0)
         {
             <table class="table table-bordered table-striped">
@@ -132,10 +138,12 @@
                 <tbody>
                     @foreach (var listado in Model.InsumosAPedir)
                     {
-                        using (Html.BeginForm("QuitarInsumo", "Pedido", FormMethod.Post))
+                        using (Html.BeginForm("QuitarInsumo", "Reserva", FormMethod.Post))
                         {
                             <tr>
                                 <td class="text-center">
+                                    @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
+                                    @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
                                     <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
                                     <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" />
                                     <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
@@ -186,7 +194,7 @@
         @if (Model.InsumosAPedir.Count != 0)
         {
             <h4 class="text-center">Agregar cantidades y finalizar</h4>
-            using (Html.BeginForm("AgregarInsumos", "Pedido", FormMethod.Post))
+            using (Html.BeginForm("AgregarInsumosAReserva", "Reserva", FormMethod.Post))
             {
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -204,25 +212,29 @@
                         {
                             <tr>
                                 <td class="text-center">
+                                    @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
+                                    @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
                                     <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
                                     <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                                 </td>
                                 <td class="text-center">
-                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" style="width:90px;" />
+                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" max="5" style="width:90px;" />
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-                <button type="submit" class="btn btn-success">Finalizar</button>
                 <div class="form-label-group text-danger pb-2">
                     @ViewBag.cantidadIgualCero
                 </div>
+                <button type="submit" class="btn btn-success">Finalizar</button>
+                <div class="form-label-group text-danger pb-2">
+                    @ViewBag.errorRegistrarInsumos
+                </div>
             }
         }
+        @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
     </div>
     <div class="col-md-3"></div>
 </div>
-
-<script src="~/Scripts/scriptAgregarInsumosAlPedido.js"></script>
 

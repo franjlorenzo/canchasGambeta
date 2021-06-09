@@ -224,9 +224,8 @@ namespace CanchasGambeta.AccesoBD
             return idReserva;
         }
 
-        public static bool insertReservaInsumo(NuevaReservaVM reservaVM, List<int> insumosSeleccionados)
+        public static bool insertReservaInsumo(NuevaReservaVM reservaVM, List<InsumosAPedir> insumosSeleccionados)
         {
-            bool updateStock = false;
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
@@ -239,29 +238,27 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Open();
                 comando.Connection = conexion;
 
-                for (int i = 0; i < insumosSeleccionados.Count; i++)
+                foreach (var lista in insumosSeleccionados)
                 {
-                    if (insumosSeleccionados[i] != 0) { updateStock = true; }
                     comando.Parameters.Clear();
                     comando.Parameters.AddWithValue("@idReserva", reservaVM.idReserva);
-                    comando.Parameters.AddWithValue("@insumo", reservaVM.ListaInsumos[i].idInsumo);
-                    comando.Parameters.AddWithValue("@cantidad", insumosSeleccionados[i]);
+                    comando.Parameters.AddWithValue("@insumo", lista.IdInsumo);
+                    comando.Parameters.AddWithValue("@cantidad", lista.Cantidad);
                     comando.ExecuteNonQuery();
                 }
 
-                if (updateStock)
-                {
-                    string consultaUpdateStock = @"update Insumo set stock = stock - @cantidad
+                string consultaUpdateStock = @"update Insumo set stock = stock - @cantidad
                                                    where idInsumo = @idInsumo";
-                    comando.CommandText = consultaUpdateStock;
-                    for (int i = 0; i < insumosSeleccionados.Count; i++)
-                    {
-                        comando.Parameters.Clear();
-                        comando.Parameters.AddWithValue("@cantidad", insumosSeleccionados[i]);
-                        comando.Parameters.AddWithValue("@idInsumo", reservaVM.ListaInsumos[i].idInsumo);
-                        comando.ExecuteNonQuery();
-                    }
+                comando.CommandText = consultaUpdateStock;
+
+                foreach (var lista in insumosSeleccionados)
+                {
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@cantidad", lista.Cantidad);
+                    comando.Parameters.AddWithValue("@idInsumo", lista.IdInsumo);
+                    comando.ExecuteNonQuery();
                 }
+
                 resultado = true;
             }
             catch (Exception)
@@ -809,6 +806,22 @@ namespace CanchasGambeta.AccesoBD
             {
                 smtpClient.Send("canchasgambeta@gmail.com", lista.Email, titulo, mensaje);
             }
+        }
+
+        public static List<InsumosAPedir> armarListaInsumosSeleccionados(List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo)
+        {
+            List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
+
+            for (int i = 0; i < listaIdInsumo.Count; i++)
+            {
+                InsumosAPedir insumo = new InsumosAPedir();
+                insumo.IdInsumo = listaIdInsumo[i];
+                insumo.Insumo = listaNombreInsumo[i];
+                insumo.Cantidad = cantidadInsumo[i];
+                listaInsumosAPedir.Add(insumo);
+            }
+
+            return listaInsumosAPedir;
         }
     }
 }

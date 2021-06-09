@@ -113,16 +113,18 @@ namespace CanchasGambeta.Controllers
                 TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                 return RedirectToAction("AgregarInsumosAlPedido");
             }
-            if (Request["nombreInsumoAnterior"] == "")
+            if (Request["buscarInsumoAnterior"] == "")
             {
                 TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
+                TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                 return RedirectToAction("AgregarInsumosAlPedido");
             }
             else
             {
-                TempData["nombreInsumoAnterior"] = Request["nombreInsumoAnterior"];
+                TempData["nombreInsumoAnterior"] = Request["buscarInsumoAnterior"];
+                TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
                 TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
-                TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["nombreInsumoAnterior"]);
+                TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                 return RedirectToAction("AgregarInsumosAlPedido");
             }
         }
@@ -164,6 +166,8 @@ namespace CanchasGambeta.Controllers
                 listaInsumosAPedir.Remove(insumoAEliminar);
             }
 
+            TempData["nombreInsumo"] = Request["buscarInsumoAnterior"];
+            TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
             TempData["listaInsumosAPedir"] = listaInsumosAPedir;
             return RedirectToAction("AgregarInsumosAlPedido");
 

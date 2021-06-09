@@ -13,6 +13,9 @@
         <h3 class="text-center" style="color:white">Mis reservas</h3>
         @if (Model.TablaReservaVM.Count() != 0)
         {
+            <div class="form-label-group text-success" style="margin-left:10px">
+                @ViewBag.reservaInsumoExitoso
+            </div>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -166,47 +169,12 @@
                                     @Html.CheckBoxFor(Model => Model.NuevaReservaVM.enviarMails)
                                 </div>
                             </div>
-                        }
-                        <table class="table table-bordered table-striped" id="tablaInsumos" style="display:none">
-                            <tbody>
-                                @foreach (var insumo in Model.NuevaReservaVM.ListaInsumos)
-                                {
-                                    if (insumo.stock > 5)
-                                    {
-                                        <tr class="text-center">
-                                            <td>
-                                                @Html.HiddenFor(Model => insumo.idInsumo)
-                                                @insumo.insumo1 ($@insumo.precio)
-                                            </td>
-                                            <td class="text-center">
-                                                <input type="number" name="cantidad" class="txtCantInsumo" max="5" min="0" placeholder="0" style="width:70px;" />
-                                            </td>
-                                        </tr>
-                                    }
-                                    else
-                                    {
-                                        <tr class="text-center">
-                                            <td>
-                                                @Html.HiddenFor(Model => insumo.idInsumo)
-                                                @insumo.insumo1 ($@insumo.precio)
-                                            </td>
-                                            <td class="text-center">
-                                                <bold>No disponible en este momento</bold>
-                                                <input hidden type="number" name="cantidad" class="txtCantInsumo" max="0" min="0" placeholder="0" style="width:70px;" />
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-
+                        }                        
                         <div class="form-group text-center">
                             <div class="col-xs-12">
-                                <button type="button" id="btnAccionesReserva" class="btn btn-primary" onclick="botonInsumos()">Agregar insumos</button>
                                 <button class="btn btn-success" type="submit">Registrar reserva</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

@@ -333,6 +333,7 @@
     <Content Include="Views\Pedido\AgregarInsumosAlPedido.cshtml" />
     <Content Include="Views\Pedido\ConcretarPedido.cshtml" />
     <Content Include="Views\Pedido\VerDetallePedido.cshtml" />
+    <Content Include="Views\Reserva\ReservarInsumos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

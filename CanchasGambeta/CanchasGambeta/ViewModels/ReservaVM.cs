@@ -73,7 +73,7 @@ namespace CanchasGambeta.ViewModels
         public bool servicioInstrumento { get; set; }
         public bool enviarMails { get; set; }
 
-        public List<Insumo> listaInsumos = AccesoBD.AD_Insumo.obtenerInsumos();
+        public List<Insumo> listaInsumos;
         public List<Insumo> ListaInsumos { get => listaInsumos; set => listaInsumos = value; }
 
         public List<SelectListItem> Canchas { get; set; }
@@ -84,6 +84,12 @@ namespace CanchasGambeta.ViewModels
             this.Canchas = new List<SelectListItem>();
             this.Horarios = new List<SelectListItem>();
             this.fecha = new DateTime();
+        }
+
+        public NuevaReservaVM(int idReserva, bool enviarMails)
+        {
+            this.idReserva = idReserva;
+            this.enviarMails = enviarMails;
         }
     }
 
@@ -102,5 +108,12 @@ namespace CanchasGambeta.ViewModels
     {
         public List<TablaReservaVM> TablaReservaVM { get; set; }
         public NuevaReservaVM NuevaReservaVM { get; set; }
+    }
+
+    public class VistaReservarInsumos
+    {
+        public NuevaReservaVM NuevaReservaVM { get; set; }
+        public List<BuscarInsumos> BuscarInsumos { get; set; }
+        public List<InsumosAPedir> InsumosAPedir { get; set; }
     }
 }

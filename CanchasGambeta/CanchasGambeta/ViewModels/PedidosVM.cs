@@ -79,10 +79,12 @@ namespace CanchasGambeta.ViewModels
         private int idInsumo;
         private string insumo;
         private int cantidad;
+        private int stock;
 
         public int IdInsumo { get => idInsumo; set => idInsumo = value; }
         public string Insumo { get => insumo; set => insumo = value; }
         public int Cantidad { get => cantidad; set => cantidad = value; }
+        public int Stock { get => stock; set => stock = value; }
     }
 
     public class InsumosAPedir
@@ -90,10 +92,12 @@ namespace CanchasGambeta.ViewModels
         private int idInsumo;
         private string insumo;
         private int cantidad;
+        private int stock;
 
         public int IdInsumo { get => idInsumo; set => idInsumo = value; }
         public string Insumo { get => insumo; set => insumo = value; }
         public int Cantidad { get => cantidad; set => cantidad = value; }
+        public int Stock { get => stock; set => stock = value; }
 
         public InsumosAPedir(int idInsumo, string insumo, int cantidad)
         {

@@ -210,7 +210,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idInsumo, insumo from Insumo where insumo like @nombreInsumo and estado = 1";
+                string consulta = @"select idInsumo, insumo, stock from Insumo where insumo like @nombreInsumo and estado = 1";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@nombreInsumo", "%" + nombreInsumo + "%");
 
@@ -228,6 +228,7 @@ namespace CanchasGambeta.AccesoBD
                         BuscarInsumos insumo = new BuscarInsumos();
                         insumo.IdInsumo = int.Parse(lector["idInsumo"].ToString());
                         insumo.Insumo = lector["insumo"].ToString();
+                        insumo.Stock = int.Parse(lector["stock"].ToString());
                         listaInsumosEncontrados.Add(insumo);
                     }
                 }
