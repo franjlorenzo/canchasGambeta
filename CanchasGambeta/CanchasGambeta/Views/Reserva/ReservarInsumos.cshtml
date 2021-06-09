@@ -6,7 +6,7 @@
 <div class="row" style="transform: translateY(60px); color: white">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        <h4 class="text-center">Reserva registrada con exito! ¿Desea reservar algún insumo del kiosko?</h4>
+        <h4 class="text-center">¿Desea reservar algún insumo del kiosko?</h4>
         @using (Html.BeginForm("BuscarInsumo", "Reserva", FormMethod.Post))
         {
             @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
@@ -78,7 +78,15 @@
                                         <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
                                         <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
                                     }
-                                    <button type="submit" class="btn btn-warning">Agregar</button>
+                                    @if (listado.Stock >= 5)
+                                    {
+                                        <button type="submit" class="btn btn-warning">Agregar</button>
+                                    }
+                                    else
+                                    {
+                                        <bold>Sin stock momentaneamente</bold>
+                                    }
+
                                 </td>
                             </tr>
                         }

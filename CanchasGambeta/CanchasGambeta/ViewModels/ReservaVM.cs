@@ -19,6 +19,7 @@ namespace CanchasGambeta.ViewModels
         private bool servicioAsador;
         private bool servicioInstrumento;
         private bool estado;
+        private List<Insumo> listaInsumosEnReserva;
 
         public int IdReserva { get => idReserva; set => idReserva = value; }
         public int IdHorario { get => idHorario; set => idHorario = value; }
@@ -29,6 +30,7 @@ namespace CanchasGambeta.ViewModels
         public bool ServicioInstrumento { get => servicioInstrumento; set => servicioInstrumento = value; }
         public DateTime? Fecha { get => fecha; set => fecha = value; }
         public bool Estado { get => estado; set => estado = value; }
+        public List<Insumo> ListaInsumosEnReserva { get => listaInsumosEnReserva; set => listaInsumosEnReserva = value; }
     }
 
     public class ActualizarReservaVM
@@ -41,7 +43,7 @@ namespace CanchasGambeta.ViewModels
         private bool servicioAsador;
         private bool servicioInstrumento;
         private bool enviarMails;
-        private List<Insumo> listaInsumosEnLaReserva;
+        private List<InsumosAPedir> listaInsumosEnLaReserva;
         public List<SelectListItem> Canchas { get; set; }
         public List<SelectListItem> Horarios { get; set; }
 
@@ -52,13 +54,19 @@ namespace CanchasGambeta.ViewModels
             this.fecha = new DateTime();
         }
 
+        public ActualizarReservaVM(int idReserva, List<InsumosAPedir> listaInsumosEnLaReserva)
+        {
+            this.idReserva = idReserva;
+            this.ListaInsumosEnLaReserva = listaInsumosEnLaReserva;
+        }
+
         public int IdReserva { get => idReserva; set => idReserva = value; }
         public int IdCancha { get => idCancha; set => idCancha = value; }
         public int IdHorario { get => idHorario; set => idHorario = value; }
         public DateTime Fecha { get => fecha; set => fecha = value; }
         public bool ServicioAsador { get => servicioAsador; set => servicioAsador = value; }
         public bool ServicioInstrumento { get => servicioInstrumento; set => servicioInstrumento = value; }
-        public List<Insumo> ListaInsumosEnLaReserva { get => listaInsumosEnLaReserva; set => listaInsumosEnLaReserva = value; }
+        public List<InsumosAPedir> ListaInsumosEnLaReserva { get => listaInsumosEnLaReserva; set => listaInsumosEnLaReserva = value; }
         public bool EnviarMails { get => enviarMails; set => enviarMails = value; }
         public string Horario { get => horario; set => horario = value; }
     }
@@ -113,6 +121,12 @@ namespace CanchasGambeta.ViewModels
     public class VistaReservarInsumos
     {
         public NuevaReservaVM NuevaReservaVM { get; set; }
+        public List<BuscarInsumos> BuscarInsumos { get; set; }
+        public List<InsumosAPedir> InsumosAPedir { get; set; }
+    }
+
+    public class VistaModificarInsumosReserva
+    {
         public List<BuscarInsumos> BuscarInsumos { get; set; }
         public List<InsumosAPedir> InsumosAPedir { get; set; }
     }

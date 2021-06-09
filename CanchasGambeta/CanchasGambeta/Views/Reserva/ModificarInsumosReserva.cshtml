@@ -1,16 +1,15 @@
-﻿@model CanchasGambeta.ViewModels.VistaPedirInsumos
+﻿@model CanchasGambeta.ViewModels.VistaModificarInsumosReserva
 @{
-    List<SelectListItem> proveedores = (List<SelectListItem>)ViewBag.proveedores;
-    ViewBag.Title = "ModificarPedido";
+    ViewBag.Title = "ModificarInsumosReserva";
 }
 
 <div class="row" style="transform: translateY(60px); color:white">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        <h4 class="text-center">Modificar pedido Nº @ViewBag.idPedido</h4>
-        @using (Html.BeginForm("BuscarInsumoModificar", "Pedido", FormMethod.Post))
+        <h4 class="text-center">Modificar insumos seleccionados de la reserva Nº @ViewBag.idReserva</h4>
+        @using (Html.BeginForm("BuscarInsumoModificar", "Reserva", FormMethod.Post))
         {
-            <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
+            <input type="hidden" name="idReserva" value="@ViewBag.idReserva" class="form-control" readonly />
             <div class="form-horizontal">
                 <div class="col-md-12 form-group btn-group">
                     <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
@@ -61,12 +60,12 @@
                 <tbody>
                     @foreach (var listado in Model.BuscarInsumos)
                     {
-                        using (Html.BeginForm("AgregarInsumosAlPedidoModificar", "Pedido", FormMethod.Post))
+                        using (Html.BeginForm("AgregarInsumosAReserva", "Reserva", FormMethod.Post))
                         {
-                            
+
                             <tr>
                                 <td>
-                                    <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
+                                    <input type="hidden" name="idReserva" value="@ViewBag.idReserva" class="form-control" readonly />
                                     <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
                                     <input type="hidden" name="idInsumo" value="@listado.IdInsumo" />
                                     <input type="text" name="nombreInsumo" class="form-control" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
@@ -110,7 +109,7 @@
             <div>
                 @foreach (var listado in Model.InsumosAPedir)
                 {
-                    <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
+                    <input type="hidden" name="idReserva" value="@ViewBag.idReserva" class="form-control" readonly />
                     <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
                     <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                     <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
@@ -136,11 +135,11 @@
                 <tbody>
                     @foreach (var listado in Model.InsumosAPedir)
                     {
-                        using (Html.BeginForm("QuitarInsumoModificar", "Pedido", FormMethod.Post))
+                        using (Html.BeginForm("QuitarInsumoModificar", "Reserva", FormMethod.Post))
                         {
                             <tr>
                                 <td class="text-center">
-                                    <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
+                                    <input type="hidden" name="idReserva" value="@ViewBag.idreserva" class="form-control" readonly />
                                     <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" />
                                     <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                                 </td>
@@ -190,7 +189,7 @@
         @if (Model.InsumosAPedir.Count != 0)
         {
             <h4 class="text-center">Modificar cantidades y finalizar</h4>
-            using (Html.BeginForm("ModificarPedido", "Pedido", FormMethod.Post))
+            using (Html.BeginForm("ModificarInsumosReserva", "Reserva", FormMethod.Post))
             {
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -208,7 +207,7 @@
                         {
                             <tr>
                                 <td class="text-center">
-                                    <input type="hidden" name="idPedido" value="@ViewBag.idPedido" class="form-control" readonly />
+                                    <input type="hidden" name="idPedido" value="@ViewBag.idReserva" class="form-control" readonly />
                                     <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
                                     <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                                 </td>
@@ -229,5 +228,3 @@
     </div>
     <div class="col-md-3"></div>
 </div>
-<script src="~/Scripts/scriptPedidos.js"></script>
-

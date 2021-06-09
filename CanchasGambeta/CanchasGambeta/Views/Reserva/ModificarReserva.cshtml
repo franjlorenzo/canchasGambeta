@@ -78,43 +78,17 @@
                         @Html.CheckBoxFor(Model => Model.EnviarMails)
                     </div>
                 }
-                <table class="table table-bordered table-striped" id="tablaInsumos" style="width:60%;">
-                    <tbody>
-                        @foreach (var insumo in Model.ListaInsumosEnLaReserva)
-                        {
-                            if (insumo.stock < 5)
-                            {
-                                <tr class="text-center">
-                                    <td>
-                                        @insumo.insumo1 ($@insumo.precio)
-                                    </td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <input type="hidden" name="listaidInsumos" id="idInsumo" value="@insumo.idInsumo" />
-                                            <input type="number" name="listaInsumosActualizados" class="form-control txtCantInsumo" max="@insumo.cantidad" min="0" placeholder="@insumo.cantidad" value="@insumo.cantidad" style="width:70px;" />
-                                            <bold>No hay stock disponible para agregar más de este insumo</bold>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr class="text-center">
-                                    <td>
-                                        @insumo.insumo1 ($@insumo.precio)
-                                    </td>
-                                    <td>
-                                        <input type="hidden" name="listaidInsumos" id="idInsumo" value="@insumo.idInsumo" />
-                                        <input type="number" name="listaInsumosActualizados" class="form-control txtCantInsumo" max="5" min="0" placeholder="@insumo.cantidad" value="@insumo.cantidad" style="width:70px;" />
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
 
                 <div class="form-group text-left">
                     <button class="btn btn-success" type="submit">Actualizar reserva</button>
+                    @if (Model.ListaInsumosEnLaReserva.Count != 0)
+                    {
+                        <a href="@Url.Action("ModificarInsumosReserva", "Reserva", new { @idReserva = Model.IdReserva })" class="btn btn-info m-1">Modificar insumos reservados</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("ReservarInsumos", "Reserva", new { @idReserva = Model.IdReserva, @enviarMails = true })" class="btn btn-info m-1">Reservar insumos</a>
+                    }
                     @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
                 </div>
                 <div class="form-label-group text-danger" style="margin-left:10px">

@@ -281,16 +281,17 @@ namespace CanchasGambeta.Controllers
                 TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                 return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
             }
-            if (Request["nombreInsumoAnterior"] == "")
+            if (Request["buscarInsumoAnterior"] == "")
             {
                 TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
                 return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
             }
             else
             {
-                TempData["nombreInsumoAnterior"] = Request["nombreInsumoAnterior"];
+                TempData["nombreInsumoAnterior"] = Request["buscarInsumoAnterior"];
                 TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
-                TempData["buscarInsumos"] = null;
+                TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+                TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                 return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
             }
         }
