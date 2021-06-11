@@ -17,7 +17,7 @@
         <EntityTypeShape EntityType="Canchas_GambetaModel.Insumo" Width="1.5" PointX="10.5" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.Pedido" Width="1.5" PointX="12.875" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.Proveedor" Width="1.5" PointX="12.875" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Canchas_GambetaModel.Reserva" Width="1.5" PointX="8.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Canchas_GambetaModel.Reserva" Width="1.75" PointX="8.125" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.ReservaInsumos" Width="1.5" PointX="8.25" PointY="1.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.Rol" Width="1.5" PointX="3.75" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Canchas_GambetaModel.sysdiagrams" Width="1.5" PointX="6.625" PointY="8.375" IsExpanded="true" />

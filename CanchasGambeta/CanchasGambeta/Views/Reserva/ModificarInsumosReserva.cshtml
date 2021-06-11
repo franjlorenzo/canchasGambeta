@@ -1,6 +1,8 @@
 ﻿@model CanchasGambeta.ViewModels.VistaModificarInsumosReserva
+@using CanchasGambeta.Models 
 @{
     ViewBag.Title = "ModificarInsumosReserva";
+    var sesion = (Usuario)HttpContext.Current.Session["User"];
 }
 
 <div class="row" style="transform: translateY(60px); color:white">
@@ -207,18 +209,30 @@
                         {
                             <tr>
                                 <td class="text-center">
-                                    <input type="hidden" name="idPedido" value="@ViewBag.idReserva" class="form-control" readonly />
+                                    <input type="hidden" name="idReserva" value="@ViewBag.idReserva" class="form-control" readonly />
                                     <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
                                     <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                                 </td>
                                 <td class="text-center">
-                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" value="@listado.Cantidad" style="width:90px;" />
+                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" max="5" placeholder="@listado.Cantidad" value="@listado.Cantidad" style="width:90px;" />
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-                <button type="submit" class="btn btn-success">Finalizar</button>
+                <div class="form-group">
+                    @if (sesion.equipo != null)
+                    {
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <label class="control-label">Notificar a mi equipo</label>
+                                @Html.CheckBox("enviarMails", false)
+                            </div>
+                        </div>
+                    }
+                    <button type="submit" class="btn btn-success mr-2">Finalizar</button>
+                    @Html.ActionLink("Cancelar", "MisInsumos", "Insumo", null, new { @class = "text-center btn btn-warning" })
+                </div>                
                 <div class="form-label-group text-danger pb-2">
                     @ViewBag.cantidadIgualCero
                     @ViewBag.ErrorModificarPedido

@@ -106,10 +106,14 @@ namespace CanchasGambeta.ViewModels
         private DateTime fecha;
         private string tipoCancha;
         private string horario;
+        private bool servicioAsador;
+        private bool servicioInstrumentos;
 
         public DateTime Fecha { get => fecha; set => fecha = value; }
         public string TipoCancha { get => tipoCancha; set => tipoCancha = value; }
         public string Horario { get => horario; set => horario = value; }
+        public bool ServicioAsador { get => servicioAsador; set => servicioAsador = value; }
+        public bool ServicioInstrumentos { get => servicioInstrumentos; set => servicioInstrumentos = value; }
     }
 
     public class VistaReserva
