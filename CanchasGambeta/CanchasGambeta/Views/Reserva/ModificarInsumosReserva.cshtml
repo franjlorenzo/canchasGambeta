@@ -35,6 +35,7 @@
                     <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
                     <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly />
                     <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly />
+                    <input type="number" name="listaStockInsumo" class="form-control" min="0" value="@item.Stock" readonly />
                 }
             </div>
         }
@@ -71,6 +72,7 @@
                                     <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
                                     <input type="hidden" name="idInsumo" value="@listado.IdInsumo" />
                                     <input type="text" name="nombreInsumo" class="form-control" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                    <input type="hidden" name="stockInsumo" value="@listado.Stock" />
                                 </td>
                                 <td class="text-center">
                                     @foreach (var item in Model.InsumosAPedir)
@@ -78,6 +80,7 @@
                                         <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
                                         <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
                                         <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                        <input type="number" name="listaStockInsumo" class="form-control" min="0" value="@item.Stock" readonly style="display:none;" />
                                     }
                                     <button type="submit" class="btn btn-warning">Agregar</button>
                                 </td>
@@ -115,6 +118,7 @@
                     <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
                     <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                     <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
+                    <input type="hidden" name="listaStockInsumo" class="form-control" min="0" value="@listado.Stock" readonly style="display:none;" />
                 }
             </div>
         }
@@ -151,6 +155,7 @@
                                         <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
                                         <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
                                         <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                        <input type="number" name="listaStockInsumo" class="form-control" min="0" value="@item.Stock" readonly style="display:none;" />
                                     }
                                     <button type="submit" class="btn btn-warning">Quitar</button>
                                 </td>
@@ -207,16 +212,34 @@
                     <tbody>
                         @foreach (var listado in Model.InsumosAPedir)
                         {
-                            <tr>
-                                <td class="text-center">
-                                    <input type="hidden" name="idReserva" value="@ViewBag.idReserva" class="form-control" readonly />
-                                    <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
-                                    <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
-                                </td>
-                                <td class="text-center">
-                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" max="5" placeholder="@listado.Cantidad" value="@listado.Cantidad" style="width:90px;" />
-                                </td>
-                            </tr>
+                            if (listado.Stock < 5)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="hidden" name="idReserva" value="@ViewBag.idReserva" class="form-control" readonly />
+                                        <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
+                                        <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                        <input type="hidden" name="listaStockInsumo" class="form-control" min="0" value="@listado.Stock" readonly style="display:none;" />
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" max="@listado.Cantidad" placeholder="@listado.Cantidad" value="@listado.Cantidad" style="width:90px;" />
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="hidden" name="idReserva" value="@ViewBag.idReserva" class="form-control" readonly />
+                                        <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
+                                        <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                        <input type="hidden" name="listaStockInsumo" class="form-control" min="0" value="@listado.Stock" readonly style="display:none;" />
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" max="5" placeholder="@listado.Cantidad" value="@listado.Cantidad" style="width:90px;" />
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -231,7 +254,7 @@
                         </div>
                     }
                     <button type="submit" class="btn btn-success mr-2">Finalizar</button>
-                    @Html.ActionLink("Cancelar", "MisInsumos", "Insumo", null, new { @class = "text-center btn btn-warning" })
+                    @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
                 </div>                
                 <div class="form-label-group text-danger pb-2">
                     @ViewBag.cantidadIgualCero

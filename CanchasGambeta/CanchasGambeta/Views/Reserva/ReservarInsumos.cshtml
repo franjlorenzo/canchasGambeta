@@ -70,6 +70,7 @@
                                     <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
                                     <input type="hidden" name="idInsumo" value="@listado.IdInsumo" />
                                     <input type="text" name="nombreInsumo" class="form-control" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
+                                    <input type="hidden" name="stockInsumo" value="@listado.Stock" />
                                 </td>
                                 <td class="text-center">
                                     @foreach (var item in Model.InsumosAPedir)

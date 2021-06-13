@@ -157,7 +157,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0);
+            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
 
             if (listaInsumosAPedir.Exists(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo))
@@ -180,7 +180,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0); //creo un nuevo insumo a agregar a la lista de InsumosAPedir
+            InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0, 0); //creo un nuevo insumo a agregar a la lista de InsumosAPedir
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>(); //creo una lista de los insumos a pedir
             if (listaCantidadInsumoAlPedido != null && listaIdInsumoAlPedido != null && listaNombreInsumoAlPedido != null) //Verifico si ya existe una lista en la vista y si es así, la armo con los datos existentes
             {
@@ -302,7 +302,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0);
+            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
 
             if (listaInsumosAPedir.Exists(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo))
@@ -321,7 +321,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0); //creo un nuevo insumo a agregar a la lista de InsumosAPedir
+            InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0, 0); //creo un nuevo insumo a agregar a la lista de InsumosAPedir
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>(); //creo una lista de los insumos a pedir
             if (listaCantidadInsumoAlPedido != null && listaIdInsumoAlPedido != null && listaNombreInsumoAlPedido != null) //Verifico si ya existe una lista en la vista y si es así, la armo con los datos existentes
             {
@@ -487,8 +487,6 @@ namespace CanchasGambeta.Controllers
                 TempData["ErrorPedidosSinConcretar"] = "Todavía hay pedidos sin concretar al proveedor que quiere eliminar, concretelos para poder eliminar";
                 return RedirectToAction("MisPedidos", "Pedido");
             }
-        }
-
-        
+        }        
     }
 }

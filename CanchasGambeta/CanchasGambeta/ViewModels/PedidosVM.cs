@@ -99,11 +99,12 @@ namespace CanchasGambeta.ViewModels
         public int Cantidad { get => cantidad; set => cantidad = value; }
         public int Stock { get => stock; set => stock = value; }
 
-        public InsumosAPedir(int idInsumo, string insumo, int cantidad)
+        public InsumosAPedir(int idInsumo, string insumo, int cantidad, int stock)
         {
             this.IdInsumo = idInsumo;
             this.Insumo = insumo;
             this.Cantidad = cantidad;
+            this.Stock = stock;
         }
 
         public InsumosAPedir()

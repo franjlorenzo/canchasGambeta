@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net.Mail;
+using System.Runtime.InteropServices;
 using System.Web;
 
 namespace CanchasGambeta.AccesoBD
@@ -753,7 +754,7 @@ namespace CanchasGambeta.AccesoBD
             return idPedido;
         }
 
-        public static List<InsumosAPedir> armarListaInsumosSeleccionados(List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo)
+        public static List<InsumosAPedir> armarListaInsumosSeleccionados(List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo, [Optional] List<int> listaStockInsumo)
         {
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
 
@@ -763,6 +764,7 @@ namespace CanchasGambeta.AccesoBD
                 insumo.IdInsumo = listaIdInsumo[i];
                 insumo.Insumo = listaNombreInsumo[i];
                 insumo.Cantidad = cantidadInsumo[i];
+                if (listaStockInsumo != null) insumo.Stock = listaStockInsumo[i];
                 listaInsumosAPedir.Add(insumo);
             }
 

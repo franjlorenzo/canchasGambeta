@@ -362,9 +362,15 @@ namespace CanchasGambeta.AccesoBD
                 List<Insumo> insumosEnReserva = obtenerInsumosDeLaReserva(idReserva);
 
                 comando.CommandText = consultaEliminarInsumosDeReserva;
-                comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@idReserva", idReserva);
-                comando.ExecuteNonQuery();
+
+                foreach (var insumo in insumosEnReserva)
+                {
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@idReserva", idReserva);
+                    comando.Parameters.AddWithValue("@idInsumo", insumo.idInsumo);
+                    comando.ExecuteNonQuery();
+                }
+                
 
                 comando.CommandText = consultaSumarStockInsumo;
                 foreach (var insumo in insumosEnReserva)
