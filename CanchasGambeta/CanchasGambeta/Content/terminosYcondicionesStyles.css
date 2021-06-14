@@ -1,0 +1,16 @@
+﻿.parrafo {
+    background: #101012;
+    padding: 10px 20px;
+    border-radius: 7px;
+}
+
+h4 {
+    color: #C3073F;
+}
+
+hr {
+    height: 3px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(to left, black, white);
+}

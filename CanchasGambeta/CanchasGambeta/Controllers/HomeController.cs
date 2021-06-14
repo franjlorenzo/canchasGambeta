@@ -12,5 +12,15 @@ namespace CanchasGambeta.Controllers
         {
             return View();
         }
+
+        public ActionResult TerminosYCondiciones()
+        {
+            return View();
+        }
+
+        public ActionResult Ayuda()
+        {
+            return View();
+        }
     }
 }

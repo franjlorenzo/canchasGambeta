@@ -234,7 +234,7 @@ namespace CanchasGambeta.AccesoBD
                 string consulta = @"select h.horario, count(*) 'Cant reservas'
                                     from Horario h join HorarioReservas hr on h.idHorario = hr.horario
                                     group by h.horario
-                                    order by 2 desc";
+                                    order by 1";
 
                 comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;

@@ -183,5 +183,19 @@ namespace CanchasGambeta.Controllers
             Session.Clear();
             return RedirectToAction("Index", "Home");
         }
+
+        //------------------------------------Términos y condiciones/Ayuda-----------------------------------------
+
+        public ActionResult TerminosYCondiciones()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Ayuda()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

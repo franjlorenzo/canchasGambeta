@@ -234,14 +234,17 @@
     <Compile Include="ViewModels\ReservaVM.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\ayudaStyles.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\layout.css" />
     <Content Include="Content\one-page-wonder.css" />
     <Content Include="Content\one-page-wonder.min.css" />
     <Content Include="Content\styles-login.css" />
     <Content Include="Content\styles-register.css" />
+    <Content Include="Content\terminosYcondicionesStyles.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font.family-Catamaran.css" />
     <Content Include="fonts\font.family-Lato.css" />
@@ -335,6 +338,8 @@
     <Content Include="Views\Pedido\VerDetallePedido.cshtml" />
     <Content Include="Views\Reserva\ReservarInsumos.cshtml" />
     <Content Include="Views\Reserva\ModificarInsumosReserva.cshtml" />
+    <Content Include="Views\Home\TerminosYCondiciones.cshtml" />
+    <Content Include="Views\Home\Ayuda.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -12,7 +12,7 @@ if (mm < 10) {
 }
 
 today = yyyy + '-' + mm + '-' + dd;
-//document.getElementById("NuevaReservaVM_fecha").setAttribute("min", today);
+document.getElementById("NuevaReservaVM_fecha").setAttribute("min", today);
 
 function validacionNuevaReserva() {
     let cboCancha = document.getElementById("idCancha").value;

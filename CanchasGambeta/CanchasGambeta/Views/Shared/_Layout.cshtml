@@ -12,6 +12,7 @@
     <link href="@Url.Content("~/fonts/font.family-Lato.css")" />
     <!--CSS personalizado-->
     <link rel="stylesheet" href="@Url.Content("~/Content/one-page-wonder.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/layout.css")" />
     <!--Bootstrap-->
     <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")" />
 </head>
@@ -105,13 +106,16 @@
     <div class="body-content">
         @RenderBody()
     </div>
-    <div class="row" style="transform: translateY(70px);">
-        <div class="col-md-1"></div>
-        <div class="col-md-11">
-            <footer>
-                <p style="color:white">&copy; @DateTime.Now.Year - Canchas Gambeta - Práctica Supervisada TUP UTN</p>
-            </footer>
+    <div class="push"></div>
+    <footer class="footer" style="transform: translateY(70px);">
+        <div>
+            <div class="float-left ml-2">
+                <p>&copy; @DateTime.Now.Year - Canchas Gambeta - Práctica Supervisada TUP UTN</p>
+            </div>
+            <div class="float-right mr-2">
+                @Html.ActionLink("Términos y condiciones", "TerminosYCondiciones", "Home", null, new { @class = "font-weight-light", @style = "color: white;" }) | @Html.ActionLink("Ayuda", "Ayuda", "Home", null, new { @class = "font-weight-light", @style = "color: white;" })
+            </div>
         </div>
-    </div>
+    </footer>
 </body>
 </html>
