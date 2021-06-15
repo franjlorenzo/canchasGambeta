@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CanchasGambeta.Models;
+using CanchasGambeta.ViewModels;
 
 namespace CanchasGambeta.Controllers
 {
@@ -15,7 +16,8 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            return View();
+            List<ReservasActivas> reservasCliente = AccesoBD.AD_Informe.obtenerReservasActivasDelCliente(sesion.idUsuario);
+            return View(reservasCliente);
         }
 
         public ActionResult PerfilCliente()

@@ -24,8 +24,60 @@ namespace CanchasGambeta.AccesoBD
                                     from Usuario u join Reserva r on u.idUsuario = r.cliente
                                          join Cancha c on c.idCancha = r.cancha
 	                                     join Horario h on h.idHorario = r.horario
-                                    where fecha >= GETDATE()-1 and estado = 1
-                                    order by fecha";
+                                    where fecha = CAST(GETDATE() AS date) and estado = 1
+                                    order by fecha, horario";
+
+                comando.CommandType = CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        ReservasActivas auxiliar = new ReservasActivas();
+                        auxiliar.IdReserva = int.Parse(lector["idReserva"].ToString());
+                        auxiliar.NombreCompleto = lector["nombreCompleto"].ToString();
+                        auxiliar.TipoCancha = lector["tipoCancha"].ToString();
+                        auxiliar.Horario = lector["horario"].ToString();
+                        auxiliar.Fecha = DateTime.Parse(lector["fecha"].ToString());
+                        auxiliar.ServicioAsador = bool.Parse(lector["servicioAsador"].ToString());
+                        auxiliar.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
+                        auxiliar.ListaInsumosReserva = AD_Reserva.obtenerInsumosDeLaReserva(auxiliar.IdReserva);
+                        listaReservas.Add(auxiliar);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return listaReservas;
+        }
+
+        public static List<ReservasActivas> obtenerReservasActivasDelCliente(int idUsuario)
+        {
+            List<ReservasActivas> listaReservas = new List<ReservasActivas>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select r.idReserva, nombreCompleto, tipoCancha, h.horario, fecha, servicioAsador, servicioInstrumentos, estado
+                                    from Usuario u join Reserva r on u.idUsuario = r.cliente
+                                         join Cancha c on c.idCancha = r.cancha
+	                                     join Horario h on h.idHorario = r.horario
+                                    where fecha = CAST(GETDATE() AS date) and estado = 1 and cliente = @idCliente
+                                    order by fecha, horario";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idCliente", idUsuario);
 
                 comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;

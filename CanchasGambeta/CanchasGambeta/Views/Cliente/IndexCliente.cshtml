@@ -1,8 +1,12 @@
-﻿@using CanchasGambeta.Models;
+﻿@model IEnumerable<CanchasGambeta.ViewModels.ReservasActivas>
+@using CanchasGambeta.Models;
 @{var sesion = (Usuario)HttpContext.Current.Session["User"];}
 @{
     ViewBag.Title = "IndexCliente";
+    decimal precioTotal = 0;
 }
+
+<link rel="stylesheet" href="@Url.Content("~/Content/reservasClientesStyles.css")" />
 
 <header class="masthead text-center text-white">
     <div class="masthead-content">
@@ -18,15 +22,64 @@
     <div class="bg-circle-4 bg-circle"></div>
 </header>
 
-<div class="container">
-    <hr />
-    <div class="row aling-items-center">
-        <div class="col-lg-4 text-center">
-        </div>
-        <div class="col-lg-4 text-center">
-        </div>
-        <div class="col-lg-4 text-center">
-        </div>
+<hr />
+<div class="row" style="color: white;">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        @if (Model.Count() != 0)
+        {
+            <div class="box">
+                <p class="heading">Reservas en el día de hoy</p>
+                <div class="reserva">
+                    @foreach (var listado in Model)
+                    {
+                        <details>
+                            <summary>@listado.Horario<bold>hs - Cancha: </bold>@listado.TipoCancha</summary>
+                            <p class="text-justify pt-3">
+                                @if (listado.ServicioAsador == true)
+                                {
+                                    <bold>Servicio asador: Contratado</bold><br />
+                                }
+                                else
+                                {
+                                    <bold>Servicio asador: No contratado</bold><br />
+                                }
+                                @if (listado.ServicioInstrumento == true)
+                                {
+                                    <bold>Servicio instrumentos: Contratado</bold><br />
+                                }
+                                else
+                                {
+                                    <bold>Servicio instrumentos: No contratado</bold><br />
+                                }
+                                @if(listado.ListaInsumosReserva.Count != 0)
+                                {
+                                    <bold>Insumos reservados:</bold>
+                                    <ul class="pl-3">
+                                        @foreach (var item in listado.ListaInsumosReserva)
+                                        {
+                                            <li>@item.insumo1 - Cantidad: @item.cantidad</li>
+                                            precioTotal = precioTotal + item.precio * item.cantidad;
+                                        }
+                                    </ul>
+                                    <bold>Precio total de los insumos: @precioTotal</bold>
+                                }
+                                else
+                                {
+                                    <bold>No se reservaron insumos del kiosko</bold>
+                                }
+                            </p>
+                        </details>
+                    }
+                </div>
+            </div>
+            
+        }
+        else
+        {
+            <p class="heading">No hay reservas en el día de la fecha</p>
+        }
     </div>
+    <div class="col-md-3"></div>
 </div>
 

@@ -242,6 +242,7 @@
     <Content Include="Content\layout.css" />
     <Content Include="Content\one-page-wonder.css" />
     <Content Include="Content\one-page-wonder.min.css" />
+    <Content Include="Content\reservasClientesStyles.css" />
     <Content Include="Content\styles-login.css" />
     <Content Include="Content\styles-register.css" />
     <Content Include="Content\terminosYcondicionesStyles.css" />
@@ -252,6 +253,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\cancha-futbol.jpg" />
+    <Content Include="Images\futbol-login.jpg" />
     <Content Include="Images\padel-wallpaper.jpg" />
     <Content Include="Images\tenis-wallpaper-2.jpg" />
     <Content Include="Images\tenis-wallpaper.jpg" />

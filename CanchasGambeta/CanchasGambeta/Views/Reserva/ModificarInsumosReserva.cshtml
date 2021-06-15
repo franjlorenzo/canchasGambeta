@@ -253,14 +253,20 @@
                             </div>
                         </div>
                     }
-                    <button type="submit" class="btn btn-success mr-2">Finalizar</button>
+                    <button type="submit" class="btn btn-success">Finalizar</button>
+                    @Html.ActionLink("Eliminar insumos de la reserva", "EliminarInsumosReserva", "Reserva", null, new { @class = "text-center btn btn-danger" })
                     @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
-                </div>                
+                </div>
                 <div class="form-label-group text-danger pb-2">
                     @ViewBag.cantidadIgualCero
                     @ViewBag.ErrorModificarPedido
                 </div>
             }
+        }
+        else
+        {
+            @Html.ActionLink("Eliminar insumos de la reserva", "EliminarInsumosReserva", "Reserva", null, new { @class = "text-center btn btn-danger mr-2" })
+            @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
         }
     </div>
     <div class="col-md-3"></div>
