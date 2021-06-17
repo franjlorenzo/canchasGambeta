@@ -182,14 +182,14 @@ namespace CanchasGambeta.Controllers
         }
 
         //------------------------------------INSERT INSUMOS EN LA RESERVA--------------------------------
-        public ActionResult ReservarInsumos(int idReserva, bool enviarMails)
+        public ActionResult ReservarInsumos(int idReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             VistaReservarInsumos vistaReservarInsumos = new VistaReservarInsumos
             {
-                NuevaReservaVM = new NuevaReservaVM(idReserva, enviarMails),
+                NuevaReservaVM = new NuevaReservaVM(idReserva),
                 BuscarInsumos = new List<BuscarInsumos>(),
                 InsumosAPedir = new List<InsumosAPedir>()
             };
@@ -230,7 +230,7 @@ namespace CanchasGambeta.Controllers
                     TempData["nombreInsumo"] = Request["buscarInsumoAnterior"];
                     TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                     TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
-                    return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva, nuevaReservaVM.enviarMails });                    
+                    return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });                    
                 }
             }
 
@@ -259,13 +259,13 @@ namespace CanchasGambeta.Controllers
                 TempData["nombreInsumo"] = buscarInsumo;
                 TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(buscarInsumo);
                 TempData["listaInsumosAPedir"] = listaInsumosAPedir;
-                return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva, nuevaReservaVM.enviarMails });
+                return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });
             }
             if (Request["buscarInsumoAnterior"] == "")
             {
                 TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
                 TempData["listaInsumosAPedir"] = listaInsumosAPedir;
-                return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva, nuevaReservaVM.enviarMails });
+                return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });
             }
             else
             {
@@ -273,7 +273,7 @@ namespace CanchasGambeta.Controllers
                 TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
                 TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
                 TempData["listaInsumosAPedir"] = listaInsumosAPedir;
-                return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva, nuevaReservaVM.enviarMails });
+                return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });
             }
         }
 
@@ -295,7 +295,7 @@ namespace CanchasGambeta.Controllers
             TempData["nombreInsumo"] = Request["buscarInsumoAnterior"];
             TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
             TempData["listaInsumosAPedir"] = listaInsumosAPedir;
-            return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva, nuevaReservaVM.enviarMails });
+            return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });
         }
 
         [HttpPost]
@@ -312,14 +312,15 @@ namespace CanchasGambeta.Controllers
                 {
                     TempData["cantidadIgualCero"] = "No se puede pedir un insumo con cantidad cero(0)";
                     TempData["listaInsumosAPedir"] = listaInsumosAPedir;
-                    return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva, nuevaReservaVM.enviarMails });
+                    return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });
                 }
             }
 
             bool resultado = AccesoBD.AD_Reserva.insertReservaInsumo(nuevaReservaVM, listaInsumosAPedir);
             if (resultado)
             {
-                if (nuevaReservaVM.enviarMails) AccesoBD.AD_Reserva.enviarMailsReserva(nuevaReservaVM.idReserva, 1);
+                bool enviarMails = bool.Parse(Request.Form["enviarMails"].Contains("true").ToString());
+                if (enviarMails) AccesoBD.AD_Reserva.enviarMailsReserva(nuevaReservaVM.idReserva, 1);
                 TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                 TempData["reservaInsumoExitoso"] = "Reserva e insumos registrados con éxito";
                 return RedirectToAction("MisReservas");
@@ -328,7 +329,7 @@ namespace CanchasGambeta.Controllers
             {
                 TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                 TempData["errorRegistrarInsumos"] = "Ocurrió un erro al guardar los insumos, inténtelo nuevamente más tarde";
-                return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva, nuevaReservaVM.enviarMails });
+                return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });
             }
           
         }
@@ -362,6 +363,8 @@ namespace CanchasGambeta.Controllers
             ViewBag.fechaReserva = actualizarReserva.Fecha;
             ViewBag.idHorarioReserva = actualizarReserva.IdHorario;
             if (TempData["sinModificacion"] != null) ViewBag.sinModificacion = TempData["sinModificacion"].ToString();
+            if (TempData["ErrorEliminarInsumos"] != null) ViewBag.ErrorEliminarInsumos = TempData["ErrorEliminarInsumos"].ToString();
+            if (TempData["exitoEliminarInsumos"] != null) ViewBag.exitoEliminarInsumos = TempData["exitoEliminarInsumos"].ToString();
             return View(actualizarReserva);
         }
 
@@ -664,6 +667,24 @@ namespace CanchasGambeta.Controllers
             return View();
         }
 
+        public ActionResult EliminarInsumosReserva(int idReserva)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            bool resultado = AccesoBD.AD_Reserva.eliminarInsumosReserva(idReserva);
+            if (resultado)
+            {
+                TempData["exitoEliminarInsumos"] = "Listo! No tiene insumos en su reserva, si cambia de parecer siempre puede agregarlos nuevamente";
+                return RedirectToAction("ModificarReserva", new { idReserva });
+            }
+            else
+            {
+                TempData["ErrorEliminarInsumos"] = "Ocurrió un error al eliminar los insumos reservados, inténtelo nuevamente.";
+                return RedirectToAction("ModificarReserva", new { idReserva });
+            }
+        }
+
         //------------------------------------ELIMINAR RESERVA--------------------------------
 
         [HttpPost]
@@ -685,7 +706,7 @@ namespace CanchasGambeta.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorEliminarReserva = "Ocurrió un error al eliminar la reserva. Intenteló nuevamente.";
+                    ViewBag.ErrorEliminarReserva = "Ocurrió un error al eliminar la reserva, inténtelo nuevamente.";
                     return RedirectToAction("MisReservas", "Reserva");
                 }
             }

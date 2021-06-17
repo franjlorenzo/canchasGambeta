@@ -1,53 +1,88 @@
 ﻿@model IEnumerable<CanchasGambeta.Models.Insumo>
 @{
     ViewBag.Title = "InsumosMasConsumidos";
+
     string fechaInicio = "fechaInicio";
     string fechaFin = "fechaFin";
+
+    DateTime fechaAyer = DateTime.Now;
+    fechaAyer = fechaAyer.AddDays(-1);
+
+    DateTime fechaUltimaSemana = DateTime.Now;
+    fechaUltimaSemana = fechaAyer.AddDays(-7);
+
+    DateTime fechaUltimoMes = DateTime.Now;
+    fechaUltimoMes = fechaAyer.AddDays(-30);
 }
 
 
 <div class="row" style="transform: translateY(70px); color:white">
     <div class="col-md-12 text-center">
-        <h3>Insumos más consumidos entre fechas deseadas</h3>
+        <h3>Insumos más consumidos</h3>
     </div>
 </div>
-@using (Html.BeginForm("InsumosMasConsumidos", "Informe", FormMethod.Post, new { onsubmit = "return validacionInsumosMasConsumidos();" }))
-{
-    <div class="row" style="transform: translateY(70px); color:white">
-        <div class="col-md-1"></div>
-        <div class="col-md-4">
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-5">
+        @using (Html.BeginForm("InsumosMasConsumidos", "Informe", FormMethod.Post))
+        {
             <div class="form-horizontal">
                 <div class="form-group">
                     <label class="control-label">Desde</label>
                     @Html.TextBox(fechaInicio, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
             <div class="form-horizontal">
                 <div class="form-group">
                     <label class="control-label">Hasta</label>
                     @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
                 </div>
             </div>
-        </div>
-        <div class="col-md-2 text-center">
-            <br />
-            <button type="submit" class="btn btn-primary btn-block mt-2">Buscar</button>
-            <div class="form-label-group text-danger" style="margin-left:10px">
-                @ViewBag.ErrorBuscarInsumos
+            <div class="text-left">
+                <button type="submit" class="btn btn-primary">Buscar</button>
             </div>
-        </div>
-        <div class="col-md-1"></div>
+        }
     </div>
-}
+    <div class="col-lg-5">
+        <div class="btn-group-justified">
+            @using (Html.BeginForm("InsumosMasConsumidos", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaAyer, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, fechaAyer, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block mt-3">Ver consumidos ayer</button>
+            }
+            @using (Html.BeginForm("InsumosMasConsumidos", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaUltimaSemana, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block mt-3 mb-3">Ver consumidos en los últimos 7 días</button>
+            }
+            @using (Html.BeginForm("InsumosMasConsumidos", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaUltimoMes, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block">Ver consumidos en los últimos 30 días</button>
+            }
+        </div>
+    </div>
+    <div class="col-lg-1"></div>
+</div>
 
-<hr />
 <div class="row" style="transform: translateY(80px); color:white">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        @if (Model != null)
+        @if (Model.Count() != 0)
         {
+            <div class="form-label-group text-danger text-center pb-2" style="margin-left:10px">
+                @ViewBag.fechaMayor
+            </div>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -76,6 +111,9 @@
         }
         else
         {
+            <div class="form-label-group text-danger text-center pb-2" style="margin-left:10px">
+                @ViewBag.fechaMayor
+            </div>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>

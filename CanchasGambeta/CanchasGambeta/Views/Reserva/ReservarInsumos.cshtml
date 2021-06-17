@@ -1,6 +1,8 @@
 ﻿@model CanchasGambeta.ViewModels.VistaReservarInsumos
+@using CanchasGambeta.Models
 @{
     ViewBag.Title = "ReservarInsumos";
+    var sesion = (Usuario)HttpContext.Current.Session["User"];
 }
 
 <div class="row" style="transform: translateY(60px); color: white">
@@ -10,7 +12,6 @@
         @using (Html.BeginForm("BuscarInsumo", "Reserva", FormMethod.Post))
         {
             @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
-            @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
             <div class="form-horizontal">
                 <div class="col-md-12 form-group btn-group">
                     <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
@@ -66,7 +67,6 @@
                             <tr>
                                 <td>
                                     @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
-                                    @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
                                     <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
                                     <input type="hidden" name="idInsumo" value="@listado.IdInsumo" />
                                     <input type="text" name="nombreInsumo" class="form-control" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
@@ -120,7 +120,6 @@
                 @foreach (var listado in Model.InsumosAPedir)
                 {
                     @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
-                    @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
                     <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
                     <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                     <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
@@ -152,7 +151,6 @@
                             <tr>
                                 <td class="text-center">
                                     @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
-                                    @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
                                     <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" class="form-control" />
                                     <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" />
                                     <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
@@ -222,7 +220,6 @@
                             <tr>
                                 <td class="text-center">
                                     @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
-                                    @Html.HiddenFor(Model => Model.NuevaReservaVM.enviarMails)
                                     <input type="hidden" name="IdInsumoAlPedido" value="@listado.IdInsumo" style="display:none" />
                                     <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                                 </td>
@@ -236,13 +233,28 @@
                 <div class="form-label-group text-danger pb-2">
                     @ViewBag.cantidadIgualCero
                 </div>
-                <button type="submit" class="btn btn-success">Finalizar</button>
+                <div class="form-group">
+                    @if (sesion.equipo != null)
+                    {
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <label class="control-label">Notificar a mi equipo</label>
+                                @Html.CheckBox("enviarMails", false)
+                            </div>
+                        </div>
+                    }
+                    <button type="submit" class="btn btn-success">Finalizar</button>
+                    @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
+                </div>
                 <div class="form-label-group text-danger pb-2">
                     @ViewBag.errorRegistrarInsumos
                 </div>
             }
         }
-        @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
+        else
+        {
+            @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
+        }
     </div>
     <div class="col-md-3"></div>
 </div>

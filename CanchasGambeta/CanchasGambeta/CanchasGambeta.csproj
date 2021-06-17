@@ -291,6 +291,7 @@
     <Content Include="Scripts\scriptAgregarInsumosAlPedido.js" />
     <Content Include="Scripts\scriptCanchasMasReservadas.js" />
     <Content Include="Scripts\scriptEquipo.js" />
+    <Content Include="Scripts\scriptHorariosMasReservados.js" />
     <Content Include="Scripts\scriptInstrumentos.js" />
     <Content Include="Scripts\scriptInsumos.js" />
     <Content Include="Scripts\scriptModificarReserva.js" />

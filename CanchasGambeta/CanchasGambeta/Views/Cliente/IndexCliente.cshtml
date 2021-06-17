@@ -52,7 +52,7 @@
                                 {
                                     <bold>Servicio instrumentos: No contratado</bold><br />
                                 }
-                                @if(listado.ListaInsumosReserva.Count != 0)
+                                @if (listado.ListaInsumosReserva.Count != 0)
                                 {
                                     <bold>Insumos reservados:</bold>
                                     <ul class="pl-3">
@@ -73,11 +73,13 @@
                     }
                 </div>
             </div>
-            
+
         }
         else
         {
-            <p class="heading">No hay reservas en el día de la fecha</p>
+            <div class="box">
+                <p class="heading">No hay reservas en el día de la fecha</p>
+            </div>
         }
     </div>
     <div class="col-md-3"></div>

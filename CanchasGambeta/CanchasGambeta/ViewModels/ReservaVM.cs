@@ -94,10 +94,9 @@ namespace CanchasGambeta.ViewModels
             this.fecha = new DateTime();
         }
 
-        public NuevaReservaVM(int idReserva, bool enviarMails)
+        public NuevaReservaVM(int idReserva)
         {
             this.idReserva = idReserva;
-            this.enviarMails = enviarMails;
         }
     }
 

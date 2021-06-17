@@ -91,10 +91,14 @@
                     }
                     @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
                 </div>
-                <div class="form-label-group text-danger" style="margin-left:10px">
+                <div class="form-label-group text-success">
+                    @ViewBag.exitoEliminarInsumos
+                </div>
+                <div class="form-label-group text-danger">
                     @ViewBag.ErrorModificarReserva
                     @ViewBag.sinHorario
                     @ViewBag.sinModificacion
+                    @ViewBag.ErrorEliminarInsumos
                 </div>
             </div>
         }

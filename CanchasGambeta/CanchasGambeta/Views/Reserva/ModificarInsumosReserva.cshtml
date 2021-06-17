@@ -254,7 +254,7 @@
                         </div>
                     }
                     <button type="submit" class="btn btn-success">Finalizar</button>
-                    @Html.ActionLink("Eliminar insumos de la reserva", "EliminarInsumosReserva", "Reserva", null, new { @class = "text-center btn btn-danger" })
+                    @Html.ActionLink("Eliminar insumos de la reserva", "EliminarInsumosReserva", "Reserva", new { idReserva = ViewBag.idReserva }, new { @class = "text-center btn btn-danger" })
                     @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
                 </div>
                 <div class="form-label-group text-danger pb-2">
@@ -265,7 +265,7 @@
         }
         else
         {
-            @Html.ActionLink("Eliminar insumos de la reserva", "EliminarInsumosReserva", "Reserva", null, new { @class = "text-center btn btn-danger mr-2" })
+            @Html.ActionLink("Eliminar insumos de la reserva", "EliminarInsumosReserva", "Reserva", new { idReserva = ViewBag.idReserva }, new { @class = "text-center btn btn-danger mr-2" })
             @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
         }
     </div>

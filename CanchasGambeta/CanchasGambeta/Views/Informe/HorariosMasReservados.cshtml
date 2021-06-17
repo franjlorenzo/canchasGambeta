@@ -1,20 +1,87 @@
 ﻿@model IEnumerable<CanchasGambeta.ViewModels.HorariosMasReservados>
 @{
     ViewBag.Title = "HorariosMasReservados";
+    string fechaInicio = "fechaInicio";
+    string fechaFin = "fechaFin";
+
+    DateTime fechaAyer = DateTime.Now;
+    fechaAyer = fechaAyer.AddDays(-1);
+
+    DateTime fechaUltimaSemana = DateTime.Now;
+    fechaUltimaSemana = fechaAyer.AddDays(-7);
+
+    DateTime fechaUltimoMes = DateTime.Now;
+    fechaUltimoMes = fechaAyer.AddDays(-30);
 }
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <div class="row" style="transform: translateY(70px); color:white">
-    <div class="col-md-3"></div>
-    <div class="col-md-6 text-center">
+    <div class="col-md-12 text-center">
         <h3>Horarios más reservados</h3>
-        <table class="table table-bordered table-striped">
+    </div>
+</div>
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-5">
+        @using (Html.BeginForm("HorariosMasReservados", "Informe", FormMethod.Post))
+        {
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Desde</label>
+                    @Html.TextBox(fechaInicio, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Hasta</label>
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+            </div>
+            <div class="text-left">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        }
+    </div>
+    <div class="col-lg-5">
+        <div class="btn-group-justified">
+            @using (Html.BeginForm("HorariosMasReservados", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaAyer, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, fechaAyer, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block mt-3">Ver reservados ayer</button>
+            }
+            @using (Html.BeginForm("HorariosMasReservados", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaUltimaSemana, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block mt-3 mb-3">Ver reservados en los últimos 7 días</button>
+            }
+            @using (Html.BeginForm("HorariosMasReservados", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaUltimoMes, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block">Ver reservados en los últimos 30 días</button>
+            }
+        </div>
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-xl-2 col-lg-2 col-md-3"></div>
+    <div class="col-xl-8 col-lg-8 col-md-6 text-center">
+        <table class="table table-bordered table-striped" id="tablaHorarios" style="display:none;">
             <thead>
                 <tr>
                     <th class="text-center">
                         Horario
-                    </th>
-                    <th class="text-center">
-                        Cantidad de veces reservado
                     </th>
                 </tr>
             </thead>
@@ -25,6 +92,22 @@
                         <td>
                             @listado.Horario
                         </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <table class="table table-bordered table-striped" id="tablaCantidadReservas" style="display:none;">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        Cantidad de veces reservada
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var listado in Model)
+                {
+                    <tr class="text-center">
                         <td>
                             @listado.Cantidad
                         </td>
@@ -32,8 +115,31 @@
                 }
             </tbody>
         </table>
-        <small>*Nota: si un horario no sale en el listado es porque no hay ninguna reserva en el mismo.</small>
+        @if (Model.Count() != 0)
+        {
+            <div class="d-flex justify-content-center">
+                <div id="chart_div" style="width: 700px; height: 500px;"></div>
+            </div>
+            <div class="d-flex justify-content-center">
+                @if (ViewBag.fechaMayor != null)
+                {
+                    <div class="form-label-group text-danger">
+                        @ViewBag.fechaMayor
+                    </div>
+                }
+            </div>
+            <small>*Nota: si un horario no sale en el gráfico es porque no hay ninguna reserva en el mismo.</small>
+        }
+        else
+        {
+            <div class="d-flex justify-content-center">
+                <h4 class="text-center text-info">No hay horarios reservados en el rango de fechas introducido</h4>
+            </div>
+        }
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-xl-2 col-lg-2 col-md-3"></div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="~/Scripts/scriptHorariosMasReservados.js"></script>
 

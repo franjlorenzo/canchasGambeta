@@ -773,5 +773,51 @@ namespace CanchasGambeta.AccesoBD
 
             return resultado;
         }
+
+        public static bool eliminarInsumosReserva(int idReserva)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                ActualizarReservaVM reservaSinModificacion = new ActualizarReservaVM();
+                reservaSinModificacion.ListaInsumosEnLaReserva = obtenerInsumosDeLaReservaActualizar(idReserva);
+
+                string consultaEliminarInsumosReserva = @"delete from ReservaInsumos where reserva = @idReserva";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idReserva", idReserva);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consultaEliminarInsumosReserva;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+
+                string consultaUpdateStock = @"update Insumo set stock = stock + @cantidad where idInsumo = @idInsumo";
+                comando.CommandText = consultaUpdateStock;
+
+                foreach (var item in reservaSinModificacion.ListaInsumosEnLaReserva)
+                {
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@cantidad", item.Cantidad);
+                    comando.Parameters.AddWithValue("@idInsumo", item.IdInsumo);
+                    comando.ExecuteNonQuery();
+                }
+
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
     }
 }

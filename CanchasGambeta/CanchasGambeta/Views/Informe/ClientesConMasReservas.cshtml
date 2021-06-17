@@ -1,12 +1,82 @@
 ﻿@model IEnumerable<CanchasGambeta.ViewModels.ClientesConMasReservas>
 @{
     ViewBag.Title = "ClientesConMasReservas";
+
+    string fechaInicio = "fechaInicio";
+    string fechaFin = "fechaFin";
+
+    DateTime fechaAyer = DateTime.Now;
+    fechaAyer = fechaAyer.AddDays(-1);
+
+    DateTime fechaUltimaSemana = DateTime.Now;
+    fechaUltimaSemana = fechaAyer.AddDays(-7);
+
+    DateTime fechaUltimoMes = DateTime.Now;
+    fechaUltimoMes = fechaAyer.AddDays(-30);
 }
 
 <div class="row" style="transform: translateY(70px); color:white">
-    <div class="col-md-3"></div>
-    <div class="col-md-6 text-center">
+    <div class="col-md-12 text-center">
         <h3>Clientes con más reservas</h3>
+    </div>
+</div>
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-5">
+        @using (Html.BeginForm("ClientesConMasReservas", "Informe", FormMethod.Post))
+        {
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Desde</label>
+                    @Html.TextBox(fechaInicio, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Hasta</label>
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+            </div>
+            <div class="text-left">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        }
+    </div>
+    <div class="col-lg-5">
+        <div class="btn-group-justified">
+            @using (Html.BeginForm("ClientesConMasReservas", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaAyer, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, fechaAyer, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block mt-3">Ver reservas de ayer</button>
+            }
+            @using (Html.BeginForm("ClientesConMasReservas", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaUltimaSemana, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block mt-3 mb-3">Ver reservas de los últimos 7 días</button>
+            }
+            @using (Html.BeginForm("ClientesConMasReservas", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaUltimoMes, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block">Ver reservas de los últimos 30 días</button>
+            }
+        </div>
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6 text-center">
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -46,6 +116,6 @@
         </table>
         <small>*Nota: las reservas solo se cuentan si estas se concretaron (no se dieron de baja).</small>
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-lg-3"></div>
 </div>
 

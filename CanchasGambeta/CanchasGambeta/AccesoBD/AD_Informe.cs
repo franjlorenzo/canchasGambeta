@@ -162,13 +162,9 @@ namespace CanchasGambeta.AccesoBD
             return listaReservas;
         }
 
-        public static List<CanchasMasReservadasVM> obtenerCanchasMasReservadas()
+        public static List<CanchasMasReservadasVM> obtenerCanchasMasReservadas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<CanchasMasReservadasVM> listaCanchasMasReservadas = new List<CanchasMasReservadasVM>();
-            /*DataTable datos = new DataTable();
-            datos.Columns.Add(new DataColumn("Canchas", typeof(string)));
-            datos.Columns.Add(new DataColumn("Cantidad de reservas", typeof(string)));
-            string strDatos = "";*/
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
 
@@ -176,9 +172,12 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consulta = @"select tipoCancha, count(*) 'Veces utilizada'
                                     from Cancha c join Reserva r on r.cancha = c.idCancha
-                                    where estado = 1
+                                    where estado = 1 and fecha between @fechaInicio and @fechaFin
                                     group by tipoCancha
                                     order by 2 desc";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                comando.Parameters.AddWithValue("@fechaFin", fechaFin);
 
                 comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
@@ -195,28 +194,7 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.Cancha = lector["tipoCancha"].ToString();
                         auxiliar.Cantidad = int.Parse(lector["Veces utilizada"].ToString());
                         listaCanchasMasReservadas.Add(auxiliar);
-                        //datos.Rows.Add(lector["tipoCancha"].ToString(), int.Parse(lector["Veces utilizada"].ToString()));
-                    }
-
-                    /*strDatos = "[['Canchas', 'Cantidad de reservas'],";
-
-                    int cantidadRows = 1;
-                    foreach (DataRow dr in datos.Rows)
-                    {
-                        if(datos.Rows.Count != cantidadRows)
-                        {
-                            cantidadRows++;
-                            strDatos = strDatos + "[";
-                            strDatos = strDatos + "'" + dr[0] + "'," + dr[1];
-                            strDatos = strDatos + "],";
-                        }
-                        else
-                        {
-                            strDatos = strDatos + "[";
-                            strDatos = strDatos + "'" + dr[0] + "'," + dr[1];
-                            strDatos = strDatos + "]]";
-                        }*                       
-                    }*/                    
+                    }                   
                 }                              
             }
             catch (Exception)
@@ -230,7 +208,7 @@ namespace CanchasGambeta.AccesoBD
             return listaCanchasMasReservadas;
         }
 
-        public static List<ClientesConMasReservas> obtenerClientesConMasReservas()
+        public static List<ClientesConMasReservas> obtenerClientesConMasReservas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<ClientesConMasReservas> listaClientesConMasReservas = new List<ClientesConMasReservas>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -240,9 +218,12 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consulta = @"select nombreCompleto, email, telefono, count(*) 'Cant reservas'
                                     from Usuario u join Reserva r on u.idUsuario = r.cliente
-                                    where estado = 1
+                                    where estado = 1 and fecha between @fechaInicio and @fechaFin
                                     group by nombreCompleto, email, telefono
                                     order by 4 desc";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                comando.Parameters.AddWithValue("@fechaFin", fechaFin);
 
                 comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
@@ -275,7 +256,7 @@ namespace CanchasGambeta.AccesoBD
             return listaClientesConMasReservas;
         }
 
-        public static List<HorariosMasReservados> obtenerHorariosMasReservados()
+        public static List<HorariosMasReservados> obtenerHorariosMasReservados(DateTime fechaInicio, DateTime fechaFin)
         {
             List<HorariosMasReservados> listaHorariosMasReservados = new List<HorariosMasReservados>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -285,8 +266,13 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consulta = @"select h.horario, count(*) 'Cant reservas'
                                     from Horario h join HorarioReservas hr on h.idHorario = hr.horario
+	                                     join Reserva r on r.idReserva = hr.reserva
+                                    where fecha between @fechaInicio and @fechaFin
                                     group by h.horario
                                     order by 1";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                comando.Parameters.AddWithValue("@fechaFin", fechaFin);
 
                 comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
