@@ -44,9 +44,9 @@ namespace CanchasGambeta.ViewModels
         public bool ServicioInstrumento { get => servicioInstrumento; set => servicioInstrumento = value; }
     }
 
-    public class VistaReservasActivasYCanceladas
+    public class VistaReservasActivas
     {
-        public List<ReservasActivas> listaReservasActivas { get; set; }
-        public List<ReservasCanceladas> listaReservasCanceladas { get; set; }
+        public List<ReservasActivas> ReservasActivas { get; set; }
+        public List<Insumo> TotalCadaInsumo { get; set; }
     }
 }

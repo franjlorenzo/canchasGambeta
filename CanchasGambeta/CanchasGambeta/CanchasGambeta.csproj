@@ -242,6 +242,7 @@
     <Content Include="Content\layout.css" />
     <Content Include="Content\one-page-wonder.css" />
     <Content Include="Content\one-page-wonder.min.css" />
+    <Content Include="Content\reservasActivasStyles.css" />
     <Content Include="Content\reservasClientesStyles.css" />
     <Content Include="Content\styles-login.css" />
     <Content Include="Content\styles-register.css" />
@@ -328,7 +329,7 @@
     <Content Include="Views\Pedido\MisPedidos.cshtml" />
     <Content Include="Views\Pedido\ModificarPedido.cshtml" />
     <Content Include="Views\Reserva\ModificarReserva.cshtml" />
-    <Content Include="Views\Informe\ReservasActivasYCanceladas.cshtml" />
+    <Content Include="Views\Informe\ReservasActivas.cshtml" />
     <Content Include="Views\Informe\CanchasMasUtilizadas.cshtml" />
     <Content Include="Views\Informe\ClientesConMasReservas.cshtml" />
     <Content Include="Views\Informe\HorariosMasReservados.cshtml" />
@@ -343,6 +344,7 @@
     <Content Include="Views\Reserva\ModificarInsumosReserva.cshtml" />
     <Content Include="Views\Home\TerminosYCondiciones.cshtml" />
     <Content Include="Views\Home\Ayuda.cshtml" />
+    <Content Include="Views\Informe\ReservasCanceladas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

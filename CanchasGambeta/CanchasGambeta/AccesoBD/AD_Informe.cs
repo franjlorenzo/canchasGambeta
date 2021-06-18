@@ -12,7 +12,7 @@ namespace CanchasGambeta.AccesoBD
     public class AD_Informe
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
-        public static List<ReservasActivas> obtenerReservasActivas()
+        public static List<ReservasActivas> obtenerReservasActivas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<ReservasActivas> listaReservas = new List<ReservasActivas>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -24,8 +24,11 @@ namespace CanchasGambeta.AccesoBD
                                     from Usuario u join Reserva r on u.idUsuario = r.cliente
                                          join Cancha c on c.idCancha = r.cancha
 	                                     join Horario h on h.idHorario = r.horario
-                                    where fecha = CAST(GETDATE() AS date) and estado = 1
+                                    where fecha between CAST(@fechaInicio AS date) and CAST(@fechaFin AS date) and estado = 1
                                     order by fecha, horario";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                comando.Parameters.AddWithValue("@fechaFin", fechaFin);
 
                 comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;
@@ -60,6 +63,34 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Close();
             }
             return listaReservas;
+        }
+
+        public static List<Insumo> obtenerTotalInsumosReservas(List<ReservasActivas> listaReservas)
+        {
+            List<Insumo> listaTotalInsumos = new List<Insumo>();
+
+            foreach (var itemReservas in listaReservas) //Recorro la lista de las reservas activas
+            {
+                foreach (var itemListaInsumos in itemReservas.ListaInsumosReserva) //Recorro la lista de insumos reservados dentro de la lista de reservas
+                {
+                    if (listaTotalInsumos.Exists(insumo => insumo.idInsumo == itemListaInsumos.idInsumo)) //Si el insumo existe en la lista del total se suma la cantidad
+                    {
+                        foreach (var item in listaTotalInsumos)
+                        {
+                            if(item.idInsumo == itemListaInsumos.idInsumo)
+                            {
+                                item.cantidad += itemListaInsumos.cantidad;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        listaTotalInsumos.Add(itemListaInsumos);//Si el insumo no existe en la lista del total se lo agrega
+                    }                    
+                }
+            }
+
+            return listaTotalInsumos;
         }
 
         public static List<ReservasActivas> obtenerReservasActivasDelCliente(int idUsuario)
@@ -114,7 +145,7 @@ namespace CanchasGambeta.AccesoBD
             return listaReservas;
         }
 
-        public static List<ReservasCanceladas> obtenerReservasCanceladas()
+        public static List<ReservasCanceladas> obtenerReservasCanceladas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<ReservasCanceladas> listaReservas = new List<ReservasCanceladas>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -126,8 +157,11 @@ namespace CanchasGambeta.AccesoBD
                                     from Usuario u join Reserva r on u.idUsuario = r.cliente
                                          join Cancha c on c.idCancha = r.cancha
 	                                     join Horario h on h.idHorario = r.horario
-                                    where fecha >= GETDATE()-1 and estado = 0
+                                    where fecha between CAST(@fechaInicio AS date) and CAST(@fechaFin AS date) and estado = 0
                                     order by fecha";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                comando.Parameters.AddWithValue("@fechaFin", fechaFin);
 
                 comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;

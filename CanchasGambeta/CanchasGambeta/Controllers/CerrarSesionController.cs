@@ -160,7 +160,13 @@ namespace CanchasGambeta.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult ReservasActivasYCanceladas()
+        public ActionResult ReservasActivas()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult ReservasCanceladas()
         {
             Session.Clear();
             return RedirectToAction("Index", "Home");

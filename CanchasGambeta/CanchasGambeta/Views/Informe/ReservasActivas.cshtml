@@ -1,0 +1,180 @@
+﻿@model CanchasGambeta.ViewModels.VistaReservasActivas
+@{
+    ViewBag.Title = "ReservasActivasYCanceladas";
+    decimal precioTotal = 0;
+    string fechaInicio = "fechaInicio";
+    string fechaFin = "fechaFin";
+
+    DateTime fechaAyer = DateTime.Now;
+    fechaAyer = fechaAyer.AddDays(-1);
+
+    DateTime fechaSiguienteSemana = DateTime.Now;
+    fechaSiguienteSemana = fechaSiguienteSemana.AddDays(+7);
+
+    DateTime fechaManiana = DateTime.Now;
+    fechaManiana = fechaManiana.AddDays(1);
+
+    int totalInsumos = 0;
+    foreach (var item in Model.TotalCadaInsumo)
+    {
+        totalInsumos += item.cantidad;
+    }
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Content/reservasActivasStyles.css")" />
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-md-12 text-center">
+        <h3>RESERVAS ACTIVAS</h3>
+    </div>
+</div>
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-5">
+        @using (Html.BeginForm("ReservasActivas", "Informe", FormMethod.Post))
+        {
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Desde</label>
+                    @Html.TextBox(fechaInicio, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Hasta</label>
+                    @Html.TextBox(fechaFin, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+            </div>
+            <div class="text-left">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+                <div class="form-label-group text-danger">
+                    @ViewBag.fechaMayor
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-lg-5">
+        <div class="btn-group-justified">
+            @using (Html.BeginForm("ReservasActivas", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaAyer, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, fechaAyer, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block mt-3">Ver reservas de ayer</button>
+            }
+            @using (Html.BeginForm("ReservasActivas", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, fechaManiana, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, fechaManiana, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block mt-3 mb-3">Ver reservas para mañana</button>
+            }
+            @using (Html.BeginForm("ReservasActivas", "Informe", FormMethod.Post))
+            {
+                <div style="display:none">
+                    @Html.TextBox(fechaInicio, DateTime.Now, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaInicio" })
+                    @Html.TextBox(fechaFin, fechaSiguienteSemana, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", @name = "fechaFin" })
+                </div>
+                <button type="submit" class="btn btn-info btn-block mb-3">Ver reservas de los siguientes 7 días</button>
+            }
+            @Html.ActionLink("Ver reservas canceladas", "ReservasCanceladas", "Informe", null, new { @class = "btn btn-warning btn-block" })
+        </div>
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+
+<div class="row" style="transform: translateY(70px); color:white">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-5">
+        @if (Model.ReservasActivas.Count() != 0)
+        {
+            <div class="box">
+                <p class="heading">Reservas</p>
+                <div class="reserva">
+                    @foreach (var listado in Model.ReservasActivas)
+                    {
+                        precioTotal = 0;
+                        string fecha = listado.Fecha.ToString();
+                        string[] fechaSplit = fecha.Split(' ');
+                        <details>
+                            <summary>@fechaSplit[0] - @listado.Horario<bold>hs - Cancha: </bold>@listado.TipoCancha</summary>
+                            <p class="text-justify pt-3">
+                                <bold>- Cliente: @listado.NombreCompleto</bold><br />
+                                @if (listado.ServicioAsador == true)
+                                {
+                                    <bold>- Servicio asador: Contratado</bold><br />
+                                }
+                                else
+                                {
+                                    <bold>- Servicio asador: No contratado</bold><br />
+                                }
+                                @if (listado.ServicioInstrumento == true)
+                                {
+                                    <bold>- Servicio instrumentos: Contratado</bold><br />
+                                }
+                                else
+                                {
+                                    <bold>- Servicio instrumentos: No contratado</bold><br />
+                                }
+                                @if (listado.ListaInsumosReserva.Count != 0)
+                                {
+                                    <bold>- Insumos reservados:</bold>
+                                    <ul class="pl-4">
+                                        @foreach (var item in listado.ListaInsumosReserva)
+                                        {
+                                            <li>@item.insumo1 - Cantidad: @item.cantidad</li>
+                                            precioTotal = precioTotal + item.precio * item.cantidad;
+                                        }
+                                    </ul>
+                                    <bold>Precio total de los insumos: $@precioTotal</bold>
+                                }
+                                else
+                                {
+                                    <bold>No se reservaron insumos del kiosko</bold>
+                                }
+                            </p>
+                        </details>
+                    }
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <div class="box">
+                <p class="heading">No hay reservas hoy</p>
+            </div>
+        }
+    </div>
+    <div class="col-lg-5">
+        @if (Model.TotalCadaInsumo.Count() != 0)
+        {
+            <div class="box">
+                <p class="heading">Insumos reservados - Total: @totalInsumos</p>
+                <div class="reserva">
+                    @foreach (var listado in Model.TotalCadaInsumo)
+                    {
+                        <details>
+                            <summary>@listado.insumo1</summary>
+                            <p class="text-justify pt-3">
+                                Cantidad total: @listado.cantidad
+                            </p>
+                        </details>
+                    }
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <div class="box">
+                <p class="heading">No hay insumos reservados para hoy</p>
+            </div>
+        }
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+
