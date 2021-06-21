@@ -11,18 +11,23 @@ const validacionRegistro = () => {
         alert("Faltan campos obligatorios para completar el registro.");
         return false;
     }
-    else if (txtPassword != txtConfirmaPassword) {
-        alert("Las contraseñas no coinciden.");
+    else if (!validarEmail(txtEmail)) {
+        alert("El email que ingresó no es válido");
         return false;
     }
     else if (txtTelefono.length < 10) {
         alert("El teléfono que ingresó no es válido");
         return false;
     }
-    if (!validarEmail(txtEmail)) {
-        alert("El email que ingresó no es válido");
+    else if (isNaN(txtTelefono) | txtTelefono.includes(".")) {
+        alert("El campo teléfono solo debe contener números.");
         return false;
     }
+    else if (txtPassword != txtConfirmaPassword) {
+        alert("Las contraseñas no coinciden.");
+        return false;
+    }
+
     return true;
 }
 

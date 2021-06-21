@@ -7,7 +7,7 @@
     <div class="col-md-3"></div>
     <div class="col-md-6">
         <h3 class="text-center">Modifique los datos del proveedor</h3>
-        @using (Html.BeginForm("ModificarProveedor", "Pedido", FormMethod.Post, new { onsubmit = "return validacionModificarProveedor();" }))
+        @using (Html.BeginForm("ModificarProveedor", "Pedido", FormMethod.Post, new { onsubmit = "return validacionProveedor();" }))
         {
             @Html.HiddenFor(Model => Model.idProveedor)
             <div class="form-horizontal">

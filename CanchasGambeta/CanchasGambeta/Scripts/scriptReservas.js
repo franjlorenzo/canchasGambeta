@@ -47,17 +47,6 @@ const botonAcciones = () => {
     }
 }
 
-const botonInsumos = () => {
-    let tablaInsumos = document.getElementById("tablaInsumos");
-
-    if (tablaInsumos.style.display == "none") {
-        tablaInsumos.style.display = "inline-table";
-    }
-    else {
-        tablaInsumos.style.display = "none"
-    }
-}
-
 function confirmacionEliminar() {
     let eliminar = confirm("¿Esta seguro de que quiere eliminar esta reserva?");
     if (eliminar) return true;

@@ -49,14 +49,30 @@ function validacionNuevoPedido() {
     return true;
 }
 
-function validacionNuevoProveedor() {
+function validacionProveedor() {
     let txtNombreProveedor = document.getElementById("txtNombreProveedor").value;
     let txtTelefono = document.getElementById("txtTelefono").value;
     let txtEmail = document.getElementById("txtEmail").value;
     let txtEmpresa = document.getElementById("txtEmpresa").value;
 
-    if (!txtNombreProveedor | !txtTelefono | txtEmail | txtEmpresa) {
+    if (!txtNombreProveedor | !txtTelefono | !txtEmail | !txtEmpresa) {
         alert("Faltan campos obligatorios para el registro.");
+        return false;
+    }
+    else if (/\s/.test(txtTelefono)) {
+        alert("El campo teléfono contiene espacios no permitidos.");
+        return false;
+    }
+    else if (isNaN(txtTelefono) | txtTelefono.includes(".")) {
+        alert("El campo teléfono solo debe contener números.")
+        return false;
+    }
+    else if (txtTelefono.length < 10) {
+        alert("El teléfono que ingresó no es válido");
+        return false;
+    }
+    else if (!validarEmail(txtEmail)) {
+        alert("El email que ingresó no es válido");
         return false;
     }
 
@@ -77,18 +93,9 @@ function validacionModificarPedido() {
     return true;
 }
 
-function validacionModificarProveedor() {
-    let txtNombreProveedor = document.getElementById("txtNombreProveedor").value;
-    let txtTelefono = document.getElementById("txtTelefono").value;
-    let txtEmail = document.getElementById("txtEmail").value;
-    let txtEmpresa = document.getElementById("txtEmpresa").value;
-
-    if (!txtNombreProveedor | !txtTelefono | txtEmail | txtEmpresa) {
-        alert("Faltan campos obligatorios para modificar al proveedor.");
-        return false;
-    }
-
-    return true;
+function validarEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
 }
 
 function confirmacionEliminarProveedor() {

@@ -9,6 +9,19 @@ function validacionNuevoInsumo() {
         alert("Debe llenar todos los campos para cargar un nuevo insumo.");
         return false;
     }
+    else if (txtPrecio <= 0 | txtStock < 0) {
+        alert("El precio o stock no puede ser menor o igual que cero(0).");
+        return false;
+    }
+    else if (/\s/.test(txtPrecio) | /\s/.test(txtStock)) {
+        alert("Uno de los campos contiene espacios no permitidos.");
+        return false;
+    }
+    else if (isNaN(txtPrecio) | isNaN(txtStock) | txtPrecio.includes(".") | txtStock.includes(".")) {
+        alert("El precio o stock solo debe contener números enteros.")
+        return false;
+    }
+
     return true;
 }
 
@@ -21,6 +34,19 @@ function validacionModificarInsumo() {
         alert("No puede dejar un campo vacio al realizar la modificación.");
         return false;
     }
+    else if (txtPrecio <= 0 | txtStock < 0) {
+        alert("El precio o stock no puede ser menor o igual que cero(0).");
+        return false;
+    }
+    else if (/\s/.test(txtPrecio) | /\s/.test(txtStock)) {
+        alert("Uno de los campos contiene espacios no permitidos.");
+        return false;
+    }
+    else if (isNaN(txtPrecio) | isNaN(txtStock) | txtPrecio.includes(".") | txtStock.includes(".")) {
+        alert("El precio o stock solo debe contener números.")
+        return false;
+    }
+
     return true;
 }
 

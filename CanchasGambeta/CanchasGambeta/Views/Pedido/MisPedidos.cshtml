@@ -95,7 +95,7 @@
     </div>
     <div class="col-md-4">
         <h4>Complete el formulario para registrar un nuevo proveedor</h4>
-        @using (Html.BeginForm("NuevoProveedor", "Pedido", FormMethod.Post, new { onsubmit = "return validacionNuevoProveedor();" }))
+        @using (Html.BeginForm("NuevoProveedor", "Pedido", FormMethod.Post, new { onsubmit = "return validacionProveedor();" }))
         {
             <div class="form-horizontal">
                 <div class="input-group-sm">

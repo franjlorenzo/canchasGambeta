@@ -18,3 +18,12 @@ body{
     height: 50px;
     color: white;
 }
+
+th {
+    background-color: #C3073F;
+}
+
+table{
+    border-collapse: collapse;
+}
+
