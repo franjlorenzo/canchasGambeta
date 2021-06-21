@@ -16,9 +16,11 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            VistaReservasActivas vista = new VistaReservasActivas();
-            vista.ReservasActivas = new List<ReservasActivas>();
-            vista.TotalCadaInsumo = new List<Insumo>();
+            VistaReservasActivas vista = new VistaReservasActivas
+            {
+                ReservasActivas = new List<ReservasActivas>(),
+                TotalCadaInsumo = new List<Insumo>()
+            };
 
             if (TempData["fechaMayor"] != null) ViewBag.fechaMayor = TempData["fechaMayor"].ToString();
             if (TempData["listaReservasActivas"] != null && TempData["listaTotalInsumos"] != null)

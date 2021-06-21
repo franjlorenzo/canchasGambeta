@@ -11,6 +11,7 @@ namespace CanchasGambeta.Controllers
     public class EquipoController : Controller
     {
         // GET: Equipo
+        //------------------------------------------EQUIPO--------------------------------------------
         public ActionResult NuevoEquipo()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -64,6 +65,73 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
+        public ActionResult EliminarEquipo(int idEquipo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(idEquipo);
+                if (resultado)
+                {
+                    using (Canchas_GambetaEntities db = new Canchas_GambetaEntities())
+                    {
+                        var oUser = (from data in db.Usuario
+                                     where data.idUsuario == sesion.idUsuario
+                                     select data).FirstOrDefault();
+                        Session["User"] = oUser;
+                    }
+                    return RedirectToAction("IndexCliente", "Cliente");
+                }
+                else
+                {
+                    TempData["ErrorEliminarEquipo"] = "Ocurrió un error al eliminar su equipo, inténtelo nuevamente";
+                    return RedirectToAction("MiEquipo", "Equipo");
+                }
+            }
+            return View(idEquipo);
+        }
+
+        public ActionResult CambiarNombreEquipo()
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
+            return View(equipo);
+        }
+
+        [HttpPost]
+        public ActionResult CambiarNombreEquipo(string nombreEquipo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            if (ModelState.IsValid)
+            {
+                bool existeEquipo = AccesoBD.AD_Equipo.existeEquipo(nombreEquipo);
+                if (existeEquipo)
+                {
+                    ViewBag.ErrorCreacion = "El nombre del equipo ya se encuentra registrado, intente con otro.";
+                    Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
+                    return View(equipo);
+                }
+
+                bool resultado = AccesoBD.AD_Equipo.cambiarNombreEquipo(nombreEquipo);
+                if (resultado) return RedirectToAction("MiEquipo", "Equipo");
+                else
+                {
+                    ViewBag.ErrorCambiarNombre = "Ocurrió un error al cambiar el nombre de su equipo, inténtelo nuevamente";
+                    Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
+                    return View(equipo);
+                }
+            }
+            return View();
+        }
+
+        //------------------------------------------INTEGRANTE--------------------------------------------
+        [HttpPost]
         public ActionResult MiEquipo(string email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -71,7 +139,7 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                if(email == sesion.email)
+                if (email == sesion.email)
                 {
                     ViewBag.ErrorInsertIntegrante = "Usted ya forma parte del equipo.";
                     int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
@@ -91,7 +159,7 @@ namespace CanchasGambeta.Controllers
                     if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                     else
                     {
-                        ViewBag.ErrorInsertIntegrante = "Ocurrió un error al cargar el nuevo integrante. Intenteló nuevamente.";
+                        ViewBag.ErrorInsertIntegrante = "Ocurrió un error al cargar el nuevo integrante. Inténtelo nuevamente.";
                         int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
                         List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
                         return View(listaEquipoMails);
@@ -164,72 +232,6 @@ namespace CanchasGambeta.Controllers
                 {
                     TempData["ErrorEliminarIntegrante"] = "Error al eliminar al integrante, por favor inténtelo nuevamente.";
                     return RedirectToAction("MiEquipo", "Equipo");
-                }
-            }
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult EliminarEquipo(int idEquipo)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            if (ModelState.IsValid)
-            {
-                bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(idEquipo);
-                if (resultado)
-                {
-                    using (Canchas_GambetaEntities db = new Canchas_GambetaEntities())
-                    {
-                        var oUser = (from data in db.Usuario
-                                     where data.idUsuario == sesion.idUsuario
-                                     select data).FirstOrDefault();
-                        Session["User"] = oUser;
-                    }
-                    return RedirectToAction("IndexCliente", "Cliente");
-                }
-                else
-                {
-                    TempData["ErrorEliminarEquipo"] = "Ocurrió un error al eliminar su equipo, inténtelo nuevamente";
-                    return RedirectToAction("MiEquipo", "Equipo");
-                }
-            }
-            return View(idEquipo);
-        }
-
-        public ActionResult CambiarNombreEquipo()
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
-            return View(equipo);
-        }
-
-        [HttpPost]
-        public ActionResult CambiarNombreEquipo(string nombreEquipo)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            if (ModelState.IsValid)
-            {
-                bool existeEquipo = AccesoBD.AD_Equipo.existeEquipo(nombreEquipo);
-                if (existeEquipo)
-                {
-                    ViewBag.ErrorCreacion = "El nombre del equipo ya se encuentra registrado, intente con otro.";
-                    Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
-                    return View(equipo);
-                }
-
-                bool resultado = AccesoBD.AD_Equipo.cambiarNombreEquipo(nombreEquipo);
-                if (resultado) return RedirectToAction("MiEquipo", "Equipo");
-                else
-                {
-                    ViewBag.ErrorCambiarNombre = "Ocurrió un error al cambiar el nombre de su equipo, inténtelo nuevamente";
-                    Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
-                    return View(equipo);
                 }
             }
             return View();

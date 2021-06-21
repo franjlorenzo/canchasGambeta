@@ -4,8 +4,8 @@
 }
 
 <div class="row" style="transform: translateY(60px); color: white">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
         <h4 class="text-center">Insumos a pedir</h4>
         @using (Html.BeginForm("BuscarInsumo", "Pedido", FormMethod.Post))
         {
@@ -29,19 +29,19 @@
             <div style="display:none">
                 @foreach (var item in Model.InsumosAPedir)
                 {
-                    <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
-                    <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly />
-                    <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly />
+                    <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" readonly />
+                    <input type="text" name="listaNombreInsumoAlPedido" value="@item.Insumo" readonly />
+                    <input type="number" name="listaCantidadInsumoAlPedido" value="@item.Cantidad" readonly />
                 }
             </div>
         }
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-lg-3"></div>
 </div>
 
 <div class="row" style="transform: translateY(60px); color: white">
-    <div class="col-md-1"></div>
-    <div class="col-md-5">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-5">
         <h4 class="text-center">Insumos encontrados</h4>
             @if (Model.BuscarInsumos.Count != 0)
             {
@@ -70,9 +70,9 @@
                                     <td class="text-center">
                                         @foreach (var item in Model.InsumosAPedir)
                                         {
-                                            <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo"/>
-                                            <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
-                                            <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                            <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" readonly />
+                                            <input type="text" name="listaNombreInsumoAlPedido" value="@item.Insumo" readonly style="display:none;" />
+                                            <input type="number" name="listaCantidadInsumoAlPedido" value="@item.Cantidad" readonly style="display:none;" />
                                         }
                                         <button type="submit" class="btn btn-warning">Agregar</button>
                                     </td>
@@ -106,15 +106,15 @@
                 <div>
                     @foreach (var listado in Model.InsumosAPedir)
                     {
-                        <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
-                        <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
-                        <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
+                        <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" readonly />
+                        <input type="hidden" name="listaNombreInsumoAlPedido" value="@listado.Insumo" readonly />
+                        <input type="hidden" name="listaCantidadInsumoAlPedido" value="@listado.Cantidad" readonly />
                     }
                 </div>
             }
     </div>
 
-    <div class="col-md-5">
+    <div class="col-lg-5">
         <h4 class="text-center">Insumos a pedir</h4>
         @if (Model.InsumosAPedir.Count != 0)
         {
@@ -143,9 +143,9 @@
                                 <td class="text-center">
                                     @foreach (var item in Model.InsumosAPedir)
                                     {
-                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
-                                        <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
-                                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" readonly />
+                                        <input type="text" name="listaNombreInsumoAlPedido" value="@item.Insumo" readonly style="display:none;" />
+                                        <input type="number" name="listaCantidadInsumoAlPedido" value="@item.Cantidad" readonly style="display:none;" />
                                     }
                                     <button type="submit" class="btn btn-warning">Quitar</button>
                                 </td>
@@ -175,14 +175,14 @@
             </table>
         }
     </div>
-    <div class="col-md-1"></div>
+    <div class="col-lg-1"></div>
 </div>
 
 <hr />
 
 <div class="row" style="transform: translateY(60px); color: white">
-    <div class="col-md-3"></div>
-    <div class="col-md-6 text-center">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6 text-center">
         @if (Model.InsumosAPedir.Count != 0)
         {
             <h4 class="text-center">Agregar cantidades y finalizar</h4>
@@ -208,21 +208,19 @@
                                     <input type="text" name="NombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
                                 </td>
                                 <td class="text-center">
-                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" placeholder="@listado.Cantidad" style="width:90px;" />
+                                    <input type="number" name="CantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" style="width:90px;" />
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-                <button type="submit" class="btn btn-success">Finalizar</button>
                 <div class="form-label-group text-danger pb-2">
                     @ViewBag.cantidadIgualCero
                 </div>
+                <button type="submit" class="btn btn-success">Finalizar</button>
             }
         }
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-lg-3"></div>
 </div>
-
-<script src="~/Scripts/scriptAgregarInsumosAlPedido.js"></script>
 

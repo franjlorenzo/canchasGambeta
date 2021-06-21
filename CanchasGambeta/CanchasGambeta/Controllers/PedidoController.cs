@@ -79,15 +79,17 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            VistaPedirInsumos vistaPedirInsumos = new VistaPedirInsumos();
-            vistaPedirInsumos.BuscarInsumos = new List<BuscarInsumos>();
-            vistaPedirInsumos.InsumosAPedir = new List<InsumosAPedir>();
+            VistaPedirInsumos vistaPedirInsumos = new VistaPedirInsumos
+            {
+                BuscarInsumos = new List<BuscarInsumos>(),
+                InsumosAPedir = new List<InsumosAPedir>()
+            };
 
             if (TempData["buscarInsumos"] != null) vistaPedirInsumos.BuscarInsumos = (List<BuscarInsumos>)TempData["buscarInsumos"];
             if (TempData["listaInsumosAPedir"] != null) vistaPedirInsumos.InsumosAPedir = (List<InsumosAPedir>)TempData["listaInsumosAPedir"];
             if (TempData["ErrorBuscarInsumo"] != null) ViewBag.ErrorBuscarInsumo = TempData["ErrorBuscarInsumo"].ToString();
             if (TempData["nombreInsumo"] != null) ViewBag.nombreInsumo = TempData["nombreInsumo"].ToString();
-            if (TempData["nombreInsumoAnterior"] != null) ViewBag.nombreInsumo = TempData["nombreInsumoAnterior"].ToString();
+            if (TempData["buscarInsumoAnterior"] != null) ViewBag.nombreInsumo = TempData["buscarInsumoAnterior"].ToString();
             if (TempData["cantidadIgualCero"] != null) ViewBag.cantidadIgualCero = TempData["cantidadIgualCero"].ToString();
 
             return View(vistaPedirInsumos);
@@ -121,7 +123,7 @@ namespace CanchasGambeta.Controllers
             }
             else
             {
-                TempData["nombreInsumoAnterior"] = Request["buscarInsumoAnterior"];
+                TempData["buscarInsumoAnterior"] = Request["buscarInsumoAnterior"];
                 TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
                 TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
                 TempData["listaInsumosAPedir"] = listaInsumosAPedir;
@@ -130,53 +132,9 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult AgregarInsumos(List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
-
-            foreach (var item in listaInsumosAPedir)
-            {
-                if(item.Cantidad == 0)
-                {
-                    TempData["cantidadIgualCero"] = "No se puede pedir un insumo con cantidad cero(0)";
-                    TempData["listaInsumosAPedir"] = listaInsumosAPedir;
-                    return RedirectToAction("AgregarInsumosAlPedido");
-                }
-            }
-
-            TempData["listaInsumosAPedir"] = listaInsumosAPedir;
-            return RedirectToAction("MisPedidos");
-        }
-
-        [HttpPost]
-        public ActionResult QuitarInsumo(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
-            List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
-
-            if (listaInsumosAPedir.Exists(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo))
-            {
-                var insumoAEliminar = listaInsumosAPedir.Single(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo);
-                listaInsumosAPedir.Remove(insumoAEliminar);
-            }
-
-            TempData["nombreInsumo"] = Request["buscarInsumoAnterior"];
-            TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
-            TempData["listaInsumosAPedir"] = listaInsumosAPedir;
-            return RedirectToAction("AgregarInsumosAlPedido");
-
-        }
-        
-        [HttpPost]
         public ActionResult AgregarInsumosAlPedido(int idInsumo, string nombreInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
-            
+
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
@@ -205,6 +163,50 @@ namespace CanchasGambeta.Controllers
             listaInsumosAPedir.Add(nuevoInsumo);
             ViewBag.nombreInsumo = Request["buscarInsumoAnterior"];
             return View(new VistaPedirInsumos { BuscarInsumos = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]), InsumosAPedir = listaInsumosAPedir });
+        }
+
+        [HttpPost]
+        public ActionResult QuitarInsumo(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
+            List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
+
+            if (listaInsumosAPedir.Exists(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo))
+            {
+                var insumoAEliminar = listaInsumosAPedir.Single(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo);
+                listaInsumosAPedir.Remove(insumoAEliminar);
+            }
+
+            TempData["nombreInsumo"] = Request["buscarInsumoAnterior"];
+            TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+            TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+            return RedirectToAction("AgregarInsumosAlPedido");
+
+        }
+
+        [HttpPost]
+        public ActionResult AgregarInsumos(List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
+
+            foreach (var item in listaInsumosAPedir)
+            {
+                if (item.Cantidad == 0)
+                {
+                    TempData["cantidadIgualCero"] = "No se puede pedir un insumo con cantidad cero(0)";
+                    TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                    return RedirectToAction("AgregarInsumosAlPedido");
+                }
+            }
+
+            TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+            return RedirectToAction("MisPedidos");
         }
 
         //-----------------------------------------CONCRETAR PEDIDO---------------------------------------------------------
@@ -240,22 +242,25 @@ namespace CanchasGambeta.Controllers
         }
 
         //-----------------------------------------MODIFICAR PEDIDO---------------------------------------------------------
-        public ActionResult ModificarPedido([Optional]int idPedido)
+        public ActionResult ModificarPedido([Optional] int idPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            VistaPedirInsumos modificarPedido = new VistaPedirInsumos();
-            modificarPedido.BuscarInsumos = new List<BuscarInsumos>();
-            if(idPedido != 0) modificarPedido.InsumosAPedir = AccesoBD.AD_Pedido.obtenerInsumosDelPedido(idPedido);
+            VistaPedirInsumos modificarPedido = new VistaPedirInsumos
+            {
+                BuscarInsumos = new List<BuscarInsumos>()
+            };
+            if (idPedido != 0) modificarPedido.InsumosAPedir = AccesoBD.AD_Pedido.obtenerInsumosDelPedido(idPedido);
 
             if (TempData["buscarInsumos"] != null) modificarPedido.BuscarInsumos = (List<BuscarInsumos>)TempData["buscarInsumos"];
             if (TempData["listaInsumosAPedir"] != null) modificarPedido.InsumosAPedir = (List<InsumosAPedir>)TempData["listaInsumosAPedir"];
             if (TempData["ErrorBuscarInsumo"] != null) ViewBag.ErrorBuscarInsumo = TempData["ErrorBuscarInsumo"].ToString();
             if (TempData["nombreInsumo"] != null) ViewBag.nombreInsumo = TempData["nombreInsumo"].ToString();
             if (TempData["insumoYaExiste"] != null) ViewBag.insumoYaExiste = TempData["insumoYaExiste"].ToString();
-            if (TempData["nombreInsumoAnterior"] != null) ViewBag.nombreInsumo = TempData["nombreInsumoAnterior"].ToString();
+            if (TempData["buscarInsumoAnterior"] != null) ViewBag.nombreInsumo = TempData["buscarInsumoAnterior"].ToString();
             if (TempData["ErrorModificarPedido"] != null) ViewBag.ErrorModificarPedido = TempData["ErrorModificarPedido"].ToString();
+            if (TempData["cantidadIgualCero"] != null) ViewBag.cantidadIgualCero = TempData["cantidadIgualCero"].ToString();
             ViewBag.idPedido = idPedido;
 
             return View(modificarPedido);
@@ -288,7 +293,7 @@ namespace CanchasGambeta.Controllers
             }
             else
             {
-                TempData["nombreInsumoAnterior"] = Request["buscarInsumoAnterior"];
+                TempData["buscarInsumoAnterior"] = Request["buscarInsumoAnterior"];
                 TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
                 TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
                 TempData["listaInsumosAPedir"] = listaInsumosAPedir;
@@ -311,6 +316,11 @@ namespace CanchasGambeta.Controllers
                 listaInsumosAPedir.Remove(insumoAEliminar);
             }
 
+            if (Request["buscarInsumoAnterior"] != null && Request["buscarInsumoAnterior"] != "")
+            {
+                TempData["nombreInsumo"] = Request["buscarInsumoAnterior"];
+                TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+            }
             TempData["listaInsumosAPedir"] = listaInsumosAPedir;
             return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
         }
@@ -337,7 +347,7 @@ namespace CanchasGambeta.Controllers
                 if (existeInsumoEnLista) //Si el insumo existe en la lista, no lo agrego a la misma y muestro un mensaje
                 {
                     TempData["insumoYaExiste"] = "Este insumo ya está en la lista para pedir";
-                    TempData["nombreInsumoAnterior"] = Request["buscarInsumoAnterior"];
+                    TempData["buscarInsumoAnterior"] = Request["buscarInsumoAnterior"];
                     TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
                     TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                     return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
@@ -361,6 +371,16 @@ namespace CanchasGambeta.Controllers
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
             NuevoPedido pedidoSinModificar = AccesoBD.AD_Pedido.obtenerPedidoPorId(idPedido);
 
+            foreach (var item in listaInsumosAPedir)
+            {
+                if (item.Cantidad == 0)
+                {
+                    TempData["cantidadIgualCero"] = "No se puede pedir un insumo con cantidad cero(0)";
+                    TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                    return RedirectToAction("ModificarPedido", new { idPedido });
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Pedido.modificarPedido(idPedido, listaInsumosAPedir);
@@ -375,7 +395,7 @@ namespace CanchasGambeta.Controllers
                     TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                     TempData["buscarInsumos"] = null;
 
-                    return RedirectToAction("ModificarPedido", new { idPedido = int.Parse(Request["idPedido"]) });
+                    return RedirectToAction("ModificarPedido", new { idPedido });
                 }
             }
 

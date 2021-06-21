@@ -32,9 +32,9 @@
             <div style="display:none">
                 @foreach (var item in Model.InsumosAPedir)
                 {
-                    <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
-                    <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly />
-                    <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly />
+                    <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" readonly />
+                    <input type="text" name="listaNombreInsumoAlPedido" value="@item.Insumo" readonly />
+                    <input type="number" name="listaCantidadInsumoAlPedido" value="@item.Cantidad" readonly />
                 }
             </div>
         }
@@ -75,9 +75,9 @@
                                 <td class="text-center">
                                     @foreach (var item in Model.InsumosAPedir)
                                     {
-                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
-                                        <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
-                                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" readonly />
+                                        <input type="text" name="listaNombreInsumoAlPedido" value="@item.Insumo" readonly style="display:none;" />
+                                        <input type="number" name="listaCantidadInsumoAlPedido" value="@item.Cantidad" readonly style="display:none;" />
                                     }
                                     @if (listado.Stock >= 5)
                                     {
@@ -121,8 +121,8 @@
                 {
                     @Html.HiddenFor(Model => Model.NuevaReservaVM.idReserva)
                     <input type="hidden" name="listaIdInsumoAlPedido" value="@listado.IdInsumo" />
-                    <input type="hidden" name="listaNombreInsumoAlPedido" class="form-control nombreInsumo" placeholder="@listado.Insumo" value="@listado.Insumo" readonly />
-                    <input type="hidden" name="listaCantidadInsumoAlPedido" class="form-control cantidadInsumo" min="0" value="@listado.Cantidad" readonly style="width:90px;" />
+                    <input type="hidden" name="listaNombreInsumoAlPedido" value="@listado.Insumo" readonly />
+                    <input type="hidden" name="listaCantidadInsumoAlPedido" value="@listado.Cantidad" readonly />
                 }
             </div>
         }
@@ -158,9 +158,9 @@
                                 <td class="text-center">
                                     @foreach (var item in Model.InsumosAPedir)
                                     {
-                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" />
-                                        <input type="text" name="listaNombreInsumoAlPedido" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly style="display:none;" />
-                                        <input type="number" name="listaCantidadInsumoAlPedido" class="form-control" min="0" value="@item.Cantidad" readonly style="display:none;" />
+                                        <input type="hidden" name="listaIdInsumoAlPedido" value="@item.IdInsumo" readonly />
+                                        <input type="text" name="listaNombreInsumoAlPedido" value="@item.Insumo" readonly style="display:none;" />
+                                        <input type="number" name="listaCantidadInsumoAlPedido" value="@item.Cantidad" readonly style="display:none;" />
                                     }
                                     <button type="submit" class="btn btn-warning">Quitar</button>
                                 </td>
