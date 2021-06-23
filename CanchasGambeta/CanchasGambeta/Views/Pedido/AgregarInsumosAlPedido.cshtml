@@ -45,13 +45,13 @@
         <h4 class="text-center">Insumos encontrados</h4>
             @if (Model.BuscarInsumos.Count != 0)
             {
-                <table class="table table-bordered table-striped">
+                <table class="tablacustom">
                     <thead>
                         <tr>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Insumo
                             </th>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Acciones
                             </th>
                         </tr>
@@ -87,10 +87,10 @@
             }
             else
             {
-                <table class="table table-bordered table-striped">
+                <table class="tablacustom">
                     <thead>
                         <tr>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Insumo
                             </th>
                         </tr>
@@ -118,13 +118,13 @@
         <h4 class="text-center">Insumos a pedir</h4>
         @if (Model.InsumosAPedir.Count != 0)
         {
-            <table class="table table-bordered table-striped">
+            <table class="tablacustom">
                 <thead>
                     <tr>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Insumo
                         </th>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Acciones
                         </th>
                     </tr>
@@ -157,10 +157,10 @@
         }
         else
         {
-            <table class="table table-bordered table-striped">
+            <table class="tablacustom">
                 <thead>
                     <tr>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Insumo
                         </th>
                     </tr>
@@ -188,13 +188,13 @@
             <h4 class="text-center">Agregar cantidades y finalizar</h4>
             using (Html.BeginForm("AgregarInsumos", "Pedido", FormMethod.Post))
             {
-                <table class="table table-bordered table-striped">
+                <table class="tablacustom">
                     <thead>
                         <tr>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Insumo
                             </th>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Cantidad
                             </th>
                         </tr>

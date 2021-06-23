@@ -51,16 +51,23 @@ function validacionModificarInsumo() {
 }
 
 const botones = () => {
-    let acciones = document.getElementsByClassName("text-center acciones");
+    let acciones = document.getElementsByClassName("text-center acciones thfix");
+    let botonesAcciones = document.getElementsByClassName("text-center acciones");
 
     if (acciones[0].style.display == "none") {
         for (let i = 0; i < acciones.length; i++) {
-            acciones[i].style.display = "block";
+            acciones[i].style.display = "revert";
+        }
+        for (var i = 0; i < botonesAcciones.length; i++) {
+            botonesAcciones[i].style.display = "revert";
         }
     }
     else {
         for (let i = 0; i < acciones.length; i++) {
             acciones[i].style.display = "none";
+        }
+        for (var i = 0; i < botonesAcciones.length; i++) {
+            botonesAcciones[i].style.display = "none";
         }
     }
 }

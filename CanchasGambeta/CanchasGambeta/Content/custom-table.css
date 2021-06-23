@@ -1,0 +1,34 @@
+﻿/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+    font-family: Lato-Regular;
+    src: url(../fonts/Lato-Regular.ttf);
+}
+
+@font-face {
+    font-family: Lato-Bold;
+    src: url(../fonts/Lato-Bold.ttf);
+}
+
+.tablacustom {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border: none;
+    margin-bottom: 5px;
+}
+
+    .tablacustom td {
+        padding: .75rem;
+        vertical-align: top;
+        border-top: none;
+        background-color: #101012;
+    }
+
+    .tablacustom th {
+        padding: .75rem;
+        vertical-align: top;
+        border-top: none;
+        background-color: #C3073F;
+    }

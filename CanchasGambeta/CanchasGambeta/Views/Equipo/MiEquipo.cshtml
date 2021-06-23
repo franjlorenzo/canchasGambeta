@@ -14,13 +14,13 @@
         </div>
         @if (Model.Count() != 0)
         {
-            <table class="table table-bordered table-striped">
+            <table class="tablacustom">
                 <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th class="text-center">
                             Integrantes
                         </th>
-                        <th class="text-center acciones" style="display:none">
+                        <th class="text-center acciones thfix" style="display:none">
                             Acciones
                         </th>
                     </tr>
@@ -33,14 +33,14 @@
                                 @Html.HiddenFor(Model => listado.IdEmail)
                                 @listado.Email
                             </td>
-                            <td class="text-center acciones" style="display:none">
+                            <td class="text-center acciones" style="display:none;">
                                 <div class="btn-group">
-                                    <a href="@Url.Action("ModificarIntegrante", "Equipo", new {@idEmail = listado.IdEmail, @email1 = listado.Email})" class="btn btn-warning m-1">Modificar</a>
+                                    <a href="@Url.Action("ModificarIntegrante", "Equipo", new {@idEmail = listado.IdEmail, @email1 = listado.Email})" class="btn btn-warning">Modificar</a>
                                     @using (Html.BeginForm("EliminarIntegrante", "Equipo", FormMethod.Post, new { onsubmit = "return confirmarEliminarIntegrante();" }))
                                     {
                                         <input type="hidden" name="idEmail" value="@listado.IdEmail" />
                                         <input type="hidden" name="email" value="@listado.Email" />
-                                        <button type="submit" class="btn btn-danger m-1">Eliminar</button>
+                                        <button type="submit" class="btn btn-danger ml-1">Eliminar</button>
                                     }
                                 </div>
                             </td>
@@ -49,11 +49,11 @@
                 </tbody>
             </table>
             <div class="btn-group">
-                <button id="btnModificarEquipo" class="btn btn-info m-1" onclick="botones()">Modificar equipo</button>
+                <button id="btnModificarEquipo" class="btn btn-info mr-1 mt-1" onclick="botones()">Modificar equipo</button>
                 @using (Html.BeginForm("EliminarEquipo", "Equipo", FormMethod.Post, new { onsubmit = "return confirmarEliminarEquipo();" }))
                 {
                     <input type="hidden" name="idEquipo" value="@sesion.equipo" />
-                    <button type="submit" class="btn btn-danger m-1">Eliminar Equipo</button>
+                    <button type="submit" class="btn btn-danger ml-1 mt-1">Eliminar Equipo</button>
                 }
             </div>
             <div class="form-label-group text-danger">
@@ -106,7 +106,9 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" id="btnNuevoIntegrante" class="btn btn-success">Agregar</button>
+                <div class="text-center">
+                    <button type="submit" id="btnNuevoIntegrante" class="btn btn-success">Agregar</button>
+                </div>
                 <div class="form-label-group text-danger" style="margin-left:10px">
                     @ViewBag.ErrorInsertIntegrante
                 </div>

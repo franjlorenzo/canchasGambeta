@@ -13,13 +13,13 @@
         <h3 class="text-center" style="color:white">Mis reservas</h3>
         @if (Model.TablaReservaVM.Count() != 0)
         {
-            <table class="table table-bordered table-striped">
+            <table class="tablacustom">
                 <thead>
                     <tr>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Reserva
                         </th>
-                        <th class="text-center acciones" style="display:none">
+                        <th class="text-center acciones thfix" style="display:none">
                             Acciones
                         </th>
                     </tr>
@@ -70,7 +70,7 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Reservas
                         </th>
                     </tr>
@@ -86,7 +86,7 @@
         }
         <div class="form-label-group text-success text-center">
             @ViewBag.reservaInsumoExitoso
-            
+
         </div>
         <div class="p-3 text-center">
             @if (Model.TablaReservaVM.Count != 0)
@@ -101,85 +101,69 @@
         <h4 class="p-1">Llene los siguientes campos para concretar una reserva:</h4>
         @using (Html.BeginForm("MisReservas", "Reserva", FormMethod.Post, new { onsubmit = "return validacionNuevaReserva();", @id = "idNuevaReserva" }))
         {
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-lg-12 control-label">Fecha</label>
-                            <div class="col-lg-12">
-                                <input type="hidden" name="fechaElegida" value="@ViewBag.fechaElegida" />
-                                @Html.TextBoxFor(model => model.NuevaReservaVM.fecha, "{0:yyyy-MM-dd}", htmlAttributes: new { onchange = "document.getElementById('idNuevaReserva').submit()", @value = DateTime.Now, @type = "date", @class = "form-control" })
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-12 control-label">Cancha</label>
-                            <div class="col-lg-12">
-                                <input type="hidden" name="idCanchaElegida" value="@ViewBag.idCanchaElegida" />
-                                <select name="idCancha" id="idCancha" data-val="true" class="form-control" onchange="document.getElementById('idNuevaReserva').submit()">
-                                    <option value="">Seleccione una cancha</option>
-                                    @foreach (var item in Model.NuevaReservaVM.Canchas)
-                                    {
-                                        if (item.Selected)
-                                        {
-                                            <option value="@item.Value" selected="selected">@item.Text</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@item.Value">@item.Text</option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-12 control-label">Horario</label>
-                            <div class="col-lg-12">
-                                <select name="idHorario" id="idHorario" data-val="true" class="form-control" disabled>
-                                    <option value="">Seleccione el horario</option>
-                                    @foreach (var item in Model.NuevaReservaVM.Horarios)
-                                    {
-                                        if (item.Selected)
-                                        {
-                                            <option value="@item.Value" selected="selected">@item.Text</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@item.Value">@item.Text</option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-12">
-                                <label class="control-label">Servicio asador</label>
-                                @Html.CheckBoxFor(Model => Model.NuevaReservaVM.servicioAsador)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-12">
-                                <label class="control-label">Servicio instrumentos</label>
-                                @Html.CheckBoxFor(Model => Model.NuevaReservaVM.servicioInstrumento)
-                            </div>
-                        </div>
-                        @if (sesion.equipo != null)
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Fecha</label>
+                    <input type="hidden" name="fechaElegida" value="@ViewBag.fechaElegida" />
+                    @Html.TextBoxFor(model => model.NuevaReservaVM.fecha, "{0:yyyy-MM-dd}", htmlAttributes: new { onchange = "document.getElementById('idNuevaReserva').submit()", @value = DateTime.Now, @type = "date", @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Cancha</label>
+                    <input type="hidden" name="idCanchaElegida" value="@ViewBag.idCanchaElegida" />
+                    <select name="idCancha" id="idCancha" data-val="true" class="form-control" onchange="document.getElementById('idNuevaReserva').submit()">
+                        <option value="">Seleccione una cancha</option>
+                        @foreach (var item in Model.NuevaReservaVM.Canchas)
                         {
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    <label class="control-label">Notificar a mi equipo</label>
-                                    @Html.CheckBoxFor(Model => Model.NuevaReservaVM.enviarMails)
-                                </div>
-                            </div>
+                            if (item.Selected)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
                         }
-                        <div class="form-group text-center">
-                            <div class="col-xs-12">
-                                <button class="btn btn-success" type="submit">Registrar reserva</button>
-                            </div>
-                        </div>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Horario</label>
+                    <select name="idHorario" id="idHorario" data-val="true" class="form-control" disabled>
+                        <option value="">Seleccione el horario</option>
+                        @foreach (var item in Model.NuevaReservaVM.Horarios)
+                        {
+                            if (item.Selected)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Servicio asador</label>
+                    @Html.CheckBoxFor(Model => Model.NuevaReservaVM.servicioAsador)
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Servicio instrumentos</label>
+                    @Html.CheckBoxFor(Model => Model.NuevaReservaVM.servicioInstrumento)
+                </div>
+                @if (sesion.equipo != null)
+                {
+                    <div class="form-group">
+                        <label class="control-label">Notificar a mi equipo</label>
+                        @Html.CheckBoxFor(Model => Model.NuevaReservaVM.enviarMails)
+                    </div>
+                }
+                <div class="form-group text-center">
+                    <div>
+                        <button class="btn btn-success" type="submit">Registrar reserva</button>
                     </div>
                 </div>
             </div>
-            <div class="form-label-group text-danger" style="margin-left:10px">
+            <div class="form-label-group text-danger">
                 @ViewBag.ErrorInsertReserva
                 @ViewBag.Error
             </div>

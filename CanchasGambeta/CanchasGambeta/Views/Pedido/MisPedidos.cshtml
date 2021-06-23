@@ -15,22 +15,22 @@
         <h4 class="text-center">Proveedores</h4>
         @if (Model.TablaProveedores.Count() != 0)
         {
-            <table class="table table-bordered table-striped">
+            <table class="tablacustom">
                 <thead>
                     <tr>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Nombre
                         </th>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Empresa
                         </th>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Teléfono
                         </th>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Correo electrónico
                         </th>
-                        <th class="text-center accionesProveedores" style="display:none">
+                        <th class="text-center accionesProveedores thfix" style="display:none">
                             Acciones
                         </th>
                     </tr>
@@ -70,7 +70,7 @@
                 @ViewBag.ErrorPedidosSinConcretar
             </div>
             <div>
-                <button class="btn btn-info" onclick="mostrarBotonesProveedores()">Modificar proveedores</button>
+                <button class="btn btn-info mt-1" onclick="mostrarBotonesProveedores()">Modificar proveedores</button>
             </div>
         }
         else
@@ -169,25 +169,25 @@
         {
             if (pedidoSinConcretar)
             {
-                <table class="table table-bordered table-striped">
+                <table class="tablacustom">
                     <thead>
                         <tr>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Descripción
                             </th>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Fecha
                             </th>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Proveedor
                             </th>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Teléfono
                             </th>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Estado
                             </th>
-                            <th class="text-center accionesPedidos" style="display:none">
+                            <th class="text-center accionesPedidos thfix" style="display:none">
                                 Acciones
                             </th>
                         </tr>
@@ -248,17 +248,17 @@
             }
             else
             {
-                <table class="table table-bordered table-striped">
+                <table class="tablacustom">
                     <thead>
                         <tr>
-                            <th class="text-center">
+                            <th class="text-center thfix">
                                 Pedidos
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="text-center">
+                            <td class="text-center thfix">
                                 No hay pedidos pendientes
                             </td>
                         </tr>
@@ -269,22 +269,22 @@
 
         }
 
-        <table class="table table-bordered table-striped" id="tablaPedidosConcretados" style="display:none">
+        <table class="tablacustom" id="tablaPedidosConcretados" style="display:none">
             <thead>
                 <tr>
-                    <th class="text-center">
+                    <th class="text-center thfix">
                         Descripción
                     </th>
-                    <th class="text-center">
+                    <th class="text-center thfix">
                         Fecha
                     </th>
-                    <th class="text-center">
+                    <th class="text-center thfix">
                         Proveedor
                     </th>
-                    <th class="text-center">
+                    <th class="text-center thfix">
                         Teléfono
                     </th>
-                    <th class="text-center">
+                    <th class="text-center thfix">
                         Estado
                     </th>
                 </tr>

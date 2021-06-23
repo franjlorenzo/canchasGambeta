@@ -18,13 +18,13 @@
     <div class="col-md-1"></div>
     <div class="col-md-5 text-center">
         <h5>Detalles del pedido</h5>
-        <table class="table table-bordered table-striped">
+        <table class="tablacustom">
             <thead>
                 <tr>
-                    <th class="text-center">
+                    <th class="text-center thfix">
                         Proveedor
                     </th>
-                    <th class="text-center">
+                    <th class="text-center thfix">
                         Pedido el día
                     </th>
                 </tr>
@@ -42,13 +42,13 @@
         </table>
         <hr />
         <h5>Insumos pedidos</h5>
-        <table class="table table-bordered table-striped">
+        <table class="tablacustom">
             <thead>
                 <tr>
-                    <th class="text-center">
+                    <th class="text-center thfix">
                         Insumo
                     </th>
-                    <th class="text-center">
+                    <th class="text-center thfix">
                         Cantidad pedida
                     </th>
                 </tr>
@@ -80,13 +80,13 @@
                     @Html.TextBoxFor(model => model.FechaRecibido, "{0:yyyy-MM-dd}", htmlAttributes: new { @value = DateTime.Now, @type = "date", @class = "form-control" })
                 </div>
             </div>
-            <table class="table table-bordered table-striped">
+            <table class="tablacustom">
                 <thead>
                     <tr>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Insumo
                         </th>
-                        <th class="text-center">
+                        <th class="text-center thfix">
                             Cantidad recibida
                         </th>
                     </tr>
@@ -106,8 +106,8 @@
                     }
                 </tbody>
             </table>
-            <button type="submit" class="btn btn-success">Concretar</button>
-            @Html.ActionLink("Cancelar", "MisPedidos", "Pedido", null, new { @class = "text-center btn btn-warning" })
+            <button type="submit" class="btn btn-success mt-1">Concretar</button>
+            @Html.ActionLink("Cancelar", "MisPedidos", "Pedido", null, new { @class = "text-center btn btn-warning mt-1" })
         }
 
     </div>

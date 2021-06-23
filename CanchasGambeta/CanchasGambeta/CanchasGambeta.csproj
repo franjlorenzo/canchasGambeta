@@ -239,14 +239,17 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\custom-table.css" />
     <Content Include="Content\layout.css" />
     <Content Include="Content\one-page-wonder.css" />
     <Content Include="Content\one-page-wonder.min.css" />
+    <Content Include="Content\perfect-scrollbar.css" />
     <Content Include="Content\reservasActivasStyles.css" />
     <Content Include="Content\reservasClientesStyles.css" />
     <Content Include="Content\styles-login.css" />
     <Content Include="Content\styles-register.css" />
     <Content Include="Content\terminosYcondicionesStyles.css" />
+    <Content Include="Content\util.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font.family-Catamaran.css" />
     <Content Include="fonts\font.family-Lato.css" />
@@ -278,6 +281,8 @@
     <Content Include="Models\ModeloBDCanchasGambeta.edmx.diagram">
       <DependentUpon>ModeloBDCanchasGambeta.edmx</DependentUpon>
     </Content>
+    <Content Include="fonts\Lato-Bold.ttf" />
+    <Content Include="fonts\Lato-Regular.ttf" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -289,6 +294,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\perfect-scrollbar.min.js" />
     <Content Include="Scripts\scriptCanchasMasReservadas.js" />
     <Content Include="Scripts\scriptEquipo.js" />
     <Content Include="Scripts\scriptHorariosMasReservados.js" />

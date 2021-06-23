@@ -37,7 +37,7 @@ const botonAcciones = () => {
 
     if (acciones[0].style.display == "none") {
         for (var i = 0; i < acciones.length; i++) {
-            acciones[i].style.display = "block";
+            acciones[i].style.display = "revert";
         }
     }
     else {

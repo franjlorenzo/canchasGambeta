@@ -462,7 +462,8 @@ namespace CanchasGambeta.AccesoBD
             try
             {
                 string consulta = @"select ir.instrumento 'idInstrumento', i.instrumento, fechaRotura 
-                                    from Instrumento i join InstrumentoRoto ir on i.idInstrumento = ir.instrumento";
+                                    from Instrumento i join InstrumentoRoto ir on i.idInstrumento = ir.instrumento
+                                    order by 3 desc";
 
                 comando.CommandType = CommandType.Text;
                 comando.CommandText = consulta;

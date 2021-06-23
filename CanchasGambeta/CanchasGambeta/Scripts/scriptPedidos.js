@@ -5,7 +5,7 @@ const mostrarBotonesPedidos = () => {
 
     if (acciones[0].style.display == "none") {
         for (let i = 0; i < acciones.length; i++) {
-            acciones[i].style.display = "block";
+            acciones[i].style.display = "revert";
         }
     }
     else {
@@ -20,7 +20,7 @@ const mostrarBotonesProveedores = () => {
 
     if (acciones[0].style.display == "none") {
         for (let i = 0; i < acciones.length; i++) {
-            acciones[i].style.display = "block";
+            acciones[i].style.display = "revert";
         }
     }
     else {
