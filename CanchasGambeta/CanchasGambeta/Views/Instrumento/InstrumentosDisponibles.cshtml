@@ -1,0 +1,99 @@
+﻿@model CanchasGambeta.ViewModels.VistaInstrumentos
+@{
+    ViewBag.Title = "InstrumentosDisponibles";
+}
+
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-6">
+        <h3 class="text-center">Instrumentos de Canchas gambeta</h3>
+        @if (Model.TablaInstrumentosDisponibles.Count() != 0)
+        {
+            <table class="tablacustom">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Instrumento
+                        </th>
+                        <th class="text-center">
+                            Adquirido el
+                        </th>
+                        <th class="text-center">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.TablaInstrumentosDisponibles)
+                    {
+                        string fecha = listado.FechaCompra.ToString();
+                        string[] fechaSplit = fecha.Split(' ');
+                        <tr>
+                            <td class="text-center">
+                                @listado.Instrumento
+                            </td>
+                            <td class="text-center">
+                                @fechaSplit[0]
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    @using (Html.BeginForm("NuevoInstrumentoRoto", "Informe", FormMethod.Post, new { onsubmit = "return confirmacionNuevoInstrumentoRoto();" }))
+                                    {
+                                        <input type="hidden" name="idInstrumento" value="@listado.IdInstrumento" />
+                                        <button type="submit" class="btn btn-danger m-1">Roto</button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="form-label-group text-danger">
+                @ViewBag.ErrorNuevoInstrumentoRoto
+            </div>
+        }
+        else
+        {
+            <table class="tablacustom">
+                <thead>
+                    <tr>
+                        <th class="text-center thfix">
+                            Instrumentos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            No hay instrumentos
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-lg-4">
+        <h4 class="p-1">Ingrese los datos del nuevo instrumento</h4>
+        @using (Html.BeginForm("NuevoInstrumento", "Instrumento", FormMethod.Post, new { onsubmit = "return validacionNuevoInstrumento();" }))
+        {
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Instrumento</label>
+                    <input type="text" class="form-control" id="txtInstrumento" name="Instrumento" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Fecha de adquisición</label>
+                    <input type="date" class="form-control datepicker" id="txtFechaCompra" name="fechaCompra" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Agregar</button>
+            <div class="form-label-group text-danger">
+                @ViewBag.ErrorInsertInstrumento
+            </div>
+        }
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+
+<script src="~/Scripts/scriptInstrumentos.js"></script>
+

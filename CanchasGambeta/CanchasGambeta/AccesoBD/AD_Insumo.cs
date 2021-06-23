@@ -11,7 +11,7 @@ namespace CanchasGambeta.AccesoBD
     public class AD_Insumo
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
-        public static List<Insumo> obtenerInsumos()
+        public static List<Insumo> obtenerTop10InsumosMenosStock()
         {
             List<Insumo> lista = new List<Insumo>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -19,7 +19,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idInsumo, insumo, precio, stock
+                string consulta = @"select top 10 idInsumo, insumo, precio, stock
                                     from Insumo
                                     where estado = 1
                                     order by 4 asc";
@@ -56,7 +56,7 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
-        public static bool nuevoInsumo(string insumo, decimal precio, int stock)
+        public static bool nuevoInsumo(Insumo nuevo)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -66,9 +66,9 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consultaInsertEquipo = "insert into Insumo (insumo, precio, stock, estado) values (@insumo, @precio, @stock, @estado)";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@insumo", insumo);
-                comando.Parameters.AddWithValue("@precio", precio);
-                comando.Parameters.AddWithValue("@stock", stock);
+                comando.Parameters.AddWithValue("@insumo", nuevo.insumo1);
+                comando.Parameters.AddWithValue("@precio", nuevo.precio);
+                comando.Parameters.AddWithValue("@stock", nuevo.stock);
                 comando.Parameters.AddWithValue("@estado", 1);
 
 
@@ -207,16 +207,27 @@ namespace CanchasGambeta.AccesoBD
             List<BuscarInsumos> listaInsumosEncontrados = new List<BuscarInsumos>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
-
+            
             try
             {
-                string consulta = @"select idInsumo, insumo, stock from Insumo where insumo like @nombreInsumo and estado = 1";
-                comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@nombreInsumo", "%" + nombreInsumo + "%");
-
                 comando.CommandType = System.Data.CommandType.Text;
-                comando.CommandText = consulta;
 
+                if (nombreInsumo == "MostrarTodosLosInsumos")
+                {
+                    string consultaObtenerTodosLosInsumos = @"select * from Insumo where estado = 1 order by insumo";
+                    comando.CommandText = consultaObtenerTodosLosInsumos;
+                }
+                else
+                {
+                    string consultaObtenerInsumosPorNombre = @"select idInsumo, insumo, stock, precio 
+                                                               from Insumo
+                                                               where insumo like @nombreInsumo and estado = 1
+                                                               order by 2";
+                    comando.Parameters.Clear();
+                    comando.Parameters.AddWithValue("@nombreInsumo", "%" + nombreInsumo + "%");
+                    comando.CommandText = consultaObtenerInsumosPorNombre;
+                }
+                             
                 conexion.Open();
                 comando.Connection = conexion;
 
@@ -229,6 +240,7 @@ namespace CanchasGambeta.AccesoBD
                         insumo.IdInsumo = int.Parse(lector["idInsumo"].ToString());
                         insumo.Insumo = lector["insumo"].ToString();
                         insumo.Stock = int.Parse(lector["stock"].ToString());
+                        insumo.Precio = Math.Round(decimal.Parse(lector["precio"].ToString()), 2);
                         listaInsumosEncontrados.Add(insumo);
                     }
                 }

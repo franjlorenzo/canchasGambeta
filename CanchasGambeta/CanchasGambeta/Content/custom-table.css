@@ -24,6 +24,7 @@
         vertical-align: top;
         border-top: none;
         background-color: #101012;
+        text-align: center;
     }
 
     .tablacustom th {
@@ -31,4 +32,5 @@
         vertical-align: top;
         border-top: none;
         background-color: #C3073F;
+        text-align: center;
     }

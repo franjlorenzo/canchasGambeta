@@ -9,132 +9,24 @@
     }
 }
 
-<div class="row" style="transform: translateY(60px); color: white">
-    <div class="col-md-1"></div>
-    <div class="col-md-6">
-        <h4 class="text-center">Proveedores</h4>
-        @if (Model.TablaProveedores.Count() != 0)
-        {
-            <table class="tablacustom">
-                <thead>
-                    <tr>
-                        <th class="text-center thfix">
-                            Nombre
-                        </th>
-                        <th class="text-center thfix">
-                            Empresa
-                        </th>
-                        <th class="text-center thfix">
-                            Teléfono
-                        </th>
-                        <th class="text-center thfix">
-                            Correo electrónico
-                        </th>
-                        <th class="text-center accionesProveedores thfix" style="display:none">
-                            Acciones
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var listado in Model.TablaProveedores)
-                    {
-                        <tr>
-                            <td class="text-center">
-                                @listado.NombreCompleto
-                            </td>
-                            <td class="text-center">
-                                @listado.Empresa
-                            </td>
-                            <td class="text-center">
-                                @listado.Telefono
-                            </td>
-                            <td class="text-center">
-                                @listado.Email
-                            </td>
-                            <td class="text-center accionesProveedores" style="display:none">
-                                <div class="btn-group">
-                                    <a href="@Url.Action("ModificarProveedor", "Pedido", new {idProveedor = listado.IdProveedor})" class="btn btn-warning m-1">Modificar</a>
-                                    @using (Html.BeginForm("EliminarProveedor", "Pedido", FormMethod.Post, new { onsubmit = "return confirmacionEliminarProveedor();" }))
-                                    {
-                                        <input type="hidden" name="idProveedor" value="@listado.IdProveedor" />
-                                        <button type="submit" class="btn btn-danger m-1">Eliminar</button>
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <div class="form-label-group text-danger" style="margin-left:10px">
-                @ViewBag.ErrorEliminarProveedor
-                @ViewBag.ErrorPedidosSinConcretar
-            </div>
-            <div>
-                <button class="btn btn-info mt-1" onclick="mostrarBotonesProveedores()">Modificar proveedores</button>
-            </div>
-        }
-        else
-        {
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th class="text-center">
-                            Proveedores
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-center">
-                            No hay proveedores
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        }
-    </div>
-    <div class="col-md-4">
-        <h4>Complete el formulario para registrar un nuevo proveedor</h4>
-        @using (Html.BeginForm("NuevoProveedor", "Pedido", FormMethod.Post, new { onsubmit = "return validacionProveedor();" }))
-        {
-            <div class="form-horizontal">
-                <div class="input-group-sm">
-                    <label class="control-label">Nombre del proveedor</label>
-                    @Html.TextBoxFor(Model => Model.NuevoProveedor.NombreCompleto, htmlAttributes: new { @class = "form-control", id = "txtNombreProveedor" })
-                </div>
-                <div class="input-group-sm">
-                    <label class="control-label">Teléfono</label>
-                    @Html.TextBoxFor(Model => Model.NuevoProveedor.Telefono, htmlAttributes: new { @class = "form-control", id = "txtTelefono", maxlength = 10 })
-                </div>
-                <div class="input-group-sm">
-                    <label class="control-label">Correo electrónico</label>
-                    @Html.TextBoxFor(Model => Model.NuevoProveedor.Email, htmlAttributes: new { @class = "form-control", id = "txtEmail" })
-                </div>
-                <div class="input-group-sm">
-                    <label class="control-label">Empresa</label>
-                    @Html.TextBoxFor(Model => Model.NuevoProveedor.Empresa, htmlAttributes: new { @class = "form-control", id = "txtEmpresa" })
-                </div>
-            </div>
-            <button class="btn btn-success mt-2" type="submit">Registrar proveedor</button>
-            <div class="form-label-group text-danger" style="margin-left:10px">
-                @ViewBag.ErrorInsertProveedor
-            </div>
-        }
-    </div>
-    <div class="col-md-1"></div>
-</div>
-
 @using (Html.BeginForm("MisPedidos", "Pedido", FormMethod.Post, new { onsubmit = "return validacionNuevoPedido();" }))
 {
     <div class="row" style="transform: translateY(70px); color: white">
         <div class="col-md-1"></div>
         <div class="col-md-5">
-            <h4 class="p-1">Complete el formulario para realizar un nuevo pedido</h4>
+            <h4 class="p-1">Realizar un nuevo pedido</h4>
             @Html.HiddenFor(Model => Model.NuevoPedido.Fecha)
             <div class="form-horizontal">
                 <div class="form-group">
-                    <label class="control-label">Proveedores</label>
-                    @Html.DropDownList("idProveedor", proveedores, "Seleccione un proveedor", htmlAttributes: new { onchange = "return habilitarBuscarInsumo()", @class = "form-control" })
+                    <label class="control-label">Proveedor</label>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            @Html.DropDownList("idProveedor", proveedores, "Seleccione un proveedor", htmlAttributes: new { onchange = "return habilitarBuscarInsumo()", @class = "form-control" })
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="@Url.Action("MisProveedores", "Pedido")" class="btn btn-primary">Ver mis proveedores</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Descripción</label>
@@ -239,7 +131,7 @@
                         }
                     </tbody>
                 </table>
-                <div class="form-label-group text-danger" style="margin-left:10px">
+                <div class="form-label-group text-danger">
                     @ViewBag.ErrorConcretarPedido
                     @ViewBag.ErrorEliminarPedido
                 </div>

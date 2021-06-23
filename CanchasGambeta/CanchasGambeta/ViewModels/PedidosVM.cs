@@ -80,11 +80,13 @@ namespace CanchasGambeta.ViewModels
         private string insumo;
         private int cantidad;
         private int stock;
+        private decimal precio;
 
         public int IdInsumo { get => idInsumo; set => idInsumo = value; }
         public string Insumo { get => insumo; set => insumo = value; }
         public int Cantidad { get => cantidad; set => cantidad = value; }
         public int Stock { get => stock; set => stock = value; }
+        public decimal Precio { get => precio; set => precio = value; }
     }
 
     public class InsumosAPedir
@@ -164,8 +166,6 @@ namespace CanchasGambeta.ViewModels
     {
         public List<TablaPedido> TablaPedido { get; set; }
         public NuevoPedido NuevoPedido { get; set; }
-        public NuevoProveedor NuevoProveedor { get; set; }
-        public List<TablaProveedores> TablaProveedores { get; set; }
         public List<InsumosAPedir> InsumosAPedir { get; set; }
     }
 
@@ -173,5 +173,11 @@ namespace CanchasGambeta.ViewModels
     {
         public List<BuscarInsumos> BuscarInsumos { get; set; }
         public List<InsumosAPedir> InsumosAPedir { get; set; }
+    }
+
+    public class VistaMisProveedores
+    {
+        public NuevoProveedor NuevoProveedor { get; set; }
+        public List<TablaProveedores> TablaProveedores { get; set; }
     }
 }

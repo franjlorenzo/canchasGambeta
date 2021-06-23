@@ -11,6 +11,7 @@ namespace CanchasGambeta.Controllers
     public class InformeController : Controller
     {
         // GET: Informe
+        //--------------------------------------RESERVAS ACTIVAS Y CANCELADAS-----------------------------------------------
         public ActionResult ReservasActivas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -103,6 +104,7 @@ namespace CanchasGambeta.Controllers
             }
         }
 
+        //--------------------------------------CANCHAS MÁS UTILIZADAS-----------------------------------------------
         public ActionResult CanchasMasUtilizadas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -145,6 +147,7 @@ namespace CanchasGambeta.Controllers
             
         }
 
+        //--------------------------------------CLIENTES CON MÁS RESERVAS-----------------------------------------------
         public ActionResult ClientesConMasReservas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -186,6 +189,7 @@ namespace CanchasGambeta.Controllers
             }
         }
 
+        //--------------------------------------HORARIOS MÁS RESERVADOS-----------------------------------------------
         public ActionResult HorariosMasReservados()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -227,6 +231,7 @@ namespace CanchasGambeta.Controllers
             }
         }
 
+        //--------------------------------------INSUMOS MÁS CONSUMIDOS-----------------------------------------------
         public ActionResult InsumosMasConsumidos()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -268,73 +273,46 @@ namespace CanchasGambeta.Controllers
             }
         }
 
-        public ActionResult InstrumentosDisponibles()
+        //--------------------------------------INSTRUMENTOS ROTOS-----------------------------------------------
+        public ActionResult InstrumentosRotos()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            if (TempData["ErrorInsertInstrumento"] != null) ViewBag.ErrorInsertInstrumento = TempData["ErrorInsertInstrumento"].ToString();
-            if (TempData["ErrorInsertInstrumentoRoto"] != null) ViewBag.ErrorInsertInstrumentoRoto = TempData["ErrorInsertInstrumentoRoto"].ToString();
-            if (TempData["ErrorEliminarInstrumentoRoto"] != null) ViewBag.ErrorEliminarInstrumentoRoto = TempData["ErrorEliminarInstrumentoRoto"].ToString();
-
-            return View(new VistaInstrumentos { TablaInstrumentosDisponibles = AccesoBD.AD_Informe.obtenerInstrumentosDisponibles(), TablaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotos(), InstrumentoNuevo = new InstrumentoDisponible() });
+            _ = new List<InstrumentoRotoVM>();
+            List<InstrumentoRotoVM> listaInstrumentosRotos;
+            if (TempData["fechaMayor"] != null) ViewBag.fechaMayor = TempData["fechaMayor"].ToString();
+            if(TempData["listaInstrumentosRotos"] != null)
+            {
+                listaInstrumentosRotos = (List<InstrumentoRotoVM>)TempData["listaInstrumentosRotos"];
+                return View(listaInstrumentosRotos);
+            }
+            else
+            {
+                listaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotosEntreFechas(DateTime.Now, DateTime.Now);
+                return View(listaInstrumentosRotos);
+            }           
         }
 
         [HttpPost]
-        public ActionResult NuevoInstrumento(InstrumentoDisponible nuevoInstrumento)
+        public ActionResult InstrumentosRotos(DateTime fechaInicio, DateTime fechaFin)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            if (ModelState.IsValid)
+            if (fechaFin >= fechaInicio)
             {
-                bool resultado = AccesoBD.AD_Informe.nuevoInstrumento(nuevoInstrumento);
-                if (resultado) return RedirectToAction("InstrumentosDisponibles", "Informe");
-                else
-                {
-                    TempData["ErrorInsertInstrumento"] = "Ocurrió un error al cargar el nuevo instrumento, inténtelo nuevamente.";
-                    return RedirectToAction("InstrumentosDisponibles", "Informe");
-                }
+                List<InstrumentoRotoVM> listaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotosEntreFechas(fechaInicio, fechaFin);
+                TempData["listaInstrumentosRotos"] = listaInstrumentosRotos;
+                return RedirectToAction("InstrumentosRotos");
             }
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult NuevoInstrumentoRoto(int idInstrumento)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            if (ModelState.IsValid)
+            else
             {
-                bool resultado = AccesoBD.AD_Informe.nuevoElementoRoto(idInstrumento);
-                if (resultado) return RedirectToAction("InstrumentosDisponibles", "Informe");
-                else
-                {
-                    TempData["ErrorInsertInstrumentoRoto"] = "Ocurrió un error al registrar el instrumento roto, inténtelo nuevamente.";
-                    return RedirectToAction("InstrumentosDisponibles", "Informe");
-                }
+                TempData["fechaMayor"] = "La fecha de inicio no puede ser mayor que la fecha de fin";
+                List<InstrumentoRotoVM> listaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotosEntreFechas(DateTime.Now, DateTime.Now);
+                TempData["listaInstrumentosRotos"] = listaInstrumentosRotos;
+                return RedirectToAction("InstrumentosRotos");
             }
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult EliminarInstrumentoRoto(int idInstrumento)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            if (ModelState.IsValid)
-            {
-                bool resultado = AccesoBD.AD_Informe.eliminarInstrumentoRoto(idInstrumento);
-                if (resultado) return RedirectToAction("InstrumentosDisponibles", "Informe");
-                else
-                {
-                    TempData["ErrorEliminarInstrumentoRoto"] = "Ocurrió un error al eliminar el instrumento roto, inténtelo nuevamente.";
-                    return RedirectToAction("InstrumentosDisponibles", "Informe");
-                }
-            }
-            return View();
         }
     }
 }

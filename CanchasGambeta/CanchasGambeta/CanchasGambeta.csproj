@@ -134,6 +134,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccesoBD\AD_Instrumento.cs" />
     <Compile Include="AccesoBD\AD_Pedido.cs" />
     <Compile Include="AccesoBD\AD_Equipo.cs" />
     <Compile Include="AccesoBD\AD_Informe.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Controllers\EquipoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InformeController.cs" />
+    <Compile Include="Controllers\InstrumentoController.cs" />
     <Compile Include="Controllers\InsumoController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
@@ -243,13 +245,11 @@
     <Content Include="Content\layout.css" />
     <Content Include="Content\one-page-wonder.css" />
     <Content Include="Content\one-page-wonder.min.css" />
-    <Content Include="Content\perfect-scrollbar.css" />
     <Content Include="Content\reservasActivasStyles.css" />
     <Content Include="Content\reservasClientesStyles.css" />
     <Content Include="Content\styles-login.css" />
     <Content Include="Content\styles-register.css" />
     <Content Include="Content\terminosYcondicionesStyles.css" />
-    <Content Include="Content\util.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font.family-Catamaran.css" />
     <Content Include="fonts\font.family-Lato.css" />
@@ -294,7 +294,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\perfect-scrollbar.min.js" />
     <Content Include="Scripts\scriptCanchasMasReservadas.js" />
     <Content Include="Scripts\scriptEquipo.js" />
     <Content Include="Scripts\scriptHorariosMasReservados.js" />
@@ -338,7 +337,7 @@
     <Content Include="Views\Informe\CanchasMasUtilizadas.cshtml" />
     <Content Include="Views\Informe\ClientesConMasReservas.cshtml" />
     <Content Include="Views\Informe\HorariosMasReservados.cshtml" />
-    <Content Include="Views\Informe\InstrumentosDisponibles.cshtml" />
+    <Content Include="Views\Instrumento\InstrumentosDisponibles.cshtml" />
     <Content Include="Views\Equipo\CambiarNombreEquipo.cshtml" />
     <Content Include="Views\Pedido\ModificarProveedor.cshtml" />
     <Content Include="Views\Informe\InsumosMasConsumidos.cshtml" />
@@ -350,6 +349,9 @@
     <Content Include="Views\Home\TerminosYCondiciones.cshtml" />
     <Content Include="Views\Home\Ayuda.cshtml" />
     <Content Include="Views\Informe\ReservasCanceladas.cshtml" />
+    <Content Include="Views\Pedido\MisProveedores.cshtml" />
+    <Content Include="Views\Insumo\AgregarInsumo.cshtml" />
+    <Content Include="Views\Informe\InstrumentosRotos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

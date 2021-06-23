@@ -43,7 +43,7 @@ namespace CanchasGambeta.Controllers
             if (TempData["ErrorInsertProveedor"] != null) ViewBag.ErrorInsertProveedor = TempData["ErrorInsertProveedor"].ToString();
             if (TempData["ErrorEliminarProveedor"] != null) ViewBag.ErrorEliminarProveedor = TempData["ErrorEliminarProveedor"].ToString();
             if (TempData["ErrorPedidosSinConcretar"] != null) ViewBag.ErrorPedidosSinConcretar = TempData["ErrorPedidosSinConcretar"].ToString();
-            return View(new VistaMisPedidos { TablaPedido = AccesoBD.AD_Pedido.obtenerTodosLosPedidos(), NuevoPedido = nuevoPedido, NuevoProveedor = new NuevoProveedor(), TablaProveedores = AccesoBD.AD_Pedido.obtenerTodosLosProveedoresTabla(), InsumosAPedir = listaInsumosAPedir });
+            return View(new VistaMisPedidos { TablaPedido = AccesoBD.AD_Pedido.obtenerTodosLosPedidos(), NuevoPedido = nuevoPedido, InsumosAPedir = listaInsumosAPedir });
         }
 
         //-----------------------------------------INSERT PEDIDO---------------------------------------------------------
@@ -436,6 +436,16 @@ namespace CanchasGambeta.Controllers
         }
 
         //-----------------------------------------ABM PROVEEDOR---------------------------------------------------------
+        public ActionResult MisProveedores()
+        {
+            VistaMisProveedores vistaProveedores = new VistaMisProveedores
+            {
+                NuevoProveedor = new NuevoProveedor(),
+                TablaProveedores = AccesoBD.AD_Pedido.obtenerTodosLosProveedoresTabla()
+            };
+            return View(vistaProveedores);
+        }
+        
         [HttpPost]
         public ActionResult NuevoProveedor(NuevoProveedor nuevoProveedor)
         {
@@ -445,11 +455,11 @@ namespace CanchasGambeta.Controllers
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Pedido.nuevoProveedor(nuevoProveedor);
-                if (resultado) return RedirectToAction("MisPedidos", "Pedido");
+                if (resultado) return RedirectToAction("MisProveedores", "Pedido");
                 else
                 {
                     TempData["ErrorInsertProveedor"] = "Ocurrió un erro al registrar el proveedor, inténtelo nuevamente";
-                    return RedirectToAction("MisPedidos", "Pedido");
+                    return RedirectToAction("MisProveedores", "Pedido");
                 }
             }
 
@@ -474,7 +484,7 @@ namespace CanchasGambeta.Controllers
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Pedido.modificarProveedor(proveedor);
-                if (resultado) return RedirectToAction("MisPedidos", "Pedido");
+                if (resultado) return RedirectToAction("MisProveedores", "Pedido");
                 else
                 {
                     ViewBag.ErrorModificarProveedor = "Ocurrió un error al modificar al proveedor, inténtelo nuevamente.";
@@ -495,17 +505,17 @@ namespace CanchasGambeta.Controllers
             if (AccesoBD.AD_Pedido.pedidosSinConcretar(idProveedor))
             {
                 bool resultado = AccesoBD.AD_Pedido.eliminarProveedor(idProveedor);
-                if (resultado) return RedirectToAction("MisPedidos", "Pedido");
+                if (resultado) return RedirectToAction("MisProveedores", "Pedido");
                 else
                 {
                     TempData["ErrorEliminarProveedor"] = "Ocurrió un error al eliminar el proveedor, inténtelo nuevamente.";
-                    return RedirectToAction("MisPedidos", "Pedido");
+                    return RedirectToAction("MisProveedores", "Pedido");
                 }
             }
             else
             {
                 TempData["ErrorPedidosSinConcretar"] = "Todavía hay pedidos sin concretar al proveedor que quiere eliminar, concretelos para poder eliminar";
-                return RedirectToAction("MisPedidos", "Pedido");
+                return RedirectToAction("MisProveedores", "Pedido");
             }
         }        
     }

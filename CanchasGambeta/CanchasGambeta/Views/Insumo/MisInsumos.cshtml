@@ -6,12 +6,49 @@
 }
 
 <div class="row" style="transform: translateY(60px); color: white">
-    <div class="col-md-1"></div>
-    <div class="col-md-5">
-        <div class="btn-group">
-            <h3 class="text-center" style="color:white">INSUMOS</h3>
-            <button id="btnModificarInsumos" class="btn btn-info ml-3 mb-3" onclick="botones()">Modificar insumos</button>
-        </div>    
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <h4 class="text-center">Buscar insumo por nombre</h4>
+        @using (Html.BeginForm("BuscarInsumo", "Insumo", FormMethod.Post))
+        {
+            <div class="form-horizontal">
+                <div class="col-lg-12 form-group btn-group">
+                    <input type="hidden" name="buscarInsumoAnterior" value="@ViewBag.nombreInsumo" />
+                    @if (ViewBag.nombreInsumo != null)
+                    {
+                        <input type="text" id="buscarInsumo" name="buscarInsumo" value="@ViewBag.nombreInsumo" class="form-control" />
+                    }
+                    else
+                    {
+                        <input type="text" id="buscarInsumo" name="buscarInsumo" class="form-control" />
+                    }
+                    <button type="submit" class="btn btn-primary ml-2" id="botonBuscar">Buscar</button>
+                </div>
+            </div>
+            <div class="form-label-group text-danger pb-2">
+                @ViewBag.ErrorBuscarInsumo
+            </div>
+        }
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <div class="row">
+            <div class="col-lg-6 text-left">
+                <a href="@Url.Action("AgregarInsumo", "Insumo")" class="btn btn-success mb-3">Nuevo insumo</a>
+                <button id="btnModificarInsumos" class="btn btn-info ml-2 mb-3" onclick="botones()">Modificar insumos</button>
+            </div>
+            <div class="col-lg-6 text-right">
+                @using (Html.BeginForm("BuscarInsumo", "Insumo", FormMethod.Post))
+                {
+                    <input type="hidden" name="buscarInsumo" value="MostrarTodosLosInsumos" />
+                    <button type="submit" class="btn btn-info">Ver todos</button>
+                }
+            </div>
+        </div>
         @if (Model.Count() != 0)
         {
             <table class="tablacustom">
@@ -58,13 +95,13 @@
                     }
                 </tbody>
             </table>
-            <div class="form-label-group text-danger" style="margin-left:10px">
+            <div class="form-label-group text-danger">
                 @ViewBag.ErrorEliminarInsumo
             </div>
         }
         else
         {
-            <table class="table table-bordered table-striped">
+            <table class="tablacustom">
                 <thead>
                     <tr>
                         <th class="text-center">
@@ -75,38 +112,14 @@
                 <tbody>
                     <tr>
                         <td class="text-center">
-                            No hay insumos
+                            No se encontraron insumos con la palabra ingresada
                         </td>
                     </tr>
                 </tbody>
             </table>
         }
     </div>
-    <div class="col-md-5">
-        <h4 class="p-1">Cargar nuevo insumo</h4>
-        @using (Html.BeginForm("MisInsumos", "Insumo", FormMethod.Post, new { onsubmit = "return validacionNuevoInsumo();" }))
-        {
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label">Nombre</label>
-                    <input type="text" class="form-control" id="txtInsumo" name="insumo" />
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Precio</label>
-                    <input type="text" class="form-control" id="txtPrecio" name="precio" />
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Stock</label>
-                    <input type="text" class="form-control" id="txtStock" name="stock" />
-                </div>
-            </div>
-            <button type="submit" class="btn btn-success">Agregar</button>
-            <div class="form-label-group text-danger" style="margin-left:10px">
-                @ViewBag.ErrorInsertInsumo
-            </div>
-        }
-    </div>
-    <div class="col-md-1"></div>
+    <div class="col-lg-2"></div>
 </div>
 
 <script src="~/Scripts/scriptInsumos.js"></script>
