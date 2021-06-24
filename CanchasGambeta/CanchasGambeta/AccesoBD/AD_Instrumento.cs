@@ -1,4 +1,5 @@
-﻿using CanchasGambeta.ViewModels;
+﻿using CanchasGambeta.Models;
+using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -107,7 +108,7 @@ namespace CanchasGambeta.AccesoBD
                 comando.Connection = conexion;
                 comando.ExecuteNonQuery();
 
-                string consultaInsertInstrumentoRoto = @"insert into InstrumentoRoto (instrumento, fechaRotura) values (@idInstrumento, getdate())";
+                string consultaInsertInstrumentoRoto = @"insert into InstrumentoRoto (instrumento, fechaRotura, estado) values (@idInstrumento, getdate(), 1)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idInstrumento", idInstrumento);
 
@@ -135,7 +136,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select ir.instrumento 'idInstrumento', i.instrumento, fechaRotura 
+                string consulta = @"select ir.idInstrumentoRoto 'idInstrumento', i.instrumento, fechaRotura 
                                     from Instrumento i join InstrumentoRoto ir on i.idInstrumento = ir.instrumento
                                     order by 3 desc";
 
@@ -151,7 +152,7 @@ namespace CanchasGambeta.AccesoBD
                     while (lector.Read())
                     {
                         InstrumentoRotoVM auxiliar = new InstrumentoRotoVM();
-                        auxiliar.IdInstrumento = int.Parse(lector["idInstrumento"].ToString());
+                        auxiliar.IdInstrumentoRoto = int.Parse(lector["idInstrumento"].ToString());
                         auxiliar.Instrumento = lector["instrumento"].ToString();
                         auxiliar.FechaRotura = DateTime.Parse(lector["fechaRotura"].ToString());
                         listaInstrumentosRotos.Add(auxiliar);
@@ -193,6 +194,103 @@ namespace CanchasGambeta.AccesoBD
                 comando.Parameters.AddWithValue("@idInstrumento", idInstrumento);
 
                 comando.CommandText = consultaEliminarInstrumento;
+                comando.ExecuteNonQuery();
+
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static InstrumentoRotoVM obtenerInstrumentoRotoPorId(int idInstrumentoRoto)
+        {
+            InstrumentoRotoVM instrumento = new InstrumentoRotoVM();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select i.idInstrumento 'idInstrumento', i.instrumento, fechaRotura
+                                    from Instrumento i join InstrumentoRoto ir on i.idInstrumento = ir.instrumento
+                                    where idInstrumentoRoto = @idInstrumentoRoto";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idInstrumentoRoto", idInstrumentoRoto);
+
+                comando.CommandType = CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        instrumento.IdInstrumentoRoto = idInstrumentoRoto;
+                        instrumento.Instrumento = lector["instrumento"].ToString();
+                        instrumento.FechaRotura = DateTime.Parse(lector["fechaRotura"].ToString());
+                        instrumento.IdInstrumentoDisponible = int.Parse(lector["idInstrumento"].ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return instrumento;
+        }
+
+        public static bool instrumentoRepuesto(InstrumentoRotoVM instrumento)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consultaInsertInstrumentoRepuesto = "insert into InstrumentoRepuesto (nombreInstrumento, idInstrumentoRoto, fechaRepuesto) values (@nombreInstrumento, @idInstrumentoRoto, @fechaRepuesto)";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@nombreInstrumento", instrumento.Instrumento);
+                comando.Parameters.AddWithValue("@idInstrumentoRoto", instrumento.IdInstrumentoRoto);
+                comando.Parameters.AddWithValue("@fechaRepuesto", instrumento.FechaRotura);
+
+                comando.CommandType = CommandType.Text;
+                comando.CommandText = consultaInsertInstrumentoRepuesto;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
+
+                string consultaUpdateInstrumentoDisponible = @"update Instrumento set instrumento = @instrumento,
+                                                                                      fechaCompra = @fechaCompra,
+                                                                                      estado = 1
+                                                               where idInstrumento = @idInstrumentoDisponible";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@instrumento", instrumento.Instrumento);
+                comando.Parameters.AddWithValue("@fechaCompra", instrumento.FechaRotura);
+                comando.Parameters.AddWithValue("@idInstrumentoDisponible", instrumento.IdInstrumentoDisponible);
+
+                comando.CommandText = consultaUpdateInstrumentoDisponible;
+                comando.ExecuteNonQuery();
+
+                string consultaUpdateInstrumentoRoto = @"update InstrumentoRoto set estado = 0
+                                                         where idInstrumentoRoto = @idInstrumentoRoto";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idInstrumentoRoto", instrumento.IdInstrumentoRoto);
+
+                comando.CommandText = consultaUpdateInstrumentoRoto;
                 comando.ExecuteNonQuery();
 
                 resultado = true;

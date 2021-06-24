@@ -33,6 +33,7 @@ namespace CanchasGambeta.Models
         public virtual DbSet<Horario> Horario { get; set; }
         public virtual DbSet<HorarioReservas> HorarioReservas { get; set; }
         public virtual DbSet<Instrumento> Instrumento { get; set; }
+        public virtual DbSet<InstrumentoRepuesto> InstrumentoRepuesto { get; set; }
         public virtual DbSet<InstrumentoRoto> InstrumentoRoto { get; set; }
         public virtual DbSet<Insumo> Insumo { get; set; }
         public virtual DbSet<Pedido> Pedido { get; set; }

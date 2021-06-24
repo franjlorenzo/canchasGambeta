@@ -76,6 +76,16 @@
     <Property Name="estado" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="InstrumentoRoto" Relationship="Self.FK_InstrumentoRoto_Instrumento" FromRole="Instrumento" ToRole="InstrumentoRoto" />
   </EntityType>
+  <EntityType Name="InstrumentoRepuesto">
+    <Key>
+      <PropertyRef Name="idInstrumentoRepuesto" />
+    </Key>
+    <Property Name="idInstrumentoRepuesto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombreInstrumento" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="idInstrumentoRoto" Type="Int32" Nullable="false" />
+    <Property Name="fechaRepuesto" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="InstrumentoRoto" Relationship="Self.FK_InstrumentoRepuesto_InstrumentoRoto" FromRole="InstrumentoRepuesto" ToRole="InstrumentoRoto" />
+  </EntityType>
   <EntityType Name="InstrumentoRoto">
     <Key>
       <PropertyRef Name="idInstrumentoRoto" />
@@ -83,7 +93,9 @@
     <Property Name="idInstrumentoRoto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="instrumento" Type="Int32" Nullable="false" />
     <Property Name="fechaRotura" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Instrumento1" Relationship="Self.FK_InstrumentoRoto_Instrumento" FromRole="InstrumentoRoto" ToRole="Instrumento" />
+    <NavigationProperty Name="InstrumentoRepuesto" Relationship="Self.FK_InstrumentoRepuesto_InstrumentoRoto" FromRole="InstrumentoRoto" ToRole="InstrumentoRepuesto" />
   </EntityType>
   <EntityType Name="Insumo">
     <Key>
@@ -103,11 +115,11 @@
     </Key>
     <Property Name="idPedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="proveedor" Type="Int32" Nullable="false" />
+    <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="estado" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="DetallePedido" Relationship="Self.FK_DetallePedido_Pedido" FromRole="Pedido" ToRole="DetallePedido" />
     <NavigationProperty Name="Proveedor1" Relationship="Self.FK_Pedido_Proveedor" FromRole="Pedido" ToRole="Proveedor" />
-    <Property Name="descripcion" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Proveedor">
     <Key>
@@ -131,7 +143,7 @@
     <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="servicioAsador" Type="Boolean" Nullable="false" />
     <Property Name="servicioInstrumentos" Type="Boolean" Nullable="false" />
-    <Property Name="estado" Type="Boolean" Nullable="false" />
+    <Property Name="estado" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Cancha1" Relationship="Self.FK_Reserva_Cancha" FromRole="Reserva" ToRole="Cancha" />
     <NavigationProperty Name="HorarioReservas" Relationship="Self.FK_HorarioReservas_Reserva" FromRole="Reserva" ToRole="HorarioReservas" />
     <NavigationProperty Name="Usuario" Relationship="Self.FK_Reserva_Cliente" FromRole="Reserva" ToRole="Usuario" />
@@ -289,6 +301,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_InstrumentoRepuesto_InstrumentoRoto">
+    <End Role="InstrumentoRoto" Type="Self.InstrumentoRoto" Multiplicity="1" />
+    <End Role="InstrumentoRepuesto" Type="Self.InstrumentoRepuesto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InstrumentoRoto">
+        <PropertyRef Name="idInstrumentoRoto" />
+      </Principal>
+      <Dependent Role="InstrumentoRepuesto">
+        <PropertyRef Name="idInstrumentoRoto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_ReservaInsumos_Insumo">
     <End Role="Insumo" Type="Self.Insumo" Multiplicity="1" />
     <End Role="ReservaInsumos" Type="Self.ReservaInsumos" Multiplicity="*" />
@@ -358,6 +382,7 @@
     <EntitySet Name="Horario" EntityType="Self.Horario" />
     <EntitySet Name="HorarioReservas" EntityType="Self.HorarioReservas" />
     <EntitySet Name="Instrumento" EntityType="Self.Instrumento" />
+    <EntitySet Name="InstrumentoRepuesto" EntityType="Self.InstrumentoRepuesto" />
     <EntitySet Name="InstrumentoRoto" EntityType="Self.InstrumentoRoto" />
     <EntitySet Name="Insumo" EntityType="Self.Insumo" />
     <EntitySet Name="Pedido" EntityType="Self.Pedido" />
@@ -402,6 +427,10 @@
     <AssociationSet Name="FK_InstrumentoRoto_Instrumento" Association="Self.FK_InstrumentoRoto_Instrumento">
       <End Role="Instrumento" EntitySet="Instrumento" />
       <End Role="InstrumentoRoto" EntitySet="InstrumentoRoto" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InstrumentoRepuesto_InstrumentoRoto" Association="Self.FK_InstrumentoRepuesto_InstrumentoRoto">
+      <End Role="InstrumentoRoto" EntitySet="InstrumentoRoto" />
+      <End Role="InstrumentoRepuesto" EntitySet="InstrumentoRepuesto" />
     </AssociationSet>
     <AssociationSet Name="FK_ReservaInsumos_Insumo" Association="Self.FK_ReservaInsumos_Insumo">
       <End Role="Insumo" EntitySet="Insumo" />

@@ -64,6 +64,15 @@
     <Property Name="fechaCompra" Type="date" Nullable="false" />
     <Property Name="estado" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="InstrumentoRepuesto">
+    <Key>
+      <PropertyRef Name="idInstrumentoRepuesto" />
+    </Key>
+    <Property Name="idInstrumentoRepuesto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombreInstrumento" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="idInstrumentoRoto" Type="int" Nullable="false" />
+    <Property Name="fechaRepuesto" Type="date" Nullable="false" />
+  </EntityType>
   <EntityType Name="InstrumentoRoto">
     <Key>
       <PropertyRef Name="idInstrumentoRoto" />
@@ -71,6 +80,7 @@
     <Property Name="idInstrumentoRoto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="instrumento" Type="int" Nullable="false" />
     <Property Name="fechaRotura" Type="date" Nullable="false" />
+    <Property Name="estado" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Insumo">
     <Key>
@@ -88,7 +98,7 @@
     </Key>
     <Property Name="idPedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="proveedor" Type="int" Nullable="false" />
-    <Property Name="descripcion" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="descripcion" Type="nvarchar(max)" Nullable="false" />
     <Property Name="fecha" Type="date" Nullable="false" />
     <Property Name="estado" Type="bit" Nullable="false" />
   </EntityType>
@@ -113,7 +123,7 @@
     <Property Name="fecha" Type="date" Nullable="false" />
     <Property Name="servicioAsador" Type="bit" Nullable="false" />
     <Property Name="servicioInstrumentos" Type="bit" Nullable="false" />
-    <Property Name="estado" Type="bit" Nullable="false" />
+    <Property Name="estado" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="ReservaInsumos">
     <Key>
@@ -237,6 +247,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_InstrumentoRepuesto_InstrumentoRoto">
+    <End Role="InstrumentoRoto" Type="Self.InstrumentoRoto" Multiplicity="1" />
+    <End Role="InstrumentoRepuesto" Type="Self.InstrumentoRepuesto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InstrumentoRoto">
+        <PropertyRef Name="idInstrumentoRoto" />
+      </Principal>
+      <Dependent Role="InstrumentoRepuesto">
+        <PropertyRef Name="idInstrumentoRoto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_InstrumentoRoto_Instrumento">
     <End Role="Instrumento" Type="Self.Instrumento" Multiplicity="1" />
     <End Role="InstrumentoRoto" Type="Self.InstrumentoRoto" Multiplicity="*" />
@@ -330,6 +352,7 @@
     <EntitySet Name="Horario" EntityType="Self.Horario" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HorarioReservas" EntityType="Self.HorarioReservas" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Instrumento" EntityType="Self.Instrumento" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InstrumentoRepuesto" EntityType="Self.InstrumentoRepuesto" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InstrumentoRoto" EntityType="Self.InstrumentoRoto" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Insumo" EntityType="Self.Insumo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
@@ -366,6 +389,10 @@
     <AssociationSet Name="FK_HorarioReservas_Reserva" Association="Self.FK_HorarioReservas_Reserva">
       <End Role="Reserva" EntitySet="Reserva" />
       <End Role="HorarioReservas" EntitySet="HorarioReservas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InstrumentoRepuesto_InstrumentoRoto" Association="Self.FK_InstrumentoRepuesto_InstrumentoRoto">
+      <End Role="InstrumentoRoto" EntitySet="InstrumentoRoto" />
+      <End Role="InstrumentoRepuesto" EntitySet="InstrumentoRepuesto" />
     </AssociationSet>
     <AssociationSet Name="FK_InstrumentoRoto_Instrumento" Association="Self.FK_InstrumentoRoto_Instrumento">
       <End Role="Instrumento" EntitySet="Instrumento" />

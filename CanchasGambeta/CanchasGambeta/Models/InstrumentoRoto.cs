@@ -14,10 +14,19 @@ namespace CanchasGambeta.Models
     
     public partial class InstrumentoRoto
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public InstrumentoRoto()
+        {
+            this.InstrumentoRepuesto = new HashSet<InstrumentoRepuesto>();
+        }
+    
         public int idInstrumentoRoto { get; set; }
         public int instrumento { get; set; }
         public System.DateTime fechaRotura { get; set; }
+        public bool estado { get; set; }
     
         public virtual Instrumento Instrumento1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InstrumentoRepuesto> InstrumentoRepuesto { get; set; }
     }
 }

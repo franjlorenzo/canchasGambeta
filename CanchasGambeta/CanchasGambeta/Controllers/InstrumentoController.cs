@@ -80,5 +80,36 @@ namespace CanchasGambeta.Controllers
             }
             return View();
         }
+
+        public ActionResult InstrumentoRepuesto(int idInstrumentoRoto)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            InstrumentoRotoVM instrumentoRoto = AccesoBD.AD_Instrumento.obtenerInstrumentoRotoPorId(idInstrumentoRoto);
+            return View(instrumentoRoto);
+        }
+
+        [HttpPost]
+        public ActionResult InstrumentoRepuesto(int IdInstrumentoRoto, string Instrumento, DateTime FechaRotura, int IdInstrumentoDisponible)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            bool estado = false;
+            InstrumentoRotoVM instrumento = new InstrumentoRotoVM(IdInstrumentoRoto, Instrumento, FechaRotura, IdInstrumentoDisponible, estado);
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Instrumento.instrumentoRepuesto(instrumento);
+                if (resultado) return RedirectToAction("InstrumentosDisponibles", "Instrumento");
+                else
+                {
+                    ViewBag.ErrorInstrumentoRepuesto = "Ocurrió un erro al reponer el instrumento, inténtelo nuevamente.";
+                    return View(instrumento);
+                }
+            }
+
+            return View();
+        }
     }
 }

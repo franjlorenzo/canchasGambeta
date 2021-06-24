@@ -30,7 +30,7 @@
                         string fecha = listado.Fecha.ToString();
                         string[] fechaSplit = fecha.Split(' ');
                         <tr class="text-center">
-                            @if (listado.Estado == true)
+                            @if (listado.Estado == 1)
                             {
                                 if (listado.ServicioAsador && listado.ServicioInstrumento)
                                 {
@@ -67,17 +67,17 @@
         }
         else
         {
-            <table class="table table-bordered table-striped">
+            <table class="tablacustom">
                 <thead>
                     <tr>
-                        <th class="text-center thfix">
+                        <th>
                             Reservas
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-center">
+                        <td>
                             No hay reservas registradas
                         </td>
                     </tr>

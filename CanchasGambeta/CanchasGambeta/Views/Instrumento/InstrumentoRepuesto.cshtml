@@ -1,0 +1,33 @@
+﻿@model CanchasGambeta.ViewModels.InstrumentoRotoVM
+@{
+    ViewBag.Title = "InstrumentoRepuesto";
+}
+
+<div class="row" style="transform: translateY(60px); color: white">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+        <h4 class="p-1 text-center">Si el instrumento repuesto es el mismo presione el botón "Repuesto" de lo contrario, cambie el nombre y fecha de adquisición</h4>
+        @using (Html.BeginForm("InstrumentoRepuesto", "Instrumento", FormMethod.Post, new { onsubmit = "return validacionInstrumentoRepuesto();" }))
+        {
+            @Html.HiddenFor(Model => Model.IdInstrumentoRoto)
+            @Html.HiddenFor(Model => Model.IdInstrumentoDisponible)
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label">Nombre</label>
+                    @Html.TextBoxFor(Model => Model.Instrumento, htmlAttributes: new { @class = "form-control", id = "txtNombre" })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Fecha de reposición</label>
+                    @Html.TextBoxFor(Model => Model.FechaRotura, "{0:yyyy-MM-dd}", htmlAttributes: new { @class = "form-control", id = "txtFecha", @value = DateTime.Now, @type = "date" })
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Repuesto</button>
+            @Html.ActionLink("Cancelar", "InstrumentosDisponibles", "Instrumento", null, new { @class = "text-center btn btn-warning" })
+            <div class="form-label-group text-danger">
+                @ViewBag.ErrorInsertInsumo
+            </div>
+        }
+    </div>
+    <div class="col-lg-3"></div>
+</div>
+

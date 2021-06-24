@@ -33,7 +33,7 @@ namespace CanchasGambeta.AccesoBD
                 comando.Parameters.AddWithValue("@fecha", reservaVM.fecha);
                 comando.Parameters.AddWithValue("@servicioAsador", reservaVM.servicioAsador);
                 comando.Parameters.AddWithValue("@servicioInstrumentos", reservaVM.servicioInstrumento);
-                comando.Parameters.AddWithValue("@estado", true);
+                comando.Parameters.AddWithValue("@estado", 1);
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consulta;
@@ -92,7 +92,7 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
                         auxiliar.IdHorario = int.Parse(lector["idHorario"].ToString());
                         auxiliar.IdCancha = int.Parse(lector["idCancha"].ToString());
-                        auxiliar.Estado = bool.Parse(lector["estado"].ToString());
+                        auxiliar.Estado = int.Parse(lector["estado"].ToString());
                         listaReservasDelCliente.Add(auxiliar);
                     }
                 }

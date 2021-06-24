@@ -28,7 +28,7 @@ namespace CanchasGambeta.Models
         public System.DateTime fecha { get; set; }
         public bool servicioAsador { get; set; }
         public bool servicioInstrumentos { get; set; }
-        public bool estado { get; set; }
+        public int estado { get; set; }
     
         public virtual Cancha Cancha1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

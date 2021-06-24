@@ -183,6 +183,9 @@
     <Compile Include="Models\Instrumento.cs">
       <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\InstrumentoRepuesto.cs">
+      <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\InstrumentoRoto.cs">
       <DependentUpon>ModeloBDCanchasGambeta.tt</DependentUpon>
     </Compile>
@@ -274,6 +277,8 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="fonts\Lato-Bold.ttf" />
+    <Content Include="fonts\Lato-Regular.ttf" />
     <EntityDeploy Include="Models\ModeloBDCanchasGambeta.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ModeloBDCanchasGambeta.Designer.cs</LastGenOutput>
@@ -281,8 +286,6 @@
     <Content Include="Models\ModeloBDCanchasGambeta.edmx.diagram">
       <DependentUpon>ModeloBDCanchasGambeta.edmx</DependentUpon>
     </Content>
-    <Content Include="fonts\Lato-Bold.ttf" />
-    <Content Include="fonts\Lato-Regular.ttf" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -352,6 +355,7 @@
     <Content Include="Views\Pedido\MisProveedores.cshtml" />
     <Content Include="Views\Insumo\AgregarInsumo.cshtml" />
     <Content Include="Views\Informe\InstrumentosRotos.cshtml" />
+    <Content Include="Views\Instrumento\InstrumentoRepuesto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

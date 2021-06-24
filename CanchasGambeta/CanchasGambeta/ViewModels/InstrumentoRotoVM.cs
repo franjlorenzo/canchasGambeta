@@ -7,13 +7,32 @@ namespace CanchasGambeta.ViewModels
 {
     public class InstrumentoRotoVM
     {
-        private int idInstrumento;
+        private int idInstrumentoRoto;
         private string instrumento;
         private DateTime fechaRotura;
+        private int idInstrumentoDisponible;
+        private bool estado;
+
+
+        public InstrumentoRotoVM(int idInstrumentoRoto, string instrumento, DateTime fechaRotura, int idInstrumentoDisponible, bool estado)
+        {
+            this.idInstrumentoRoto = idInstrumentoRoto;
+            this.instrumento = instrumento;
+            this.fechaRotura = fechaRotura;
+            this.idInstrumentoDisponible = idInstrumentoDisponible;
+            this.estado = estado;
+        }
+
+        public InstrumentoRotoVM()
+        {
+
+        }
 
         public string Instrumento { get => instrumento; set => instrumento = value; }
         public DateTime FechaRotura { get => fechaRotura; set => fechaRotura = value; }
-        public int IdInstrumento { get => idInstrumento; set => idInstrumento = value; }
+        public int IdInstrumentoRoto { get => idInstrumentoRoto; set => idInstrumentoRoto = value; }
+        public int IdInstrumentoDisponible { get => idInstrumentoDisponible; set => idInstrumentoDisponible = value; }
+        public bool Estado { get => estado; set => estado = value; }
     }
 
     public class InstrumentoDisponible

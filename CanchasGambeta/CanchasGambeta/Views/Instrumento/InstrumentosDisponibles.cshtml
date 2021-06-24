@@ -37,7 +37,7 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    @using (Html.BeginForm("NuevoInstrumentoRoto", "Informe", FormMethod.Post, new { onsubmit = "return confirmacionNuevoInstrumentoRoto();" }))
+                                    @using (Html.BeginForm("NuevoInstrumentoRoto", "Instrumento", FormMethod.Post, new { onsubmit = "return confirmacionNuevoInstrumentoRoto();" }))
                                     {
                                         <input type="hidden" name="idInstrumento" value="@listado.IdInstrumento" />
                                         <button type="submit" class="btn btn-danger m-1">Roto</button>
@@ -93,6 +93,71 @@
         }
     </div>
     <div class="col-lg-1"></div>
+</div>
+
+<div class="row" style="transform: translateY(70px); color: white">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        @if (Model.TablaInstrumentosRotos.Count() != 0)
+        {
+            <table class="tablacustom mt-3">
+                <thead>
+                    <tr>
+                        <th>
+                            Instrumento
+                        </th>
+                        <th>
+                            Fecha rotura
+                        </th>
+                        <th>
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var listado in Model.TablaInstrumentosRotos)
+                    {
+                        string fecha = listado.FechaRotura.ToString();
+                        string[] fechaSplit = fecha.Split(' ');
+                        <tr>
+                            <td>
+                                @listado.Instrumento
+                            </td>
+                            <td>
+                                @fechaSplit[0]
+                            </td>
+                            <td>
+                                <a href="@Url.Action("InstrumentoRepuesto", "Instrumento", new {idInstrumentoRoto = listado.IdInstrumentoRoto})" class="btn btn-warning">Repuesto</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="form-label-group text-danger">
+                @ViewBag.ErrorEliminarInstrumentoRoto
+            </div>
+        }
+        else
+        {
+            <table class="tablacustom">
+                <thead>
+                    <tr>
+                        <th>
+                            Instrumentos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            No hay instrumentos rotos
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-lg-2"></div>
 </div>
 
 <script src="~/Scripts/scriptInstrumentos.js"></script>
