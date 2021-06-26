@@ -3,9 +3,9 @@
     --input-padding-y: .75rem;
 }
 
-body{
-    overflow-x:hidden;
-    overflow-y:hidden;
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .card-signin {

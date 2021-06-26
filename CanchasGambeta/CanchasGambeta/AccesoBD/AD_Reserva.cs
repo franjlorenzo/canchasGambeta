@@ -3,7 +3,6 @@ using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Net.Mail;
 using System.Runtime.InteropServices;
 using System.Web;
@@ -96,7 +95,7 @@ namespace CanchasGambeta.AccesoBD
                         listaReservasDelCliente.Add(auxiliar);
                     }
                 }
-                lector.Close();                           
+                lector.Close();
             }
             catch (Exception)
             {
@@ -204,7 +203,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idInsumo, i.insumo, precio, stock, cantidad 
+                string consulta = @"select idInsumo, i.insumo, precio, stock, cantidad
                                     from Insumo i join ReservaInsumos ri on i.idInsumo = ri.insumo
 	                                     join Reserva r on r.idReserva = ri.reserva
                                     where idReserva = @idReserva";
@@ -252,8 +251,10 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select fecha, cancha, r.horario, h.horario 'Hora', servicioAsador, servicioInstrumentos
+                string consulta = @"select fecha, cancha, r.horario, h.horario 'Hora', servicioAsador, servicioInstrumentos, nombreCompleto, tipoCancha
                                     from Reserva r join Horario h on h.idHorario = r.horario
+	                                     join Usuario u on r.cliente = u.idUsuario
+	                                     join Cancha c on r.cancha = c.idCancha
                                     where idReserva = @idReserva";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idReserva", idReserva);
@@ -277,6 +278,8 @@ namespace CanchasGambeta.AccesoBD
                         datosReserva.Horario = lector["Hora"].ToString();
                         datosReserva.ServicioAsador = bool.Parse(lector["servicioAsador"].ToString());
                         datosReserva.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
+                        datosReserva.NombreCliente = lector["nombreCompleto"].ToString();
+                        datosReserva.TipoCancha = lector["tipoCancha"].ToString();
                         datosReserva.ListaInsumosEnLaReserva = obtenerInsumosDeLaReservaActualizar(idReserva);
                     }
                 }
@@ -298,7 +301,7 @@ namespace CanchasGambeta.AccesoBD
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
-            
+
             try
             {
                 string consultaUpdateReserva = @"update Reserva set cancha = @idCancha,
@@ -317,7 +320,7 @@ namespace CanchasGambeta.AccesoBD
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consultaUpdateReserva;
-                
+
                 conexion.Open();
                 comando.Connection = conexion;
                 comando.ExecuteNonQuery();
@@ -355,7 +358,7 @@ namespace CanchasGambeta.AccesoBD
                 comando.Connection = conexion;
                 comando.ExecuteNonQuery();
 
-                string consultaEliminarInsumosDeReserva = @"delete from ReservaInsumos 
+                string consultaEliminarInsumosDeReserva = @"delete from ReservaInsumos
                                                             where reserva = @idReserva and insumo = @idInsumo";
                 string consultaSumarStockInsumo = @"update Insumo set stock = stock + @cantidad
                                                     where idInsumo = @idInsumo";
@@ -370,7 +373,6 @@ namespace CanchasGambeta.AccesoBD
                     comando.Parameters.AddWithValue("@idInsumo", insumo.idInsumo);
                     comando.ExecuteNonQuery();
                 }
-                
 
                 comando.CommandText = consultaSumarStockInsumo;
                 foreach (var insumo in insumosEnReserva)
@@ -381,7 +383,7 @@ namespace CanchasGambeta.AccesoBD
                     comando.ExecuteNonQuery();
                 }
 
-                string consultaEliminarHorarioReserva = @"delete from HorarioReservas 
+                string consultaEliminarHorarioReserva = @"delete from HorarioReservas
                                                           where reserva = @idReserva";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idReserva", idReserva);
@@ -544,7 +546,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idInsumo, i.insumo, stock, cantidad 
+                string consulta = @"select idInsumo, i.insumo, stock, cantidad
                                     from Insumo i join ReservaInsumos ri on i.idInsumo = ri.insumo
 	                                     join Reserva r on r.idReserva = ri.reserva
                                     where idReserva = @idReserva";
@@ -587,7 +589,7 @@ namespace CanchasGambeta.AccesoBD
             SmtpClient smtpClient = new SmtpClient();
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
             DatosReserva reservaCliente = null;
-            if(datosReservaEliminada == null) reservaCliente = obtenerDatosReserva(idReserva);
+            if (datosReservaEliminada == null) reservaCliente = obtenerDatosReserva(idReserva);
             List<MailEquipoVM> listaIntegrantesEquipo = AD_Equipo.obtenerMailsEquipo(sesion.equipo);
             string mensaje = "";
             string insumos = "";
@@ -598,7 +600,7 @@ namespace CanchasGambeta.AccesoBD
             if (tipoMensaje == 1) //Nueva reserva
             {
                 List<Insumo> insumosReservados = obtenerInsumosDeLaReserva(idReserva);
-                if(insumosReservados.Count != 0)
+                if (insumosReservados.Count != 0)
                 {
                     insumos = descripcionInsumosSeleccionados(insumosReservados);
                     mensaje = $"Hola, su compañero de equipo hizo una reserva para el día {reservaCliente.Fecha} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha}.\n\n" +
@@ -608,12 +610,12 @@ namespace CanchasGambeta.AccesoBD
                 else mensaje = $"Hola, su compañero de equipo hizo una reserva para el día {reservaCliente.Fecha} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha}";
                 titulo = "Nueva reserva!";
             }
-            else if(tipoMensaje == 2) //Update reserva
+            else if (tipoMensaje == 2) //Update reserva
             {
                 if (reservaCliente.ServicioAsador == true) servicioAsador = "Contratado";
                 if (reservaCliente.ServicioInstrumentos == true) servicioInstrumentos = "Contratado";
                 List<Insumo> insumosEnReserva = obtenerInsumosDeLaReserva(idReserva);
-                if(insumosEnReserva.Count != 0)
+                if (insumosEnReserva.Count != 0)
                 {
                     insumos = descripcionInsumosSeleccionados(insumosEnReserva);
 
@@ -634,10 +636,10 @@ namespace CanchasGambeta.AccesoBD
                               $"Cancha: {reservaCliente.TipoCancha}\n" +
                               $"Servicio Asador: {servicioAsador}\n" +
                               $"Servicio Instrumentos: {servicioInstrumentos}";
-                }               
+                }
                 titulo = "Reserva modificada";
             }
-            else if(tipoMensaje == 3) //Update insumos de la reserva
+            else if (tipoMensaje == 3) //Update insumos de la reserva
             {
                 if (reservaCliente.ServicioAsador == true) servicioAsador = "Contratado";
                 if (reservaCliente.ServicioInstrumentos == true) servicioInstrumentos = "Contratado";
@@ -659,7 +661,7 @@ namespace CanchasGambeta.AccesoBD
                 mensaje = $"Hola, su compañero de equipo dio de baja la reserva del día {datosReservaEliminada.Fecha} a las {datosReservaEliminada.Horario} en la cancha {datosReservaEliminada.TipoCancha}";
                 titulo = "Reserva eliminada";
             }
-                       
+
             foreach (var lista in listaIntegrantesEquipo)
             {
                 smtpClient.Send("canchasgambeta@gmail.com", lista.Email, titulo, mensaje);
@@ -670,7 +672,7 @@ namespace CanchasGambeta.AccesoBD
         {
             string insumos = "";
 
-            if(insumosReservados != null)
+            if (insumosReservados != null)
             {
                 foreach (var item in insumosReservados)
                 {
@@ -686,7 +688,6 @@ namespace CanchasGambeta.AccesoBD
                 }
                 return insumos;
             }
-            
         }
 
         public static List<InsumosAPedir> armarListaInsumosSeleccionados(List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo)

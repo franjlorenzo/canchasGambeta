@@ -1,9 +1,6 @@
 ﻿using CanchasGambeta.Models;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CanchasGambeta.ViewModels
@@ -37,12 +34,14 @@ namespace CanchasGambeta.ViewModels
     {
         private int idReserva;
         private int idCancha;
+        private string tipoCancha;
         private int idHorario;
         private string horario;
         private DateTime fecha;
         private bool servicioAsador;
         private bool servicioInstrumento;
         private bool enviarMails;
+        private string nombreCliente;
         private List<InsumosAPedir> listaInsumosEnLaReserva;
         public List<SelectListItem> Canchas { get; set; }
         public List<SelectListItem> Horarios { get; set; }
@@ -69,6 +68,8 @@ namespace CanchasGambeta.ViewModels
         public List<InsumosAPedir> ListaInsumosEnLaReserva { get => listaInsumosEnLaReserva; set => listaInsumosEnLaReserva = value; }
         public bool EnviarMails { get => enviarMails; set => enviarMails = value; }
         public string Horario { get => horario; set => horario = value; }
+        public string NombreCliente { get => nombreCliente; set => nombreCliente = value; }
+        public string TipoCancha { get => tipoCancha; set => tipoCancha = value; }
     }
 
     public class NuevaReservaVM

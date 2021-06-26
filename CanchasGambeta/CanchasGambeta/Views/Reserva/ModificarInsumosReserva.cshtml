@@ -1,5 +1,5 @@
 ﻿@model CanchasGambeta.ViewModels.VistaModificarInsumosReserva
-@using CanchasGambeta.Models 
+@using CanchasGambeta.Models
 @{
     ViewBag.Title = "ModificarInsumosReserva";
     var sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -261,7 +261,7 @@
                     <button type="submit" class="btn btn-success">Finalizar</button>
                     @Html.ActionLink("Eliminar insumos de la reserva", "EliminarInsumosReserva", "Reserva", new { idReserva = ViewBag.idReserva }, new { @class = "text-center btn btn-danger" })
                     @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
-                </div>                
+                </div>
             }
         }
         else

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using CanchasGambeta.Models;
+﻿using CanchasGambeta.Models;
 using CanchasGambeta.ViewModels;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace CanchasGambeta.Controllers
 {
@@ -88,7 +85,6 @@ namespace CanchasGambeta.Controllers
                         return View(usuario);
                     }
                 }
-                
             }
 
             return View(usuarioModificado);

@@ -1,17 +1,15 @@
-﻿using CanchasGambeta.Models;
-using CanchasGambeta.ViewModels;
+﻿using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace CanchasGambeta.AccesoBD
 {
     public class AD_Instrumento
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
+
         public static List<InstrumentoDisponible> obtenerInstrumentosDisponibles()
         {
             List<InstrumentoDisponible> listaInstrumentosDisponibles = new List<InstrumentoDisponible>();
@@ -20,7 +18,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idInstrumento, instrumento, fechaCompra 
+                string consulta = @"select idInstrumento, instrumento, fechaCompra
                                     from Instrumento
                                     where estado = 1";
 
@@ -136,7 +134,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select ir.idInstrumentoRoto 'idInstrumento', i.instrumento, fechaRotura 
+                string consulta = @"select ir.idInstrumentoRoto 'idInstrumento', i.instrumento, fechaRotura, ir.estado
                                     from Instrumento i join InstrumentoRoto ir on i.idInstrumento = ir.instrumento
                                     order by 3 desc";
 
@@ -155,6 +153,7 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.IdInstrumentoRoto = int.Parse(lector["idInstrumento"].ToString());
                         auxiliar.Instrumento = lector["instrumento"].ToString();
                         auxiliar.FechaRotura = DateTime.Parse(lector["fechaRotura"].ToString());
+                        auxiliar.Estado = bool.Parse(lector["estado"].ToString());
                         listaInstrumentosRotos.Add(auxiliar);
                     }
                 }
@@ -252,7 +251,7 @@ namespace CanchasGambeta.AccesoBD
             return instrumento;
         }
 
-        public static bool instrumentoRepuesto(InstrumentoRotoVM instrumento)
+        public static bool instrumentoRepuesto(InstrumentoRotoVM instrumento, string nombreIntrumentoRotoAnterior)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -262,7 +261,8 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consultaInsertInstrumentoRepuesto = "insert into InstrumentoRepuesto (nombreInstrumento, idInstrumentoRoto, fechaRepuesto) values (@nombreInstrumento, @idInstrumentoRoto, @fechaRepuesto)";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@nombreInstrumento", instrumento.Instrumento);
+                if (instrumento.Instrumento == nombreIntrumentoRotoAnterior) comando.Parameters.AddWithValue("@nombreInstrumento", instrumento.Instrumento);
+                else comando.Parameters.AddWithValue("@nombreInstrumento", nombreIntrumentoRotoAnterior);
                 comando.Parameters.AddWithValue("@idInstrumentoRoto", instrumento.IdInstrumentoRoto);
                 comando.Parameters.AddWithValue("@fechaRepuesto", instrumento.FechaRotura);
 

@@ -1,8 +1,5 @@
-﻿using CanchasGambeta.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace CanchasGambeta.ViewModels
 {
@@ -111,7 +108,6 @@ namespace CanchasGambeta.ViewModels
 
         public InsumosAPedir()
         {
-
         }
     }
 

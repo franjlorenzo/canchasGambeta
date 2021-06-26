@@ -2,8 +2,6 @@
 using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CanchasGambeta.Controllers
@@ -131,7 +129,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            if(fechaFin >= fechaInicio)
+            if (fechaFin >= fechaInicio)
             {
                 List<CanchasMasReservadasVM> listaCanchasMasReservadas = AccesoBD.AD_Informe.obtenerCanchasMasReservadas(fechaInicio, fechaFin);
                 TempData["canchasMasUtilizadas"] = listaCanchasMasReservadas;
@@ -144,7 +142,6 @@ namespace CanchasGambeta.Controllers
                 TempData["canchasMasUtilizadas"] = listaCanchasMasReservadas;
                 return RedirectToAction("CanchasMasUtilizadas");
             }
-            
         }
 
         //--------------------------------------CLIENTES CON MÁS RESERVAS-----------------------------------------------
@@ -207,7 +204,7 @@ namespace CanchasGambeta.Controllers
             {
                 listaHorariosMasReservados = AccesoBD.AD_Informe.obtenerHorariosMasReservados(DateTime.Today, DateTime.Today);
                 return View(listaHorariosMasReservados);
-            }           
+            }
         }
 
         [HttpPost]
@@ -282,7 +279,7 @@ namespace CanchasGambeta.Controllers
             _ = new List<InstrumentoRotoVM>();
             List<InstrumentoRotoVM> listaInstrumentosRotos;
             if (TempData["fechaMayor"] != null) ViewBag.fechaMayor = TempData["fechaMayor"].ToString();
-            if(TempData["listaInstrumentosRotos"] != null)
+            if (TempData["listaInstrumentosRotos"] != null)
             {
                 listaInstrumentosRotos = (List<InstrumentoRotoVM>)TempData["listaInstrumentosRotos"];
                 return View(listaInstrumentosRotos);
@@ -291,7 +288,7 @@ namespace CanchasGambeta.Controllers
             {
                 listaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotosEntreFechas(DateTime.Now, DateTime.Now);
                 return View(listaInstrumentosRotos);
-            }           
+            }
         }
 
         [HttpPost]

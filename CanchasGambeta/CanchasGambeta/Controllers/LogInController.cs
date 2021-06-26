@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CanchasGambeta.Controllers
@@ -25,7 +23,7 @@ namespace CanchasGambeta.Controllers
                                  where data.email == Email.Trim() && data.password == Password.Trim()
                                  select data).FirstOrDefault(); //FirstOrDefault devuelve el elemento o devuelve null
 
-                    if(oUser == null)
+                    if (oUser == null)
                     {
                         ViewBag.Error = "Usuario o contraseña invalida";
                         return View();
@@ -34,9 +32,9 @@ namespace CanchasGambeta.Controllers
                     Session["User"] = oUser;
                     Session.Timeout = 10;
 
-                    if(oUser.rol == 2) return RedirectToAction("IndexCliente", "Cliente");
+                    if (oUser.rol == 2) return RedirectToAction("IndexCliente", "Cliente");
                     else return RedirectToAction("IndexAdministrador", "Administrador");
-                } 
+                }
             }
             catch (Exception ex)
             {

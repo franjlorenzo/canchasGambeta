@@ -3,14 +3,13 @@ using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace CanchasGambeta.AccesoBD
 {
     public class AD_Insumo
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
+
         public static List<Insumo> obtenerTop10InsumosMenosStock()
         {
             List<Insumo> lista = new List<Insumo>();
@@ -39,7 +38,7 @@ namespace CanchasGambeta.AccesoBD
                         Insumo auxiliar = new Insumo();
                         auxiliar.idInsumo = int.Parse(lector["idInsumo"].ToString());
                         auxiliar.insumo1 = lector["insumo"].ToString();
-                        auxiliar.precio = Math.Round(decimal.Parse(lector["precio"].ToString()),2);
+                        auxiliar.precio = Math.Round(decimal.Parse(lector["precio"].ToString()), 2);
                         auxiliar.stock = int.Parse(lector["stock"].ToString());
                         lista.Add(auxiliar);
                     }
@@ -70,7 +69,6 @@ namespace CanchasGambeta.AccesoBD
                 comando.Parameters.AddWithValue("@precio", nuevo.precio);
                 comando.Parameters.AddWithValue("@stock", nuevo.stock);
                 comando.Parameters.AddWithValue("@estado", 1);
-
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consultaInsertEquipo;
@@ -178,7 +176,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consultaEliminarInsumo = @"update Insumo set estado = 0 
+                string consultaEliminarInsumo = @"update Insumo set estado = 0
                                                   where idInsumo = @idInsumo";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idInsumo", idInsumo);
@@ -207,7 +205,7 @@ namespace CanchasGambeta.AccesoBD
             List<BuscarInsumos> listaInsumosEncontrados = new List<BuscarInsumos>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
-            
+
             try
             {
                 comando.CommandType = System.Data.CommandType.Text;
@@ -219,7 +217,7 @@ namespace CanchasGambeta.AccesoBD
                 }
                 else
                 {
-                    string consultaObtenerInsumosPorNombre = @"select idInsumo, insumo, stock, precio 
+                    string consultaObtenerInsumosPorNombre = @"select idInsumo, insumo, stock, precio
                                                                from Insumo
                                                                where insumo like @nombreInsumo and estado = 1
                                                                order by 2";
@@ -227,7 +225,7 @@ namespace CanchasGambeta.AccesoBD
                     comando.Parameters.AddWithValue("@nombreInsumo", "%" + nombreInsumo + "%");
                     comando.CommandText = consultaObtenerInsumosPorNombre;
                 }
-                             
+
                 conexion.Open();
                 comando.Connection = conexion;
 

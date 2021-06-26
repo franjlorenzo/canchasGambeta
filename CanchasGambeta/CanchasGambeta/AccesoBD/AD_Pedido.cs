@@ -3,10 +3,8 @@ using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Net.Mail;
 using System.Runtime.InteropServices;
-using System.Web;
 
 namespace CanchasGambeta.AccesoBD
 {
@@ -175,10 +173,10 @@ namespace CanchasGambeta.AccesoBD
                     comando.Parameters.Clear();
                     comando.Parameters.AddWithValue("@pedido", obtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha, nuevoPedido.Descripcion));
                     comando.Parameters.AddWithValue("@insumo", lista.IdInsumo);
-                    comando.Parameters.AddWithValue("@cantidadPedida", lista.Cantidad);                   
+                    comando.Parameters.AddWithValue("@cantidadPedida", lista.Cantidad);
                     comando.ExecuteNonQuery();
                 }
-                
+
                 resultado = true;
             }
             catch (Exception)
@@ -529,7 +527,7 @@ namespace CanchasGambeta.AccesoBD
 
                 foreach (var lista in pedidosAProveedor)
                 {
-                    if(lista.estado == true)
+                    if (lista.estado == true)
                     {
                         resultado = false;
                         break;
@@ -670,13 +668,13 @@ namespace CanchasGambeta.AccesoBD
             SmtpClient smtpClient = new SmtpClient();
 
             Proveedor proveedor = null;
-            if (nuevoPedido != null) 
+            if (nuevoPedido != null)
             {
                 nuevoPedido.IdPedido = obtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha, nuevoPedido.Descripcion);
                 proveedor = obtenerProveedorPorId(nuevoPedido.IdProveedor);
             }
-            if(pedidoSinModificar != null) proveedor = obtenerProveedorPorId(pedidoSinModificar.IdProveedor);
-            if(pedidoEliminado != null) proveedor = obtenerProveedorPorId(pedidoEliminado.IdProveedor);
+            if (pedidoSinModificar != null) proveedor = obtenerProveedorPorId(pedidoSinModificar.IdProveedor);
+            if (pedidoEliminado != null) proveedor = obtenerProveedorPorId(pedidoEliminado.IdProveedor);
 
             string mensaje = "";
             string titulo = "";
@@ -719,7 +717,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idPedido from Pedido 
+                string consulta = @"select idPedido from Pedido
                                     where proveedor = @idProveedor and
                                     descripcion = @descripcion and
                                     fecha = @fecha";
@@ -739,7 +737,7 @@ namespace CanchasGambeta.AccesoBD
                 {
                     while (lector.Read())
                     {
-                       idPedido = int.Parse(lector["idPedido"].ToString());
+                        idPedido = int.Parse(lector["idPedido"].ToString());
                     }
                 }
             }
@@ -843,7 +841,7 @@ namespace CanchasGambeta.AccesoBD
                                                             where pedido = @idPedido";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idPedido", idPedido);
-                
+
                 comando.CommandText = consultaObtenerInsumosAConcretar;
                 SqlDataReader lector3 = comando.ExecuteReader();
                 if (lector3 != null)

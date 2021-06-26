@@ -13,99 +13,97 @@
         <h4 class="p-1">Modifique los campos que desee para actualizar la reserva:</h4>
         @using (Html.BeginForm("ModificarReserva", "Reserva", FormMethod.Post, new { onsubmit = "return validacionModificarReserva();", @id = "idModificarReserva" }))
         {
-            @Html.HiddenFor(Model => Model.IdReserva)
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label">Fecha</label>
-                    <input type="hidden" name="fechaReserva" value="@ViewBag.fechaReserva" />
-                    @Html.TextBoxFor(model => model.Fecha, "{0:yyyy-MM-dd}", htmlAttributes: new { onchange = "document.getElementById('idModificarReserva').submit()", @type = "date", @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Cancha</label>
-                    <input type="hidden" name="idCanchaReserva" value="@ViewBag.idCanchaReserva" />
-                    <select name="idCancha" id="idCancha" data-val="true" class="form-control" onchange="document.getElementById('idModificarReserva').submit()">
-                        <option value="">Seleccione una cancha</option>
-                        @foreach (var item in Model.Canchas)
+        @Html.HiddenFor(Model => Model.IdReserva)
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label">Fecha</label>
+                <input type="hidden" name="fechaReserva" value="@ViewBag.fechaReserva" />
+                @Html.TextBoxFor(model => model.Fecha, "{0:yyyy-MM-dd}", htmlAttributes: new { onchange = "document.getElementById('idModificarReserva').submit()", @type = "date", @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label class="control-label">Cancha</label>
+                <input type="hidden" name="idCanchaReserva" value="@ViewBag.idCanchaReserva" />
+                <select name="idCancha" id="idCancha" data-val="true" class="form-control" onchange="document.getElementById('idModificarReserva').submit()">
+                    <option value="">Seleccione una cancha</option>
+                    @foreach (var item in Model.Canchas)
                         {
                             if (item.Selected)
                             {
-                                <option value="@item.Value" selected="selected">@item.Text</option>
+                    <option value="@item.Value" selected="selected">@item.Text</option>
                             }
                             else
                             {
-                                <option value="@item.Value">@item.Text</option>
+                    <option value="@item.Value">@item.Text</option>
                             }
                         }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Horario</label>
-                    @if (ViewBag.idHorarioReserva == null)
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Horario</label>
+                @if (ViewBag.idHorarioReserva == null)
                     {
-                        <input type="hidden" name="idHorarioReserva" value="0" />
+                <input type="hidden" name="idHorarioReserva" value="0" />
                     }
                     else
                     {
-                        <input type="hidden" name="idHorarioReserva" value="@ViewBag.idHorarioReserva" />
+                <input type="hidden" name="idHorarioReserva" value="@ViewBag.idHorarioReserva" />
                     }
-                    <select name="idHorario" id="idHorario" data-val="true" class="form-control">
-                        @if (ViewBag.idHorarioReserva == null)
+                <select name="idHorario" id="idHorario" data-val="true" class="form-control">
+                    @if (ViewBag.idHorarioReserva == null)
                         {
-                            <option value="">Seleccione un horario</option>
+                    <option value="">Seleccione un horario</option>
                         }
                         else if (Model.IdHorario == ViewBag.idHorarioReserva)
                         {
-                            <option value="@Model.IdHorario" selected>@Model.Horario</option>
+                    <option value="@Model.IdHorario" selected>@Model.Horario</option>
                         }
-                        @foreach (var item in Model.Horarios)
+                    @foreach (var item in Model.Horarios)
                         {
-                            <option value="@item.Value">@item.Text</option>
+                    <option value="@item.Value">@item.Text</option>
                         }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Servicio asador</label>
-                    @Html.CheckBoxFor(Model => Model.ServicioAsador)
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Servicio instrumentos</label>
-                    @Html.CheckBoxFor(Model => Model.ServicioInstrumento)
-                </div>
-                @if (sesion.equipo != null)
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Servicio asador</label>
+                @Html.CheckBoxFor(Model => Model.ServicioAsador)
+            </div>
+            <div class="form-group">
+                <label class="control-label">Servicio instrumentos</label>
+                @Html.CheckBoxFor(Model => Model.ServicioInstrumento)
+            </div>
+            @if (sesion.equipo != null)
                 {
-                    <div class="form-group">
-                        <label class="control-label">Enviar email a mis compañeros de equipo</label>
-                        @Html.CheckBoxFor(Model => Model.EnviarMails)
-                    </div>
+            <div class="form-group">
+                <label class="control-label">Enviar email a mis compañeros de equipo</label>
+                @Html.CheckBoxFor(Model => Model.EnviarMails)
+            </div>
                 }
 
-                <div class="form-group text-left">
-                    <button class="btn btn-success" type="submit">Actualizar reserva</button>
-                    @if (Model.ListaInsumosEnLaReserva.Count != 0)
+            <div class="form-group text-left">
+                <button class="btn btn-success" type="submit">Actualizar reserva</button>
+                @if (Model.ListaInsumosEnLaReserva.Count != 0)
                     {
-                        <a href="@Url.Action("ModificarInsumosReserva", "Reserva", new { @idReserva = Model.IdReserva })" class="btn btn-info m-1">Modificar insumos reservados</a>
+                <a href="@Url.Action("ModificarInsumosReserva", "Reserva", new { @idReserva = Model.IdReserva })" class="btn btn-info m-1">Modificar insumos reservados</a>
                     }
                     else
                     {
-                        <a href="@Url.Action("ReservarInsumos", "Reserva", new { @idReserva = Model.IdReserva, @enviarMails = true })" class="btn btn-info m-1">Reservar insumos</a>
+                <a href="@Url.Action("ReservarInsumos", "Reserva", new { @idReserva = Model.IdReserva, @enviarMails = true })" class="btn btn-info m-1">Reservar insumos</a>
                     }
-                    @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
-                </div>
-                <div class="form-label-group text-success">
-                    @ViewBag.exitoEliminarInsumos
-                </div>
-                <div class="form-label-group text-danger">
-                    @ViewBag.ErrorModificarReserva
-                    @ViewBag.sinHorario
-                    @ViewBag.sinModificacion
-                    @ViewBag.ErrorEliminarInsumos
-                </div>
+                @Html.ActionLink("Cancelar", "MisReservas", "Reserva", null, new { @class = "text-center btn btn-warning" })
             </div>
+            <div class="form-label-group text-success">
+                @ViewBag.exitoEliminarInsumos
+            </div>
+            <div class="form-label-group text-danger">
+                @ViewBag.ErrorModificarReserva
+                @ViewBag.sinHorario
+                @ViewBag.sinModificacion
+                @ViewBag.ErrorEliminarInsumos
+            </div>
+        </div>
         }
     </div>
     <div class="col-md-3"></div>
 </div>
 
 <script src="~/Scripts/scriptModificarReserva.js"></script>
-
-

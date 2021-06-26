@@ -3,7 +3,6 @@ using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CanchasGambeta.Controllers
@@ -45,7 +44,7 @@ namespace CanchasGambeta.Controllers
                         Session["User"] = oUser;
                         return RedirectToAction("MiEquipo", "Equipo");
                     }
-                }     
+                }
             }
             return View();
         }
@@ -59,7 +58,7 @@ namespace CanchasGambeta.Controllers
             List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
             ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
 
-            if(TempData["ErrorEliminarIntegrante"] != null) ViewBag.ErrorEliminarIntegrante = TempData["ErrorEliminarIntegrante"].ToString();
+            if (TempData["ErrorEliminarIntegrante"] != null) ViewBag.ErrorEliminarIntegrante = TempData["ErrorEliminarIntegrante"].ToString();
             if (TempData["ErrorEliminarEquipo"] != null) ViewBag.ErrorEliminarEquipo = TempData["ErrorEliminarEquipo"].ToString();
             return View(listaEquipoMails);
         }
@@ -181,7 +180,7 @@ namespace CanchasGambeta.Controllers
             return View(integrante);
         }
 
-       [HttpPost]
+        [HttpPost]
         public ActionResult ModificarIntegrante(Email email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -204,11 +203,11 @@ namespace CanchasGambeta.Controllers
                         {
                             ViewBag.ErrorModificar = "Ocurrió un error al modificar el integrante, por favor inténtelo de nuevo.";
                             return View(email);
-                        }                    
+                        }
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ViewBag.ErrorModificar = ex.Message;
                 return View(email);

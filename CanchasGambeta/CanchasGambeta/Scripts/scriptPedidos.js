@@ -111,11 +111,9 @@ function confirmacionEliminarPedido() {
 }
 
 function validacionConcretarPedido() {
-
     let inputs = document.getElementsByName('cantidadRecibida');
     let cantidades = [];
     let hayInsumoIgualCero = false;
-
 
     for (var i = 0; i < inputs.length; i++) {
         let valor = inputs[i].value;
@@ -134,6 +132,6 @@ function validacionConcretarPedido() {
         if (confirmarConcretar) return true;
         return false;
     }
-    
+
     return true;
 }

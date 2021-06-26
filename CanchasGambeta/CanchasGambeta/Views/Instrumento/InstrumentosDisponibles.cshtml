@@ -1,6 +1,16 @@
 ﻿@model CanchasGambeta.ViewModels.VistaInstrumentos
 @{
     ViewBag.Title = "InstrumentosDisponibles";
+
+    bool hayInstrumentoRoto = false;
+    foreach (var item in Model.TablaInstrumentosRotos)
+    {
+        if (item.Estado == true)
+        {
+            hayInstrumentoRoto = true;
+            break;
+        }
+    }
 }
 
 <div class="row" style="transform: translateY(60px); color: white">
@@ -98,7 +108,7 @@
 <div class="row" style="transform: translateY(70px); color: white">
     <div class="col-lg-2"></div>
     <div class="col-lg-8">
-        @if (Model.TablaInstrumentosRotos.Count() != 0)
+        @if (hayInstrumentoRoto)
         {
             <table class="tablacustom mt-3">
                 <thead>
@@ -114,24 +124,40 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var listado in Model.TablaInstrumentosRotos)
-                    {
-                        string fecha = listado.FechaRotura.ToString();
-                        string[] fechaSplit = fecha.Split(' ');
+                @if (Model.TablaInstrumentosRotos.Count() != 0)
+                {
+                    <tbody>
+                        @foreach (var listado in Model.TablaInstrumentosRotos)
+                        {
+                            if (listado.Estado == true)
+                            {
+                                string fecha = listado.FechaRotura.ToString();
+                                string[] fechaSplit = fecha.Split(' ');
+                                <tr>
+                                    <td>
+                                        @listado.Instrumento
+                                    </td>
+                                    <td>
+                                        @fechaSplit[0]
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("InstrumentoRepuesto", "Instrumento", new {idInstrumentoRoto = listado.IdInstrumentoRoto})" class="btn btn-warning">Repuesto</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                }
+                else
+                {
+                    <tbody>
                         <tr>
                             <td>
-                                @listado.Instrumento
-                            </td>
-                            <td>
-                                @fechaSplit[0]
-                            </td>
-                            <td>
-                                <a href="@Url.Action("InstrumentoRepuesto", "Instrumento", new {idInstrumentoRoto = listado.IdInstrumentoRoto})" class="btn btn-warning">Repuesto</a>
+                                No hay instrumentos rotos
                             </td>
                         </tr>
-                    }
-                </tbody>
+                    </tbody>
+                }
             </table>
             <div class="form-label-group text-danger">
                 @ViewBag.ErrorEliminarInstrumentoRoto
@@ -139,7 +165,7 @@
         }
         else
         {
-            <table class="tablacustom">
+            <table class="tablacustom mt-3">
                 <thead>
                     <tr>
                         <th>
@@ -161,4 +187,3 @@
 </div>
 
 <script src="~/Scripts/scriptInstrumentos.js"></script>
-

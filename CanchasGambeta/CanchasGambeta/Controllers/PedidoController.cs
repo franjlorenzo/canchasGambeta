@@ -1,10 +1,8 @@
 ﻿using CanchasGambeta.Models;
 using CanchasGambeta.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CanchasGambeta.Controllers
@@ -134,7 +132,6 @@ namespace CanchasGambeta.Controllers
         [HttpPost]
         public ActionResult AgregarInsumosAlPedido(int idInsumo, string nombreInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
-
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
@@ -184,7 +181,6 @@ namespace CanchasGambeta.Controllers
             TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
             TempData["listaInsumosAPedir"] = listaInsumosAPedir;
             return RedirectToAction("AgregarInsumosAlPedido");
-
         }
 
         [HttpPost]
@@ -445,7 +441,7 @@ namespace CanchasGambeta.Controllers
             };
             return View(vistaProveedores);
         }
-        
+
         [HttpPost]
         public ActionResult NuevoProveedor(NuevoProveedor nuevoProveedor)
         {
@@ -517,6 +513,6 @@ namespace CanchasGambeta.Controllers
                 TempData["ErrorPedidosSinConcretar"] = "Todavía hay pedidos sin concretar al proveedor que quiere eliminar, concretelos para poder eliminar";
                 return RedirectToAction("MisProveedores", "Pedido");
             }
-        }        
+        }
     }
 }

@@ -21,20 +21,20 @@
         <table class="tablacustom">
             <thead>
                 <tr>
-                    <th class="text-center thfix">
+                    <th>
                         Proveedor
                     </th>
-                    <th class="text-center thfix">
+                    <th>
                         Pedido el día
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="text-center">
-                        @Model.NombreProveedor 
+                    <td>
+                        @Model.NombreProveedor
                     </td>
-                    <td class="text-center">
+                    <td>
                         @fechaSplit[0]
                     </td>
                 </tr>
@@ -45,10 +45,10 @@
         <table class="tablacustom">
             <thead>
                 <tr>
-                    <th class="text-center thfix">
+                    <th>
                         Insumo
                     </th>
-                    <th class="text-center thfix">
+                    <th>
                         Cantidad pedida
                     </th>
                 </tr>
@@ -57,11 +57,11 @@
                 @foreach (var item in Model.ListaInsumosPedidos)
                 {
                     <tr>
-                        <td class="text-center">
+                        <td>
                             @Html.HiddenFor(model => item.IdInsumo)
                             @item.Insumo
                         </td>
-                        <td class="text-center">
+                        <td>
                             @item.Cantidad
                         </td>
                     </tr>
@@ -83,10 +83,10 @@
             <table class="tablacustom">
                 <thead>
                     <tr>
-                        <th class="text-center thfix">
+                        <th>
                             Insumo
                         </th>
-                        <th class="text-center thfix">
+                        <th>
                             Cantidad recibida
                         </th>
                     </tr>
@@ -95,7 +95,7 @@
                     @foreach (var item in Model.ListaCantidadesRecibidas)
                     {
                         <tr>
-                            <td class="text-center">
+                            <td>
                                 <input type="hidden" name="idInsumo" value="@item.IdInsumo" />
                                 <input type="text" name="nombreInsumo" class="form-control" placeholder="@item.Insumo" value="@item.Insumo" readonly />
                             </td>
@@ -109,11 +109,8 @@
             <button type="submit" class="btn btn-success mt-1">Concretar</button>
             @Html.ActionLink("Cancelar", "MisPedidos", "Pedido", null, new { @class = "text-center btn btn-warning mt-1" })
         }
-
     </div>
     <div class="col-md-1"></div>
 </div>
 
 <script src="~/Scripts/scriptPedidos.js"></script>
-
-

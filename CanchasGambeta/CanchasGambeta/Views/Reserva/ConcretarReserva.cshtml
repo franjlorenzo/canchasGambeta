@@ -1,0 +1,75 @@
+﻿@model CanchasGambeta.ViewModels.ActualizarReservaVM
+@{
+    ViewBag.Title = "ConcretarReserva";
+}
+
+<div class="row" style="transform: translateY(60px); color: white;">
+    <div class="col-lg-12 text-left">
+        <h3>Concretar reserva N°: @Model.IdReserva</h3>
+    </div>
+</div>
+
+<div class="row" style="transform: translateY(60px); color: white;">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-5">
+        <table class="tablacustom mt-3">
+            <tr>
+                <th>
+                    Cliente
+                </th>
+                <td>
+                    @Model.NombreCliente
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Fecha
+                </th>
+                <td>
+                    @{
+                        string fechaRealizado = Model.Fecha.ToString();
+                        string[] fechaSplit = fechaRealizado.Split(' ');
+                    }
+                    @fechaSplit[0]
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Cancha
+                </th>
+                <td>
+                    @Model.TipoCancha
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Horario
+                </th>
+                <td>
+                    @Model.Horario
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Servicio asador
+                </th>
+                <td>
+                    @Html.CheckBoxFor(Model => Model.ServicioAsador)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Servicio instrumentos
+                </th>
+                <td>
+                    @Html.CheckBoxFor(Model => Model.ServicioInstrumento)
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-lg-5">
+
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+

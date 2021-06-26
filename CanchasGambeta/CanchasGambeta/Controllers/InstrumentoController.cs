@@ -1,9 +1,6 @@
 ﻿using CanchasGambeta.Models;
 using CanchasGambeta.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CanchasGambeta.Controllers
@@ -62,25 +59,6 @@ namespace CanchasGambeta.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult EliminarInstrumentoRoto(int idInstrumento)
-        {
-            var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
-
-            if (ModelState.IsValid)
-            {
-                bool resultado = AccesoBD.AD_Instrumento.eliminarInstrumentoRoto(idInstrumento);
-                if (resultado) return RedirectToAction("InstrumentosDisponibles", "Instrumento");
-                else
-                {
-                    TempData["ErrorEliminarInstrumentoRoto"] = "Ocurrió un error al eliminar el instrumento roto, inténtelo nuevamente.";
-                    return RedirectToAction("InstrumentosDisponibles", "Instrumento");
-                }
-            }
-            return View();
-        }
-
         public ActionResult InstrumentoRepuesto(int idInstrumentoRoto)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -91,7 +69,7 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult InstrumentoRepuesto(int IdInstrumentoRoto, string Instrumento, DateTime FechaRotura, int IdInstrumentoDisponible)
+        public ActionResult InstrumentoRepuesto(int IdInstrumentoRoto, string Instrumento, DateTime FechaRotura, int IdInstrumentoDisponible, string nombreInstrumentoAnterior)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
@@ -100,7 +78,7 @@ namespace CanchasGambeta.Controllers
             InstrumentoRotoVM instrumento = new InstrumentoRotoVM(IdInstrumentoRoto, Instrumento, FechaRotura, IdInstrumentoDisponible, estado);
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Instrumento.instrumentoRepuesto(instrumento);
+                bool resultado = AccesoBD.AD_Instrumento.instrumentoRepuesto(instrumento, nombreInstrumentoAnterior);
                 if (resultado) return RedirectToAction("InstrumentosDisponibles", "Instrumento");
                 else
                 {

@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace CanchasGambeta.AccesoBD
 {
     public class AD_Informe
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
+
         public static List<ReservasActivas> obtenerReservasActivas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<ReservasActivas> listaReservas = new List<ReservasActivas>();
@@ -77,7 +76,7 @@ namespace CanchasGambeta.AccesoBD
                     {
                         foreach (var item in listaTotalInsumos)
                         {
-                            if(item.idInsumo == itemListaInsumos.idInsumo)
+                            if (item.idInsumo == itemListaInsumos.idInsumo)
                             {
                                 item.cantidad += itemListaInsumos.cantidad;
                             }
@@ -86,7 +85,7 @@ namespace CanchasGambeta.AccesoBD
                     else
                     {
                         listaTotalInsumos.Add(itemListaInsumos);//Si el insumo no existe en la lista del total se lo agrega
-                    }                    
+                    }
                 }
             }
 
@@ -206,7 +205,7 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consulta = @"select tipoCancha, count(*) 'Veces utilizada'
                                     from Cancha c join Reserva r on r.cancha = c.idCancha
-                                    where estado = 1 and fecha between @fechaInicio and @fechaFin
+                                    where estado = 1 and fecha between CAST(@fechaInicio AS date) and CAST(@fechaFin AS date)
                                     group by tipoCancha
                                     order by 2 desc";
                 comando.Parameters.Clear();
@@ -228,8 +227,8 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.Cancha = lector["tipoCancha"].ToString();
                         auxiliar.Cantidad = int.Parse(lector["Veces utilizada"].ToString());
                         listaCanchasMasReservadas.Add(auxiliar);
-                    }                   
-                }                              
+                    }
+                }
             }
             catch (Exception)
             {
@@ -252,7 +251,7 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consulta = @"select nombreCompleto, email, telefono, count(*) 'Cant reservas'
                                     from Usuario u join Reserva r on u.idUsuario = r.cliente
-                                    where estado = 1 and fecha between @fechaInicio and @fechaFin
+                                    where estado = 1 and fecha between CAST(@fechaInicio AS date) and CAST(@fechaFin AS date)
                                     group by nombreCompleto, email, telefono
                                     order by 4 desc";
                 comando.Parameters.Clear();
@@ -301,7 +300,7 @@ namespace CanchasGambeta.AccesoBD
                 string consulta = @"select h.horario, count(*) 'Cant reservas'
                                     from Horario h join HorarioReservas hr on h.idHorario = hr.horario
 	                                     join Reserva r on r.idReserva = hr.reserva
-                                    where fecha between @fechaInicio and @fechaFin
+                                    where fecha between CAST(@fechaInicio AS date) and CAST(@fechaFin AS date)
                                     group by h.horario
                                     order by 1";
                 comando.Parameters.Clear();
@@ -348,7 +347,7 @@ namespace CanchasGambeta.AccesoBD
                 string consulta = @"select i.insumo, sum(cantidad) 'Cantidad vendida'
                                     from Insumo i join ReservaInsumos ri on ri.insumo = i.idInsumo
 	                                     join Reserva r on r.idReserva = ri.reserva
-                                    where fecha between @fechaInicio and @fechaFin
+                                    where fecha between CAST(@fechaInicio AS date) and CAST(@fechaFin AS date)
                                     group by i.insumo
                                     order by 2 desc";
 
@@ -395,7 +394,7 @@ namespace CanchasGambeta.AccesoBD
             {
                 string consulta = @"select i.instrumento, fechaRotura
                                     from Instrumento i join InstrumentoRoto ir on ir.instrumento = i.idInstrumento
-                                    where fechaRotura between @fechaInicio and @fechaFin";
+                                    where fechaRotura between CAST(@fechaInicio AS date) and CAST(@fechaFin AS date)";
 
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@fechaInicio", fechaInicio);

@@ -2,8 +2,8 @@
 using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace CanchasGambeta.Controllers
 {
@@ -28,7 +28,7 @@ namespace CanchasGambeta.Controllers
         }
 
         //------------------------------------INSERT RESERVA--------------------------------
-        [HttpPost]       
+        [HttpPost]
         public ActionResult MisReservas(NuevaReservaVM nuevaReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -40,7 +40,7 @@ namespace CanchasGambeta.Controllers
             try
             {
                 /*Solo se cambia la fecha, cancha no seleccionada. Se devuelve la vista con la fecha cambiada y con viewbag actualizado*/
-                if(nuevaReserva.fecha != fechaElegida && nuevaReserva.idCancha == idCanchaElegida && nuevaReserva.idCancha == 0)
+                if (nuevaReserva.fecha != fechaElegida && nuevaReserva.idCancha == idCanchaElegida && nuevaReserva.idCancha == 0)
                 {
                     Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     NuevaReservaVM modelo = new NuevaReservaVM();
@@ -53,7 +53,7 @@ namespace CanchasGambeta.Controllers
                     return View(new VistaReserva { NuevaReservaVM = modelo, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
                 }
                 /*Solo se cambia la cancha, pero antes no habia cancha seleccionada. Se devuelven los horarios disponibles de esa cancha en ese dia*/
-                if(nuevaReserva.fecha == fechaElegida && nuevaReserva.idCancha != idCanchaElegida && idCanchaElegida == 0)
+                if (nuevaReserva.fecha == fechaElegida && nuevaReserva.idCancha != idCanchaElegida && idCanchaElegida == 0)
                 {
                     Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
@@ -74,7 +74,7 @@ namespace CanchasGambeta.Controllers
                     return View(new VistaReserva { NuevaReservaVM = nuevaReserva, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
                 }
                 /*Se cambia la fecha y hay una cancha seleccionada anteriormente. Se devuelven los horarios actualizados para esa fecha*/
-                if(nuevaReserva.fecha != fechaElegida && nuevaReserva.idCancha == idCanchaElegida && nuevaReserva.idCancha != 0)
+                if (nuevaReserva.fecha != fechaElegida && nuevaReserva.idCancha == idCanchaElegida && nuevaReserva.idCancha != 0)
                 {
                     Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
@@ -95,7 +95,7 @@ namespace CanchasGambeta.Controllers
                     return View(new VistaReserva { NuevaReservaVM = nuevaReserva, TablaReservaVM = AccesoBD.AD_Reserva.obtenerReservasDelCliente() });
                 }
                 /*Se cambia la cancha y ya se estaban mostrando los horarios. Se devuelven los horarios actualizados para esa cancha*/
-                if(nuevaReserva.fecha == fechaElegida && nuevaReserva.idCancha != idCanchaElegida && idCanchaElegida != 0)
+                if (nuevaReserva.fecha == fechaElegida && nuevaReserva.idCancha != idCanchaElegida && idCanchaElegida != 0)
                 {
                     Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
@@ -130,7 +130,7 @@ namespace CanchasGambeta.Controllers
                         if (insertHorarioReservas && sesion.equipo != null)
                         {
                             nuevaReserva.enviarMails = bool.Parse(Request["NuevaReservaVM.enviarMails"].Contains("true").ToString());
-                            if(nuevaReserva.enviarMails) AccesoBD.AD_Reserva.enviarMailsReserva(nuevaReserva.idReserva, 1);
+                            if (nuevaReserva.enviarMails) AccesoBD.AD_Reserva.enviarMailsReserva(nuevaReserva.idReserva, 1);
                         }
                         return RedirectToAction("ReservarInsumos", new { nuevaReserva.idReserva, nuevaReserva.enviarMails });
                     }
@@ -221,7 +221,7 @@ namespace CanchasGambeta.Controllers
 
             bool existeInsumoEnLista = false;
             if (listaInsumosAPedir.Count != 0)
-            {               
+            {
                 foreach (var lista in listaInsumosAPedir) if (lista.IdInsumo == nuevoInsumo.IdInsumo) existeInsumoEnLista = true;
 
                 if (existeInsumoEnLista)
@@ -230,7 +230,7 @@ namespace CanchasGambeta.Controllers
                     TempData["nombreInsumo"] = Request["buscarInsumoAnterior"];
                     TempData["listaInsumosAPedir"] = listaInsumosAPedir;
                     TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
-                    return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });                    
+                    return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });
                 }
             }
 
@@ -331,7 +331,6 @@ namespace CanchasGambeta.Controllers
                 TempData["errorRegistrarInsumos"] = "Ocurrió un erro al guardar los insumos, inténtelo nuevamente más tarde";
                 return RedirectToAction("ReservarInsumos", new { nuevaReservaVM.idReserva });
             }
-          
         }
 
         //------------------------------------MODIFICAR RESERVA--------------------------------
@@ -379,7 +378,7 @@ namespace CanchasGambeta.Controllers
             int idCanchaReserva = int.Parse(Request["idCanchaReserva"]);
             int idHorarioReserva = 0;
             if (!Request["idHorarioReserva"].Equals(null)) idHorarioReserva = int.Parse(Request["idHorarioReserva"]);
-                  
+
             try
             {
                 /*El usuario cambió la fecha, se devuelven los horarios y los viewbag actualizados*/
@@ -404,7 +403,7 @@ namespace CanchasGambeta.Controllers
                     return View(actualizarReserva);
                 }
                 /*El usuario cambió la cancha, se devuelven los horarios y los viewbag actualizados*/
-                if((actualizarReserva.IdCancha != idCanchaReserva && actualizarReserva.IdHorario == idHorarioReserva) || (actualizarReserva.IdCancha != idCanchaReserva && actualizarReserva.IdHorario != idHorarioReserva))
+                if ((actualizarReserva.IdCancha != idCanchaReserva && actualizarReserva.IdHorario == idHorarioReserva) || (actualizarReserva.IdCancha != idCanchaReserva && actualizarReserva.IdHorario != idHorarioReserva))
                 {
                     Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
@@ -425,7 +424,7 @@ namespace CanchasGambeta.Controllers
                     return View(actualizarReserva);
                 }
                 /*El usuario cambió algo de la reserva y luego no seleccionó un horario*/
-                if(actualizarReserva.Fecha == fechaReserva && actualizarReserva.IdCancha == idCanchaReserva && actualizarReserva.IdHorario == idHorarioReserva && actualizarReserva.IdHorario == 0)
+                if (actualizarReserva.Fecha == fechaReserva && actualizarReserva.IdCancha == idCanchaReserva && actualizarReserva.IdHorario == idHorarioReserva && actualizarReserva.IdHorario == 0)
                 {
                     Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                     foreach (var cancha in db.Cancha)
@@ -497,7 +496,7 @@ namespace CanchasGambeta.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Canchas_GambetaEntities db = new Canchas_GambetaEntities();
                 foreach (var canchas in db.Cancha)
@@ -519,7 +518,7 @@ namespace CanchasGambeta.Controllers
                 ViewBag.idHorarioReserva = actualizarReserva.IdHorario;
                 return View(actualizarReserva);
             }
-            
+
             return View(actualizarReserva);
         }
 
@@ -668,7 +667,7 @@ namespace CanchasGambeta.Controllers
                 if (resultado)
                 {
                     bool enviarMails = bool.Parse(Request["enviarMails"].Contains("true").ToString());
-                    if(enviarMails) AccesoBD.AD_Reserva.enviarMailsReserva(idReserva, 3, null, reservaSinModificacion);
+                    if (enviarMails) AccesoBD.AD_Reserva.enviarMailsReserva(idReserva, 3, null, reservaSinModificacion);
                     return RedirectToAction("MisReservas", "Reserva");
                 }
                 else
@@ -718,7 +717,7 @@ namespace CanchasGambeta.Controllers
                 bool resultado = AccesoBD.AD_Reserva.eliminarReserva(idReserva);
                 if (resultado)
                 {
-                    if(sesion.equipo != null) AccesoBD.AD_Reserva.enviarMailsReserva(idReserva, 0, reservaCliente, null);
+                    if (sesion.equipo != null) AccesoBD.AD_Reserva.enviarMailsReserva(idReserva, 0, reservaCliente, null);
                     return RedirectToAction("MisReservas", "Reserva");
                 }
                 else
@@ -728,6 +727,17 @@ namespace CanchasGambeta.Controllers
                 }
             }
             return View();
+        }
+
+        //------------------------------------CONCRETAR RESERVA--------------------------------
+
+        public ActionResult ConcretarReserva(int idReserva)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            ActualizarReservaVM reserva = AccesoBD.AD_Reserva.obtenerReservaPorId(idReserva);
+            return View(reserva);
         }
     }
 }

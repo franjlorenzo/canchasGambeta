@@ -22,90 +22,90 @@
 <body style="background-color: #1A1A1D;">
     @if (sesion == null)
     {
-        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
-            <div class="container">
-                @Html.ActionLink("Canchas Gambeta", "Index", "Home", null, new { @class = "navbar-brand" })
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            @Html.ActionLink("Registrarse", "Register", "Register", null, new { @class = "nav-link" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Iniciar Sesion", "LogIn", "LogIn", null, new { @class = "nav-link" })
-                        </li>
-                    </ul>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container">
+            @Html.ActionLink("Canchas Gambeta", "Index", "Home", null, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("Registrarse", "Register", "Register", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Iniciar Sesion", "LogIn", "LogIn", null, new { @class = "nav-link" })
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
     }
     else if (sesion.rol == 1)
     {
-        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
-            <div class="container">
-                @Html.ActionLink("Canchas Gambeta", "IndexAdministrador", "Administrador", null, new { @class = "navbar-brand" })
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            @Html.ActionLink("Pedidos", "MisPedidos", "Pedido", null, new { @class = "nav-link" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Instrumentos", "InstrumentosDisponibles", "Instrumento", null, new { @class = "nav-link" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Insumos", "MisInsumos", "Insumo", null, new { @class = "nav-link" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Mi perfil", "PerfilAdministrador", "Administrador", null, new { @class = "nav-link" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Cerrar Sesión", null, "CerrarSesion", null, new { @class = "nav-link" })
-                        </li>
-                    </ul>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container">
+            @Html.ActionLink("Canchas Gambeta", "IndexAdministrador", "Administrador", null, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("Pedidos", "MisPedidos", "Pedido", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Instrumentos", "InstrumentosDisponibles", "Instrumento", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Insumos", "MisInsumos", "Insumo", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Mi perfil", "PerfilAdministrador", "Administrador", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Cerrar Sesión", null, "CerrarSesion", null, new { @class = "nav-link" })
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
     }
     else
     {
-        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
-            <div class="container">
-                @Html.ActionLink("Canchas Gambeta", "IndexCliente", "Cliente", null, new { @class = "navbar-brand" })
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            @Html.ActionLink("Reservar", "MisReservas", "Reserva", null, new { @class = "nav-link" })
-                        </li>
-                        @if (sesion.equipo == null || sesion.equipo == 0)
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container">
+            @Html.ActionLink("Canchas Gambeta", "IndexCliente", "Cliente", null, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("Reservar", "MisReservas", "Reserva", null, new { @class = "nav-link" })
+                    </li>
+                    @if (sesion.equipo == null || sesion.equipo == 0)
                         {
-                            <li class="nav-item">
-                                @Html.ActionLink("Nuevo equipo", "NuevoEquipo", "Equipo", null, new { @class = "nav-link" })
-                            </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Nuevo equipo", "NuevoEquipo", "Equipo", null, new { @class = "nav-link" })
+                    </li>
                         }
                         else
                         {
-                            <li class="nav-item">
-                                @Html.ActionLink("Mi equipo", "MiEquipo", "Equipo", null, new { @class = "nav-link" })
-                            </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Mi equipo", "MiEquipo", "Equipo", null, new { @class = "nav-link" })
+                    </li>
                         }
-                        <li class="nav-item">
-                            @Html.ActionLink("Mi perfil", "PerfilCliente", "Cliente", null, new { @class = "nav-link" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Cerrar Sesión", null, "CerrarSesion", null, new { @class = "nav-link" })
-                        </li>
-                    </ul>
-                </div>
+                    <li class="nav-item">
+                        @Html.ActionLink("Mi perfil", "PerfilCliente", "Cliente", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Cerrar Sesión", null, "CerrarSesion", null, new { @class = "nav-link" })
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
     }
 
     <div class="body-content">

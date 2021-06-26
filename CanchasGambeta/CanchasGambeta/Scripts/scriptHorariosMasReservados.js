@@ -2,7 +2,6 @@
 google.charts.setOnLoadCallback(drawBasic);
 
 function drawBasic() {
-
     let titleArr = ['', 'Reservas'];
     let arrayNeeded = [];
     let arrHorarios = [];
@@ -46,7 +45,6 @@ function drawBasic() {
         tempArr.push(arrCanchasString[index], arrCantidadReservasString[index]);
         arrayNeeded.push(tempArr);
     });
-
 
     var data = google.visualization.arrayToDataTable(arrayNeeded);
 

@@ -356,6 +356,7 @@
     <Content Include="Views\Insumo\AgregarInsumo.cshtml" />
     <Content Include="Views\Informe\InstrumentosRotos.cshtml" />
     <Content Include="Views\Instrumento\InstrumentoRepuesto.cshtml" />
+    <Content Include="Views\Reserva\ConcretarReserva.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

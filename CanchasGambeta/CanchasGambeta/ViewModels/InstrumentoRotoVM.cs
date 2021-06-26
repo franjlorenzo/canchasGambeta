@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace CanchasGambeta.ViewModels
 {
@@ -12,7 +10,6 @@ namespace CanchasGambeta.ViewModels
         private DateTime fechaRotura;
         private int idInstrumentoDisponible;
         private bool estado;
-
 
         public InstrumentoRotoVM(int idInstrumentoRoto, string instrumento, DateTime fechaRotura, int idInstrumentoDisponible, bool estado)
         {
@@ -25,7 +22,6 @@ namespace CanchasGambeta.ViewModels
 
         public InstrumentoRotoVM()
         {
-
         }
 
         public string Instrumento { get => instrumento; set => instrumento = value; }

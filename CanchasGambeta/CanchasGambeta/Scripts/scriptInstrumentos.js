@@ -26,3 +26,14 @@ function confirmacionEliminarInstrumentoRoto() {
     }
     return false;
 }
+
+function validacionInstrumentoRepuesto() {
+    let txtNombre = document.getElementById("txtNombre").value;
+    let txtFecha = document.getElementById("txtFecha").value;
+
+    if (!txtNombre | txtFecha == "") {
+        alert("Faltan campos obligatorios.");
+        return false;
+    }
+    return true;
+}

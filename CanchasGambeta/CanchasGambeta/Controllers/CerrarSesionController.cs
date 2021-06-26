@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace CanchasGambeta.Controllers
 {
@@ -85,6 +81,12 @@ namespace CanchasGambeta.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public ActionResult AgregarInsumo()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
         //------------------------------------RESERVA-----------------------------------------
         public ActionResult MisReservas()
         {
@@ -147,6 +149,12 @@ namespace CanchasGambeta.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public ActionResult MisProveedores()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
         //------------------------------------INFORMES-----------------------------------------
         public ActionResult CanchasMasUtilizadas()
         {
@@ -178,7 +186,7 @@ namespace CanchasGambeta.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult InstrumentosDisponibles()
+        public ActionResult InstrumentosRotos()
         {
             Session.Clear();
             return RedirectToAction("Index", "Home");

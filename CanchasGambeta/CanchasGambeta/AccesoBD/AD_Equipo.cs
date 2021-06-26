@@ -1,9 +1,8 @@
-﻿using CanchasGambeta.ViewModels;
-using CanchasGambeta.Models;
+﻿using CanchasGambeta.Models;
+using CanchasGambeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Web;
 
 namespace CanchasGambeta.AccesoBD
@@ -19,11 +18,10 @@ namespace CanchasGambeta.AccesoBD
             SqlCommand comando = new SqlCommand();
 
             try
-            {                
+            {
                 string consultaInsertEquipo = "insert into Equipo(nombreEquipo) values (@nombreEquipo)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@nombreEquipo", nombre);
-                
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consultaInsertEquipo;
@@ -31,7 +29,7 @@ namespace CanchasGambeta.AccesoBD
                 conexion.Open();
                 comando.Connection = conexion;
                 comando.ExecuteNonQuery();
-                
+
                 resultado = true;
             }
             catch (Exception)
@@ -69,7 +67,7 @@ namespace CanchasGambeta.AccesoBD
                     while (lector.Read())
                     {
                         idEquiponuevo = int.Parse(lector["idEquipo"].ToString());
-                    }    
+                    }
                 }
             }
             catch (Exception)
@@ -113,7 +111,7 @@ namespace CanchasGambeta.AccesoBD
 
                 foreach (string nombreEnLista in listaNombres)
                 {
-                    if(nombreEnLista == nombreEquipo)
+                    if (nombreEnLista == nombreEquipo)
                     {
                         resultado = true;
                         return resultado;
@@ -298,10 +296,9 @@ namespace CanchasGambeta.AccesoBD
                     comando.CommandText = consultaInsertMailEnEquipo;
 
                     conexion.Open();
-                    comando.Connection = conexion; 
+                    comando.Connection = conexion;
                     comando.ExecuteNonQuery();
                     resultado = true;
-
                 }
                 else
                 {
@@ -436,7 +433,7 @@ namespace CanchasGambeta.AccesoBD
             SqlCommand comando = new SqlCommand();
 
             try
-            {               
+            {
                 string consulta = "select idEmail from Email where email = @email";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@email", email);
@@ -588,7 +585,6 @@ namespace CanchasGambeta.AccesoBD
                     comando.ExecuteNonQuery();*/
                 }
 
-
                 string consultaEliminarEquipoDeUsuario = "update Usuario set equipo = NULL where idUsuario = @idUsuario";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@idUsuario", sesion.idUsuario);
@@ -604,7 +600,7 @@ namespace CanchasGambeta.AccesoBD
                 comando.ExecuteNonQuery();
                 resultado = true;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }

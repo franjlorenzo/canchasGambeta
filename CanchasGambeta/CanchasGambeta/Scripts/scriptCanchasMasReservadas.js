@@ -2,7 +2,6 @@
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
-
     let titleArr = ['Canchas', 'Cantidad de reservas'];
     let arrayNeeded = [];
     let arrCanchas = [];
@@ -23,7 +22,6 @@ function drawChart() {
         valor = $.trim(valor);
         arrCanchasString.push(valor);
     };
-
 
     $("table#tablaCantidadReservas tr").each(function () {
         var arrayOfThisRow = [];
