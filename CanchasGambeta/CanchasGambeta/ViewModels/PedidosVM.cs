@@ -92,11 +92,13 @@ namespace CanchasGambeta.ViewModels
         private string insumo;
         private int cantidad;
         private int stock;
+        private decimal precio;
 
         public int IdInsumo { get => idInsumo; set => idInsumo = value; }
         public string Insumo { get => insumo; set => insumo = value; }
         public int Cantidad { get => cantidad; set => cantidad = value; }
         public int Stock { get => stock; set => stock = value; }
+        public decimal Precio { get => precio; set => precio = value; }
 
         public InsumosAPedir(int idInsumo, string insumo, int cantidad, int stock)
         {

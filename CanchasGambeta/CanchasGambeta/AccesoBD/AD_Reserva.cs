@@ -546,7 +546,7 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                string consulta = @"select idInsumo, i.insumo, stock, cantidad
+                string consulta = @"select idInsumo, i.insumo, stock, cantidad, precio
                                     from Insumo i join ReservaInsumos ri on i.idInsumo = ri.insumo
 	                                     join Reserva r on r.idReserva = ri.reserva
                                     where idReserva = @idReserva";
@@ -569,6 +569,7 @@ namespace CanchasGambeta.AccesoBD
                         insumo.Insumo = lector["insumo"].ToString();
                         insumo.Stock = int.Parse(lector["stock"].ToString());
                         insumo.Cantidad = int.Parse(lector["cantidad"].ToString());
+                        insumo.Precio = Math.Round(decimal.Parse(lector["precio"].ToString()), 2);
                         listaInsumosEnReserva.Add(insumo);
                     }
                 }
