@@ -744,6 +744,7 @@ namespace CanchasGambeta.Controllers
 
             ActualizarReservaVM reserva = AccesoBD.AD_Reserva.obtenerReservaPorId(idReserva);
             if (TempData["InsumosGuardados"] != null) ViewBag.InsumosGuardados = TempData["InsumosGuardados"].ToString();
+            if (TempData["exitoEliminarInsumos"] != null) ViewBag.exitoEliminarInsumos = TempData["exitoEliminarInsumos"].ToString();
             if (TempData["ReservaInsumoExitoso"] != null) ViewBag.ReservaInsumoExitoso = TempData["ReservaInsumoExitoso"].ToString();
             if (TempData["ErrorModificarReserva"] != null) ViewBag.ErrorModificarReserva = TempData["ErrorModificarReserva"].ToString();
             if (TempData["ReservaModificadaCorrectamente"] != null) ViewBag.ReservaModificadaCorrectamente = TempData["ReservaModificadaCorrectamente"].ToString();
@@ -931,6 +932,24 @@ namespace CanchasGambeta.Controllers
             }
 
             return View();
+        }
+
+        public ActionResult EliminarInsumosReservaConcretar(int idReserva)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            bool resultado = AccesoBD.AD_Reserva.eliminarInsumosReserva(idReserva);
+            if (resultado)
+            {
+                TempData["exitoEliminarInsumos"] = "Insumos eliminados de la reserva correctamente!";
+                return RedirectToAction("ConcretarReserva", new { idReserva });
+            }
+            else
+            {
+                TempData["ErrorEliminarInsumos"] = "Ocurrió un error al eliminar los insumos reservados, inténtelo nuevamente.";
+                return RedirectToAction("ModificarInsumosReservaConcretar", new { idReserva });
+            }
         }
 
         //------------------------------------AGREGAR INSUMOS A LA RESERVA CONCRETAR--------------------------------

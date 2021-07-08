@@ -143,6 +143,9 @@
         {
             <div class="text-center">
                 <h4>No se reservaron insumos</h4>
+                <div class="form-label-group text-success text-center">
+                    @ViewBag.exitoEliminarInsumos
+                </div>
                 <a href="@Url.Action("ReservarInsumosConcretar", "Reserva", new { @idReserva = Model.IdReserva })" class="btn btn-warning mt-2 p-2">Agregar</a>
             </div>
         }
