@@ -28,6 +28,7 @@
         <h4>Detalles</h4>
         @using (Html.BeginForm("GuardarReserva", "Reserva", FormMethod.Post))
         {
+            @Html.HiddenFor(Model => Model.IdReserva)
             <table class="tablacustom">
                 <tr>
                     <th>
@@ -50,6 +51,7 @@
                         Cancha
                     </th>
                     <td>
+                        @Html.HiddenFor(Model => Model.IdCancha)
                         @Html.TextBoxFor(Model => Model.TipoCancha, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                     </td>
                 </tr>
@@ -58,6 +60,7 @@
                         Horario
                     </th>
                     <td>
+                        @Html.HiddenFor(Model => Model.IdHorario)
                         @Html.TextBoxFor(Model => Model.Horario, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                     </td>
                 </tr>
@@ -80,6 +83,14 @@
             </table>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary mt-2">Guardar</button>
+                <a href="@Url.Action("ModificarInsumosReserva", "Reserva", new { @idReserva = Model.IdReserva })" class="btn btn-success mt-2">Concretar</a>
+                @Html.ActionLink("Cancelar", "ReservasActivas", "Informe", null, new { @class = "btn btn-warning mt-2" })
+            </div>
+            <div class="form-label-group text-danger pb-2 text-center">
+                @ViewBag.ErrorModificarReserva
+            </div>
+            <div class="form-label-group text-success text-center">
+                @ViewBag.ReservaModificadaCorrectamente
             </div>
         }
     </div>
@@ -112,6 +123,10 @@
                     }
                 </tbody>
             </table>
+            <div class="form-label-group text-success text-left">
+                @ViewBag.InsumosGuardados
+                @ViewBag.ReservaInsumoExitoso
+            </div>
             <div class="row" style="color: white;">
                 <div class="col-xl-4 col-lg-5">
                     <h5 class="bg-primary p-1 mt-2 rounded">
@@ -128,17 +143,10 @@
         {
             <div class="text-center">
                 <h4>No se reservaron insumos</h4>
-                <a href="@Url.Action("ModificarInsumosReserva", "Reserva", new { @idReserva = Model.IdReserva })" class="btn btn-warning mt-2 p-2">Agregar</a>
+                <a href="@Url.Action("ReservarInsumosConcretar", "Reserva", new { @idReserva = Model.IdReserva })" class="btn btn-warning mt-2 p-2">Agregar</a>
             </div>
         }
     </div>
     <div class="col-lg-1"></div>
-</div>
-
-<div class="row" style="transform: translateY(60px); color: white;">
-    <div class="col-lg-12 text-center mt-3">
-        <a href="@Url.Action("ModificarInsumosReserva", "Reserva", new { @idReserva = Model.IdReserva })" class="btn btn-success">Concretar</a>
-        @Html.ActionLink("Cancelar", "ReservasActivas", "Informe", null, new { @class = "text-center btn btn-warning ml-1" })
-    </div>
 </div>
 

@@ -743,6 +743,10 @@ namespace CanchasGambeta.Controllers
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
             ActualizarReservaVM reserva = AccesoBD.AD_Reserva.obtenerReservaPorId(idReserva);
+            if (TempData["InsumosGuardados"] != null) ViewBag.InsumosGuardados = TempData["InsumosGuardados"].ToString();
+            if (TempData["ReservaInsumoExitoso"] != null) ViewBag.ReservaInsumoExitoso = TempData["ReservaInsumoExitoso"].ToString();
+            if (TempData["ErrorModificarReserva"] != null) ViewBag.ErrorModificarReserva = TempData["ErrorModificarReserva"].ToString();
+            if (TempData["ReservaModificadaCorrectamente"] != null) ViewBag.ReservaModificadaCorrectamente = TempData["ReservaModificadaCorrectamente"].ToString();
             return View(reserva);
         }
 
@@ -752,8 +756,25 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
+            if (ModelState.IsValid)
+            {
+                bool resultado = AccesoBD.AD_Reserva.modificarReserva(actualizarReserva);
+                if (resultado)
+                {
+                    TempData["ReservaModificadaCorrectamente"] = "Reserva guardada correctamente!";
+                    return RedirectToAction("ConcretarReserva", new { idReserva = actualizarReserva.IdReserva });
+                }
+                else
+                {
+                    TempData["ErrorModificarReserva"] = "Ocurrió un error al actualizar la reserva, por favor inténtelo nuevamente.";
+                    return RedirectToAction("ConcretarReserva", new { idReserva = actualizarReserva.IdReserva });
+                }
+            }
+
             return View();
         }
+
+        //------------------------------------MODIFICAR INSUMOS DE LA RESERVA CONCRETAR--------------------------------
 
         public ActionResult ModificarInsumosReservaConcretar(int idReserva)
         {
@@ -777,7 +798,7 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult BuscarInsumoConcretar(string buscarInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
+        public ActionResult BuscarInsumoModificarConcretar(string buscarInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
@@ -812,7 +833,7 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult AgregarInsumosAReservaConcretar(int idInsumo, string nombreInsumo, int stockInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
+        public ActionResult AgregarInsumosAReservaModificarConcretar(int idInsumo, string nombreInsumo, int stockInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
@@ -847,7 +868,7 @@ namespace CanchasGambeta.Controllers
         }
 
         [HttpPost]
-        public ActionResult QuitarInsumoConcretar(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
+        public ActionResult QuitarInsumoModificarConcretar(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
@@ -888,14 +909,17 @@ namespace CanchasGambeta.Controllers
                 }
             }
 
-            //Obtengo los datos de la reserva antes de que sea modificada
             ActualizarReservaVM reservaSinModificacion = AccesoBD.AD_Reserva.obtenerReservaPorId(idReserva);
             reservaSinModificacion.ListaInsumosEnLaReserva = AccesoBD.AD_Reserva.obtenerInsumosDeLaReservaActualizar(idReserva);
 
             if (ModelState.IsValid)
             {
                 bool resultado = AccesoBD.AD_Reserva.modificarInsumosDeLaReserva(idReserva, listaInsumosAPedir);
-                if (resultado) return RedirectToAction("ConcretarReserva", new { idReserva });
+                if (resultado)
+                {
+                    TempData["InsumosGuardados"] = "Insumos guardados correctamente!";
+                    return RedirectToAction("ConcretarReserva", new { idReserva });
+                }
                 else
                 {
                     TempData["ErrorModificarPedido"] = "Error al modificar los insumos a reservar, inténtelo nuevamente.";
@@ -909,5 +933,158 @@ namespace CanchasGambeta.Controllers
             return View();
         }
 
+        //------------------------------------AGREGAR INSUMOS A LA RESERVA CONCRETAR--------------------------------
+
+        public ActionResult ReservarInsumosConcretar(int idReserva)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            VistaReservarInsumos vistaReservarInsumos = new VistaReservarInsumos
+            {
+                NuevaReservaVM = new NuevaReservaVM(idReserva),
+                BuscarInsumos = new List<BuscarInsumos>(),
+                InsumosAPedir = new List<InsumosAPedir>()
+            };
+
+            if (TempData["buscarInsumos"] != null) vistaReservarInsumos.BuscarInsumos = (List<BuscarInsumos>)TempData["buscarInsumos"];
+            if (TempData["listaInsumosAPedir"] != null) vistaReservarInsumos.InsumosAPedir = (List<InsumosAPedir>)TempData["listaInsumosAPedir"];
+            if (TempData["nombreInsumo"] != null) ViewBag.nombreInsumo = TempData["nombreInsumo"].ToString();
+            if (TempData["ErrorBuscarInsumo"] != null) ViewBag.ErrorBuscarInsumo = TempData["ErrorBuscarInsumo"].ToString();
+            if (TempData["insumoYaExiste"] != null) ViewBag.insumoYaExiste = TempData["insumoYaExiste"].ToString();
+            if (TempData["buscarInsumoAnterior"] != null) ViewBag.nombreInsumo = TempData["buscarInsumoAnterior"].ToString();
+            if (TempData["cantidadIgualCero"] != null) ViewBag.cantidadIgualCero = TempData["cantidadIgualCero"].ToString();
+            if (TempData["errorRegistrarInsumos"] != null) ViewBag.errorRegistrarInsumos = TempData["errorRegistrarInsumos"].ToString();
+            ViewBag.idReserva = idReserva;
+
+            return View(vistaReservarInsumos);
+        }
+
+        [HttpPost]
+        public ActionResult BuscarInsumoConcretar(string buscarInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            if (buscarInsumo == "" || buscarInsumo == " ") buscarInsumo = null;
+            List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
+            if (listaCantidadInsumoAlPedido != null && listaIdInsumoAlPedido != null && listaNombreInsumoAlPedido != null && listaStockInsumo != null)
+            {
+                listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido, listaStockInsumo);
+            }
+
+            if (buscarInsumo != null)
+            {
+                TempData["nombreInsumo"] = buscarInsumo;
+                TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(buscarInsumo);
+                TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                return RedirectToAction("ReservarInsumosConcretar", new { idReserva = int.Parse(Request["NuevaReservaVM.idReserva"]) });
+            }
+            if (Request["buscarInsumoAnterior"] == "")
+            {
+                TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
+                return RedirectToAction("ReservarInsumosConcretar", new { idReserva = int.Parse(Request["NuevaReservaVM.idReserva"]) });
+            }
+            else
+            {
+                TempData["buscarInsumoAnterior"] = Request["buscarInsumoAnterior"];
+                TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
+                TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+                TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                return RedirectToAction("ReservarInsumosConcretar", new { idReserva = int.Parse(Request["NuevaReservaVM.idReserva"]) });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AgregarInsumosConcretar(int idInsumo, string nombreInsumo, int stockInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0, stockInsumo);
+            List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
+            if (listaCantidadInsumoAlPedido != null && listaIdInsumoAlPedido != null && listaNombreInsumoAlPedido != null && listaStockInsumo != null)
+            {
+                listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido, listaStockInsumo);
+            }
+
+            bool existeInsumoEnLista = false;
+            if (listaInsumosAPedir.Count != 0)
+            {
+                foreach (var lista in listaInsumosAPedir) if (lista.IdInsumo == nuevoInsumo.IdInsumo) existeInsumoEnLista = true;
+
+                if (existeInsumoEnLista)
+                {
+                    TempData["insumoYaExiste"] = "Este insumo ya está en la lista para reservar";
+                    TempData["buscarInsumoAnterior"] = Request["buscarInsumoAnterior"];
+                    TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+                    TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                    return RedirectToAction("ReservarInsumosConcretar", new { idReserva = int.Parse(Request["NuevaReservaVM.idReserva"]) });
+                }
+            }
+
+            listaInsumosAPedir.Add(nuevoInsumo);
+            TempData["buscarInsumoAnterior"] = Request["buscarInsumoAnterior"];
+            TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+            TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+            return RedirectToAction("ReservarInsumosConcretar", new { idReserva = int.Parse(Request["NuevaReservaVM.idReserva"]) });
+        }
+
+        [HttpPost]
+        public ActionResult QuitarInsumoConcretar(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
+            List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.armarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido, listaStockInsumo);
+
+            if (listaInsumosAPedir.Exists(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo))
+            {
+                var insumoAEliminar = listaInsumosAPedir.Single(insumo => insumo.IdInsumo == insumoEnLista.IdInsumo);
+                listaInsumosAPedir.Remove(insumoAEliminar);
+            }
+
+            if (Request["buscarInsumoAnterior"] != null && Request["buscarInsumoAnterior"] != "")
+            {
+                TempData["nombreInsumo"] = Request["buscarInsumoAnterior"];
+                TempData["buscarInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+            }
+            TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+            return RedirectToAction("ReservarInsumosConcretar", new { idReserva = int.Parse(Request["NuevaReservaVM.idReserva"]) });
+        }
+
+        [HttpPost]
+        public ActionResult ReservarInsumosConcretar(NuevaReservaVM nuevaReservaVM, List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+
+            List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Reserva.armarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
+
+            foreach (var item in listaInsumosAPedir)
+            {
+                if (item.Cantidad == 0)
+                {
+                    TempData["cantidadIgualCero"] = "No se puede pedir un insumo con cantidad cero(0)";
+                    TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                    return RedirectToAction("ReservarInsumosConcretar", new { nuevaReservaVM.idReserva });
+                }
+            }
+
+            bool resultado = AccesoBD.AD_Reserva.insertReservaInsumo(nuevaReservaVM, listaInsumosAPedir);
+            if (resultado)
+            {
+                TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                TempData["reservaInsumoExitoso"] = "Insumos reservados con éxito!";
+                return RedirectToAction("ConcretarReserva", new { nuevaReservaVM.idReserva });
+            }
+            else
+            {
+                TempData["listaInsumosAPedir"] = listaInsumosAPedir;
+                TempData["errorRegistrarInsumos"] = "Ocurrió un erro al guardar los insumos, inténtelo nuevamente más tarde";
+                return RedirectToAction("ReservarInsumosConcretar", new { nuevaReservaVM.idReserva });
+            }
+        }
     }
 }
