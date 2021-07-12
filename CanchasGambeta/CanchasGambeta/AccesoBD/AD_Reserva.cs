@@ -592,36 +592,45 @@ namespace CanchasGambeta.AccesoBD
             DatosReserva reservaCliente = null;
             if (datosReservaEliminada == null) reservaCliente = ObtenerDatosReserva(idReserva);
             List<MailEquipoVM> listaIntegrantesEquipo = AD_Equipo.ObtenerMailsEquipo(sesion.equipo);
+
             string mensaje = "";
             string insumos = "";
             string titulo = "";
             string servicioAsador = "No contratado";
             string servicioInstrumentos = "No contratado";
-
+            
             if (tipoMensaje == 1) //Nueva reserva
             {
+                string fecha = reservaCliente.Fecha.ToString();
+                string[] fechaSplit = fecha.Split(' ');
+
                 List<Insumo> insumosReservados = ObtenerInsumosDeLaReserva(idReserva);
                 if (insumosReservados.Count != 0)
                 {
                     insumos = DescripcionInsumosSeleccionados(insumosReservados);
-                    mensaje = $"Hola, su compañero de equipo hizo una reserva para el día {reservaCliente.Fecha} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha}.\n\n" +
+                    mensaje = $"Hola, su compañero de equipo hizo una reserva para el día {fechaSplit[0]} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha}.\n\n" +
                               $"Además reservó los siguientes insumos:\n\n" +
                               $"{insumos}";
                 }
-                else mensaje = $"Hola, su compañero de equipo hizo una reserva para el día {reservaCliente.Fecha} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha}";
+                else mensaje = $"Hola, su compañero de equipo hizo una reserva para el día {fechaSplit[0]} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha}";
                 titulo = "Nueva reserva!";
             }
             else if (tipoMensaje == 2) //Update reserva
             {
+                string fecha = reservaCliente.Fecha.ToString();
+                string[] fechaSplit = fecha.Split(' ');
+
                 if (reservaCliente.ServicioAsador == true) servicioAsador = "Contratado";
                 if (reservaCliente.ServicioInstrumentos == true) servicioInstrumentos = "Contratado";
+
                 List<Insumo> insumosEnReserva = ObtenerInsumosDeLaReserva(idReserva);
+
                 if (insumosEnReserva.Count != 0)
                 {
                     insumos = DescripcionInsumosSeleccionados(insumosEnReserva);
 
                     mensaje = $"Hola de nuevo! su compañero de equipo hizo modificaciones en la reserva:\n\n" +
-                              $"Día: {reservaCliente.Fecha}\n" +
+                              $"Día: {fechaSplit[0]}\n" +
                               $"Horario: {reservaCliente.Horario}\n" +
                               $"Cancha: {reservaCliente.TipoCancha}\n" +
                               $"Servicio Asador: {servicioAsador}\n" +
@@ -632,7 +641,7 @@ namespace CanchasGambeta.AccesoBD
                 else
                 {
                     mensaje = $"Hola de nuevo! su compañero de equipo hizo modificaciones en la reserva:\n\n" +
-                              $"Día: {reservaCliente.Fecha}\n" +
+                              $"Día: {fechaSplit[0]}\n" +
                               $"Horario: {reservaCliente.Horario}\n" +
                               $"Cancha: {reservaCliente.TipoCancha}\n" +
                               $"Servicio Asador: {servicioAsador}\n" +
@@ -642,13 +651,18 @@ namespace CanchasGambeta.AccesoBD
             }
             else if (tipoMensaje == 3) //Update insumos de la reserva
             {
+                string fecha = reservaCliente.Fecha.ToString();
+                string[] fechaSplit = fecha.Split(' ');
+
                 if (reservaCliente.ServicioAsador == true) servicioAsador = "Contratado";
                 if (reservaCliente.ServicioInstrumentos == true) servicioInstrumentos = "Contratado";
+
                 List<Insumo> listaInsumosEnReserva = ObtenerInsumosDeLaReserva(idReserva);
                 insumos = DescripcionInsumosSeleccionados(listaInsumosEnReserva);
                 string insumosAnteriores = DescripcionInsumosSeleccionados(null, reservaSinModificacion.ListaInsumosEnLaReserva);
+
                 mensaje = $"Hola de nuevo! su compañero de equipo hizo una modificación de la reserva:\n\n" +
-                          $"Día: {reservaCliente.Fecha}\n" +
+                          $"Día: {fechaSplit[0]}\n" +
                           $"Horario: {reservaCliente.Horario}\n" +
                           $"Cancha: {reservaCliente.TipoCancha}\n\n" +
                           $"Insumos anteriores:\n" +
@@ -659,7 +673,10 @@ namespace CanchasGambeta.AccesoBD
             }
             else //Delete reserva
             {
-                mensaje = $"Hola, su compañero de equipo dio de baja la reserva del día {datosReservaEliminada.Fecha} a las {datosReservaEliminada.Horario} en la cancha {datosReservaEliminada.TipoCancha}";
+                string fechaReserva = datosReservaEliminada.Fecha.ToString();
+                string[] fechaReservaSplit = fechaReserva.Split(' ');
+
+                mensaje = $"Hola, su compañero de equipo dio de baja la reserva del día {fechaReservaSplit[0]} a las {datosReservaEliminada.Horario} en la cancha {datosReservaEliminada.TipoCancha}";
                 titulo = "Reserva eliminada";
             }
 
