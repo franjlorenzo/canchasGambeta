@@ -13,7 +13,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult MisReservas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             Canchas_GambetaEntities db = new Canchas_GambetaEntities();
             NuevaReservaVM modelo = new NuevaReservaVM();
@@ -32,7 +36,12 @@ namespace CanchasGambeta.Controllers
         public ActionResult MisReservas(NuevaReservaVM nuevaReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
             nuevaReserva.fecha = DateTime.Parse(Request["NuevaReservaVM.fecha"]);
             int idCanchaElegida = int.Parse(Request["idCanchaElegida"]);
             DateTime fechaElegida = DateTime.Parse(Request["fechaElegida"]);
@@ -185,7 +194,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ReservarInsumos(int idReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             VistaReservarInsumos vistaReservarInsumos = new VistaReservarInsumos
             {
@@ -210,7 +223,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumos(int idInsumo, string nombreInsumo, int stockInsumo, NuevaReservaVM nuevaReservaVM, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0, stockInsumo);
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -245,7 +262,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult BuscarInsumo(string buscarInsumo, NuevaReservaVM nuevaReservaVM, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (buscarInsumo == "" || buscarInsumo == " ") buscarInsumo = null;
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -281,7 +302,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult QuitarInsumo(NuevaReservaVM nuevaReservaVM, int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Reserva.ArmarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
@@ -302,7 +327,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult InsertInsumosAReserva(NuevaReservaVM nuevaReservaVM, List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Reserva.ArmarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
 
@@ -340,7 +369,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarReserva(int idReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             ActualizarReservaVM actualizarReserva = AccesoBD.AD_Reserva.ObtenerReservaPorId(idReserva);
 
@@ -374,7 +407,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarReserva(ActualizarReservaVM actualizarReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             actualizarReserva.ListaInsumosEnLaReserva = AccesoBD.AD_Reserva.ObtenerInsumosDeLaReservaActualizar(actualizarReserva.IdReserva);
             DateTime fechaReserva = DateTime.Parse(Request["fechaReserva"]);
@@ -530,7 +567,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarInsumosReserva(int idReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             VistaModificarInsumosReserva vistaModificarInsumosReserva = new VistaModificarInsumosReserva();
             if (idReserva != 0) vistaModificarInsumosReserva.InsumosAPedir = AccesoBD.AD_Reserva.ObtenerInsumosDeLaReservaActualizar(idReserva);
@@ -552,7 +593,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult BuscarInsumoModificar(string buscarInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (buscarInsumo == "" || buscarInsumo == " ") buscarInsumo = null;
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -587,7 +632,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumosAReserva(int idInsumo, string nombreInsumo, int stockInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0, stockInsumo);
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -622,7 +671,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult QuitarInsumoModificar(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido, listaStockInsumo);
@@ -646,7 +699,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarInsumosReserva(int idReserva, List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido, listaStockInsumo);
 
@@ -692,7 +749,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarInsumosReserva(int idReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             bool resultado = AccesoBD.AD_Reserva.EliminarInsumosReserva(idReserva);
             if (resultado)
@@ -713,7 +774,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarReserva()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             int idReserva = int.Parse(Request["listado.IdReserva"]);
             DatosReserva reservaCliente = AccesoBD.AD_Reserva.ObtenerDatosReserva(idReserva);//En caso de que el usuario tenga un equipo, se recupera la info de la reserva antes de que se borre
@@ -740,7 +805,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ConcretarReserva(int idReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             ActualizarReservaVM reserva = AccesoBD.AD_Reserva.ObtenerReservaPorId(idReserva);
             if (TempData["InsumosGuardados"] != null) ViewBag.InsumosGuardados = TempData["InsumosGuardados"].ToString();
@@ -756,7 +825,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ConcretarReserva()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             int idReserva = int.Parse(Request["idReserva"]);
 
@@ -781,7 +854,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult GuardarReserva(ActualizarReservaVM actualizarReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -806,7 +883,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarInsumosReservaConcretar(int idReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             VistaModificarInsumosReserva vistaModificarInsumosReserva = new VistaModificarInsumosReserva();
             if (idReserva != 0) vistaModificarInsumosReserva.InsumosAPedir = AccesoBD.AD_Reserva.ObtenerInsumosDeLaReservaActualizar(idReserva);
@@ -828,7 +909,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult BuscarInsumoModificarConcretar(string buscarInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (buscarInsumo == "" || buscarInsumo == " ") buscarInsumo = null;
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -863,7 +948,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumosAReservaModificarConcretar(int idInsumo, string nombreInsumo, int stockInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0, stockInsumo);
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -898,7 +987,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult QuitarInsumoModificarConcretar(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido, listaStockInsumo);
@@ -922,7 +1015,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarInsumosReservaConcretar(int idReserva, List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido, listaStockInsumo);
 
@@ -963,7 +1060,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarInsumosReservaConcretar(int idReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             bool resultado = AccesoBD.AD_Reserva.EliminarInsumosReserva(idReserva);
             if (resultado)
@@ -983,7 +1084,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ReservarInsumosConcretar(int idReserva)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             VistaReservarInsumos vistaReservarInsumos = new VistaReservarInsumos
             {
@@ -1009,7 +1114,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult BuscarInsumoConcretar(string buscarInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (buscarInsumo == "" || buscarInsumo == " ") buscarInsumo = null;
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -1044,7 +1153,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumosConcretar(int idInsumo, string nombreInsumo, int stockInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0, stockInsumo);
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -1079,7 +1192,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult QuitarInsumoConcretar(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido, List<int> listaStockInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido, listaStockInsumo);
@@ -1103,7 +1220,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ReservarInsumosConcretar(NuevaReservaVM nuevaReservaVM, List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Reserva.ArmarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
 

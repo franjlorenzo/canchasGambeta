@@ -13,7 +13,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ReservasActivas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             VistaReservasActivas vista = new VistaReservasActivas
             {
@@ -41,7 +45,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ReservasActivas(DateTime fechaInicio, DateTime fechaFin)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (fechaFin >= fechaInicio)
             {
@@ -65,7 +73,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ReservasCanceladas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             _ = new List<ReservasCanceladas>();
             List<ReservasCanceladas> listaReservasCanceladas;
@@ -86,7 +98,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ReservasCanceladas(DateTime fechaInicio, DateTime fechaFin)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (fechaFin >= fechaInicio)
             {
@@ -107,7 +123,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult CanchasMasUtilizadas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             _ = new List<CanchasMasReservadasVM>();
             List<CanchasMasReservadasVM> listaCanchasMasReservadas;
@@ -128,7 +148,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult CanchasMasUtilizadas(DateTime fechaInicio, DateTime fechaFin)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (fechaFin >= fechaInicio)
             {
@@ -149,7 +173,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ClientesConMasReservas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             _ = new List<ClientesConMasReservas>();
             List<ClientesConMasReservas> listaClientesConMasReservas;
@@ -170,7 +198,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ClientesConMasReservas(DateTime fechaInicio, DateTime fechaFin)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (fechaFin >= fechaInicio)
             {
@@ -191,7 +223,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult HorariosMasReservados()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             _ = new List<HorariosMasReservados>();
             List<HorariosMasReservados> listaHorariosMasReservados;
@@ -212,7 +248,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult HorariosMasReservados(DateTime fechaInicio, DateTime fechaFin)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (fechaFin >= fechaInicio)
             {
@@ -233,7 +273,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult InsumosMasConsumidos()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             _ = new List<Insumo>();
             List<Insumo> listaInsumosConsumidos;
@@ -254,7 +298,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult InsumosMasConsumidos(DateTime fechaInicio, DateTime fechaFin)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (fechaFin >= fechaInicio)
             {
@@ -275,7 +323,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult InstrumentosRotos()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             _ = new List<InstrumentoRotoVM>();
             List<InstrumentoRotoVM> listaInstrumentosRotos;
@@ -296,7 +348,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult InstrumentosRotos(DateTime fechaInicio, DateTime fechaFin)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (fechaFin >= fechaInicio)
             {

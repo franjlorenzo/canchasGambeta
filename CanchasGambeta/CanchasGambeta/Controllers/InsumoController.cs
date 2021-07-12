@@ -11,7 +11,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult MisInsumos()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             List<Insumo> listaInsumo = AccesoBD.AD_Insumo.ObtenerTop10InsumosMenosStock();
             if (TempData["nombreInsumo"] != null) ViewBag.nombreInsumo = TempData["nombreInsumo"].ToString();
@@ -37,7 +41,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult BuscarInsumo(string buscarInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (buscarInsumo == "" || buscarInsumo == " ") buscarInsumo = null;
 
@@ -68,7 +76,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumo()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             return View();
         }
@@ -77,7 +89,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumo(Insumo nuevoInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -95,7 +111,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarInsumo(int idInsumo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             Insumo insumo = AccesoBD.AD_Insumo.ObtenerInsumoPorId(idInsumo);
             return View(insumo);
@@ -105,7 +125,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarInsumo(Insumo insumoModificado)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -125,7 +149,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarInsumo()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             int idInsumo = int.Parse(Request["idInsumo"]);
 

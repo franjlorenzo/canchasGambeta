@@ -9,7 +9,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult IndexAdministrador()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             return View();
         }
@@ -17,7 +21,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult PerfilAdministrador()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             return View();
         }
@@ -25,7 +33,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarPerfilAdministrador()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             Usuario usuario = AccesoBD.AD_Usuario.ObtenerUsuario(sesion.idUsuario);
             return View(usuario);
@@ -35,7 +47,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarPerfilAdministrador(Usuario usuarioModificado)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {

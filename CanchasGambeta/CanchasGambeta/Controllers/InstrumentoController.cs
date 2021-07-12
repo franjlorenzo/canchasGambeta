@@ -12,7 +12,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult InstrumentosDisponibles()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (TempData["ErrorInsertInstrumento"] != null) ViewBag.ErrorInsertInstrumento = TempData["ErrorInsertInstrumento"].ToString();
             if (TempData["ErrorInsertInstrumentoRoto"] != null) ViewBag.ErrorInsertInstrumentoRoto = TempData["ErrorInsertInstrumentoRoto"].ToString();
@@ -25,7 +29,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult NuevoInstrumento(InstrumentoDisponible nuevoInstrumento)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -44,7 +52,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult NuevoInstrumentoRoto(int idInstrumento)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -62,7 +74,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult InstrumentoRepuesto(int idInstrumentoRoto)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InstrumentoRotoVM instrumentoRoto = AccesoBD.AD_Instrumento.ObtenerInstrumentoRotoPorId(idInstrumentoRoto);
             return View(instrumentoRoto);
@@ -72,7 +88,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult InstrumentoRepuesto(int IdInstrumentoRoto, string Instrumento, DateTime FechaRotura, int IdInstrumentoDisponible, string nombreInstrumentoAnterior)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             bool estado = false;
             InstrumentoRotoVM instrumento = new InstrumentoRotoVM(IdInstrumentoRoto, Instrumento, FechaRotura, IdInstrumentoDisponible, estado);

@@ -11,7 +11,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult IndexCliente()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             List<ReservasActivas> reservasCliente = AccesoBD.AD_Informe.ObtenerReservasActivasDelCliente(sesion.idUsuario);
             return View(reservasCliente);
@@ -20,7 +24,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult PerfilCliente()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             return View();
         }
@@ -28,7 +36,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarCliente()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             Usuario usuario = AccesoBD.AD_Usuario.ObtenerUsuario(sesion.idUsuario);
             return View(usuario);
@@ -38,7 +50,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarCliente(Usuario usuarioModificado)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {

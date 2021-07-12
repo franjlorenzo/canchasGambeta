@@ -14,7 +14,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult MisPedidos()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             List<Proveedor> proveedores = AccesoBD.AD_Pedido.ObtenerTodosLosProveedores();
             List<SelectListItem> listaProveedores = proveedores.ConvertAll(d =>
@@ -49,7 +53,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult MisPedidos(NuevoPedido nuevoPedido, string idProveedor, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             nuevoPedido.IdProveedor = int.Parse(idProveedor);
             nuevoPedido.InsumosPedido = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
@@ -75,7 +83,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumosAlPedido()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             VistaPedirInsumos vistaPedirInsumos = new VistaPedirInsumos
             {
@@ -97,7 +109,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult BuscarInsumo(string buscarInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (buscarInsumo == "" || buscarInsumo == " ") buscarInsumo = null;
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -133,7 +149,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumosAlPedido(int idInsumo, string nombreInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0, 0); //creo un nuevo insumo a agregar a la lista de InsumosAPedir
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>(); //creo una lista de los insumos a pedir
@@ -166,7 +186,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult QuitarInsumo(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
@@ -187,7 +211,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumos(List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
 
@@ -209,7 +237,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ConcretarPedido(int idPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             ConcretarPedido concretarPedido = AccesoBD.AD_Pedido.ObtenerDatosPedidoAConcretar(idPedido);
             return View(concretarPedido);
@@ -219,7 +251,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ConcretarPedido(ConcretarPedido concretarPedido, List<int> idInsumo, List<string> nombreInsumo, List<int> cantidadRecibida)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             concretarPedido.ListaCantidadesRecibidas = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(idInsumo, nombreInsumo, cantidadRecibida);
 
@@ -241,7 +277,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarPedido([Optional] int idPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             VistaPedirInsumos modificarPedido = new VistaPedirInsumos
             {
@@ -266,7 +306,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult BuscarInsumoModificar(string buscarInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (buscarInsumo == "" || buscarInsumo == " ") buscarInsumo = null;
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
@@ -301,7 +345,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult QuitarInsumoModificar(int IdInsumoAlPedido, string NombreInsumoAlPedido, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir insumoEnLista = new InsumosAPedir(IdInsumoAlPedido, NombreInsumoAlPedido, 0, 0);
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(listaIdInsumoAlPedido, listaNombreInsumoAlPedido, listaCantidadInsumoAlPedido);
@@ -325,7 +373,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult AgregarInsumosAlPedidoModificar(int idInsumo, string nombreInsumo, List<int> listaIdInsumoAlPedido, List<string> listaNombreInsumoAlPedido, List<int> listaCantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             InsumosAPedir nuevoInsumo = new InsumosAPedir(idInsumo, nombreInsumo, 0, 0); //creo un nuevo insumo a agregar a la lista de InsumosAPedir
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>(); //creo una lista de los insumos a pedir
@@ -362,7 +414,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarPedido(int idPedido, List<int> IdInsumoAlPedido, List<string> NombreInsumoAlPedido, List<int> CantidadInsumoAlPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             List<InsumosAPedir> listaInsumosAPedir = AccesoBD.AD_Pedido.ArmarListaInsumosSeleccionados(IdInsumoAlPedido, NombreInsumoAlPedido, CantidadInsumoAlPedido);
             NuevoPedido pedidoSinModificar = AccesoBD.AD_Pedido.ObtenerPedidoPorId(idPedido);
@@ -403,7 +459,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarPedido()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             int idPedido = int.Parse(Request["listado.IdPedido"]);
             NuevoPedido datosPedido = AccesoBD.AD_Pedido.ObtenerPedidoPorId(idPedido);
@@ -425,7 +485,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult VerDetallePedido(int idPedido)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             DetallePedidoConcretado detallePedido = AccesoBD.AD_Pedido.ObtenerDetallePedidoPorId(idPedido);
             return View(detallePedido);
@@ -434,6 +498,13 @@ namespace CanchasGambeta.Controllers
         //-----------------------------------------ABM PROVEEDOR---------------------------------------------------------
         public ActionResult MisProveedores()
         {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
             VistaMisProveedores vistaProveedores = new VistaMisProveedores
             {
                 NuevoProveedor = new NuevoProveedor(),
@@ -446,7 +517,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult NuevoProveedor(NuevoProveedor nuevoProveedor)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            };
 
             if (ModelState.IsValid)
             {
@@ -465,7 +540,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarProveedor(int idProveedor)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             Proveedor proveedor = AccesoBD.AD_Pedido.ObtenerProveedorPorId(idProveedor);
             return View(proveedor);
@@ -475,7 +554,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarProveedor(Proveedor proveedor)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -494,7 +577,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarProveedor()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             int idProveedor = int.Parse(Request["idProveedor"]);
 

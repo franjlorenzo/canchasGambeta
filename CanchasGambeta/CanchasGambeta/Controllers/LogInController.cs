@@ -9,6 +9,7 @@ namespace CanchasGambeta.Controllers
         // GET: LogIn
         public ActionResult LogIn()
         {
+            if (TempData["SesionCaducada"] != null) ViewBag.SesionCaducada = TempData["SesionCaducada"].ToString();
             return View();
         }
 
@@ -30,7 +31,7 @@ namespace CanchasGambeta.Controllers
                     }
 
                     Session["User"] = oUser;
-                    Session.Timeout = 10;
+                    Session.Timeout = 15;
 
                     if (oUser.rol == 2) return RedirectToAction("IndexCliente", "Cliente");
                     else return RedirectToAction("IndexAdministrador", "Administrador");

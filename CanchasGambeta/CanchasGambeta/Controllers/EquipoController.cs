@@ -14,7 +14,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult NuevoEquipo()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             return View();
         }
@@ -23,7 +27,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult NuevoEquipo(string nombreEquipo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -52,7 +60,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult MiEquipo()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             int idEquipo = AccesoBD.AD_Equipo.ObtenerEquiporPorId();
             List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.ObtenerMailsEquipo(idEquipo);
@@ -67,7 +79,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarEquipo(int idEquipo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -95,7 +111,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult CambiarNombreEquipo()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             Equipo equipo = AccesoBD.AD_Equipo.ObtenerEquipoUsuario(sesion.equipo);
             return View(equipo);
@@ -105,7 +125,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult CambiarNombreEquipo(string nombreEquipo)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -134,7 +158,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult MiEquipo(string email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
@@ -171,7 +199,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarIntegrante()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             int idEmail = int.Parse(Request["idEmail"]);
             string email = Request["email1"];
@@ -184,7 +216,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult ModificarIntegrante(Email email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             try
             {
@@ -220,7 +256,11 @@ namespace CanchasGambeta.Controllers
         public ActionResult EliminarIntegrante(int idEmail, string email)
         {
             var sesion = (Usuario)HttpContext.Session["User"];
-            if (sesion == null) return RedirectToAction("LogIn", "LogIn");
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
 
             if (ModelState.IsValid)
             {
