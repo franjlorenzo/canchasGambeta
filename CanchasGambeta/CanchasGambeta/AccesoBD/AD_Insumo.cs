@@ -10,7 +10,7 @@ namespace CanchasGambeta.AccesoBD
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
 
-        public static List<Insumo> obtenerTop10InsumosMenosStock()
+        public static List<Insumo> ObtenerTop10InsumosMenosStock()
         {
             List<Insumo> lista = new List<Insumo>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -55,7 +55,7 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
-        public static bool nuevoInsumo(Insumo nuevo)
+        public static bool NuevoInsumo(Insumo nuevo)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -90,7 +90,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static Insumo obtenerInsumoPorId(int idInsumo)
+        public static Insumo ObtenerInsumoPorId(int idInsumo)
         {
             Insumo insumo = new Insumo();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -131,7 +131,7 @@ namespace CanchasGambeta.AccesoBD
             return insumo;
         }
 
-        public static bool modificarInsumo(Insumo insumo)
+        public static bool ModificarInsumo(Insumo insumo)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -168,7 +168,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool eliminarInsumo(int idInsumo)
+        public static bool EliminarInsumo(int idInsumo)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -200,7 +200,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<BuscarInsumos> obtenerInsumosPorNombre(string nombreInsumo)
+        public static List<BuscarInsumos> ObtenerInsumosPorNombre(string nombreInsumo)
         {
             List<BuscarInsumos> listaInsumosEncontrados = new List<BuscarInsumos>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);

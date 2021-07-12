@@ -93,6 +93,9 @@
         {
             <div class="box">
                 <p class="heading">Reservas</p>
+                <div class="form-label-group text-success text-center">
+                    @ViewBag.ReservaConcretada
+                </div>
                 <div class="reserva">
                     @foreach (var listado in Model.ReservasActivas)
                     {
@@ -154,7 +157,6 @@
                     }
                 </div>
             </div>
-
         }
         else
         {

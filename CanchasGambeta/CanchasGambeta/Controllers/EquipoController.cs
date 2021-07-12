@@ -27,20 +27,20 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                bool existeEquipo = AccesoBD.AD_Equipo.existeEquipo(nombreEquipo);
+                bool existeEquipo = AccesoBD.AD_Equipo.ExisteEquipo(nombreEquipo);
                 if (existeEquipo)
                 {
                     ViewBag.ErrorCreacion = "El nombre del equipo ya se encuentra registrado, intente con otro.";
                     return View();
                 }
 
-                bool resultado = AccesoBD.AD_Equipo.nuevoEquipo(nombreEquipo);
+                bool resultado = AccesoBD.AD_Equipo.NuevoEquipo(nombreEquipo);
                 if (resultado)
                 {
-                    bool insertExitoso = AccesoBD.AD_Equipo.insertarEquipoEnUsuario(nombreEquipo);
+                    bool insertExitoso = AccesoBD.AD_Equipo.InsertarEquipoEnUsuario(nombreEquipo);
                     if (insertExitoso)
                     {
-                        var oUser = AccesoBD.AD_Usuario.obtenerUsuario(sesion.idUsuario);
+                        var oUser = AccesoBD.AD_Usuario.ObtenerUsuario(sesion.idUsuario);
                         Session["User"] = oUser;
                         return RedirectToAction("MiEquipo", "Equipo");
                     }
@@ -54,9 +54,9 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
-            List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
-            ViewBag.nombreEquipo = AccesoBD.AD_Equipo.obtenerNombreEquipo();
+            int idEquipo = AccesoBD.AD_Equipo.ObtenerEquiporPorId();
+            List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.ObtenerMailsEquipo(idEquipo);
+            ViewBag.nombreEquipo = AccesoBD.AD_Equipo.ObtenerNombreEquipo();
 
             if (TempData["ErrorEliminarIntegrante"] != null) ViewBag.ErrorEliminarIntegrante = TempData["ErrorEliminarIntegrante"].ToString();
             if (TempData["ErrorEliminarEquipo"] != null) ViewBag.ErrorEliminarEquipo = TempData["ErrorEliminarEquipo"].ToString();
@@ -71,7 +71,7 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Equipo.eliminarEquipo(idEquipo);
+                bool resultado = AccesoBD.AD_Equipo.EliminarEquipo(idEquipo);
                 if (resultado)
                 {
                     using (Canchas_GambetaEntities db = new Canchas_GambetaEntities())
@@ -97,7 +97,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
+            Equipo equipo = AccesoBD.AD_Equipo.ObtenerEquipoUsuario(sesion.equipo);
             return View(equipo);
         }
 
@@ -109,20 +109,20 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                bool existeEquipo = AccesoBD.AD_Equipo.existeEquipo(nombreEquipo);
+                bool existeEquipo = AccesoBD.AD_Equipo.ExisteEquipo(nombreEquipo);
                 if (existeEquipo)
                 {
                     ViewBag.ErrorCreacion = "El nombre del equipo ya se encuentra registrado, intente con otro.";
-                    Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
+                    Equipo equipo = AccesoBD.AD_Equipo.ObtenerEquipoUsuario(sesion.equipo);
                     return View(equipo);
                 }
 
-                bool resultado = AccesoBD.AD_Equipo.cambiarNombreEquipo(nombreEquipo);
+                bool resultado = AccesoBD.AD_Equipo.CambiarNombreEquipo(nombreEquipo);
                 if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                 else
                 {
                     ViewBag.ErrorCambiarNombre = "Ocurrió un error al cambiar el nombre de su equipo, inténtelo nuevamente";
-                    Equipo equipo = AccesoBD.AD_Equipo.obtenerEquipoUsuario(sesion.equipo);
+                    Equipo equipo = AccesoBD.AD_Equipo.ObtenerEquipoUsuario(sesion.equipo);
                     return View(equipo);
                 }
             }
@@ -141,26 +141,26 @@ namespace CanchasGambeta.Controllers
                 if (email == sesion.email)
                 {
                     ViewBag.ErrorInsertIntegrante = "Usted ya forma parte del equipo.";
-                    int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
-                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
+                    int idEquipo = AccesoBD.AD_Equipo.ObtenerEquiporPorId();
+                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.ObtenerMailsEquipo(idEquipo);
                     return View(listaEquipoMails);
                 }
-                else if (AccesoBD.AD_Equipo.existeIntegranteEnEquipo(email))
+                else if (AccesoBD.AD_Equipo.ExisteIntegranteEnEquipo(email))
                 {
                     ViewBag.ErrorInsertIntegrante = "El integrante que desea agregar ya existe en su equipo.";
-                    int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
-                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
+                    int idEquipo = AccesoBD.AD_Equipo.ObtenerEquiporPorId();
+                    List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.ObtenerMailsEquipo(idEquipo);
                     return View(listaEquipoMails);
                 }
                 else
                 {
-                    bool resultado = AccesoBD.AD_Equipo.agregarNuevoIntegrante(email);
+                    bool resultado = AccesoBD.AD_Equipo.AgregarNuevoIntegrante(email);
                     if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                     else
                     {
                         ViewBag.ErrorInsertIntegrante = "Ocurrió un error al cargar el nuevo integrante. Inténtelo nuevamente.";
-                        int idEquipo = AccesoBD.AD_Equipo.obtenerEquiporPorId();
-                        List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.obtenerMailsEquipo(idEquipo);
+                        int idEquipo = AccesoBD.AD_Equipo.ObtenerEquiporPorId();
+                        List<MailEquipoVM> listaEquipoMails = AccesoBD.AD_Equipo.ObtenerMailsEquipo(idEquipo);
                         return View(listaEquipoMails);
                     }
                 }
@@ -190,14 +190,14 @@ namespace CanchasGambeta.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (AccesoBD.AD_Equipo.existeIntegranteEnEquipo(email.email1))
+                    if (AccesoBD.AD_Equipo.ExisteIntegranteEnEquipo(email.email1))
                     {
                         ViewBag.ErrorModificar = "El integrante que desea modificar ya existe en su equipo.";
                         return View(email);
                     }
                     else
                     {
-                        bool resultado = AccesoBD.AD_Equipo.modificarIntegrante(email);
+                        bool resultado = AccesoBD.AD_Equipo.ModificarIntegrante(email);
                         if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                         else
                         {
@@ -225,7 +225,7 @@ namespace CanchasGambeta.Controllers
             if (ModelState.IsValid)
             {
                 Email integrante = new Email(idEmail, email);
-                bool resultado = AccesoBD.AD_Equipo.eliminarIntegrante(integrante);
+                bool resultado = AccesoBD.AD_Equipo.EliminarIntegrante(integrante);
                 if (resultado) return RedirectToAction("MiEquipo", "Equipo");
                 else
                 {

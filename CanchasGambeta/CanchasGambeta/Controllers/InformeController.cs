@@ -21,6 +21,7 @@ namespace CanchasGambeta.Controllers
                 TotalCadaInsumo = new List<Insumo>()
             };
 
+            if (TempData["ReservaConcretada"] != null) ViewBag.ReservaConcretada = TempData["ReservaConcretada"].ToString();
             if (TempData["fechaMayor"] != null) ViewBag.fechaMayor = TempData["fechaMayor"].ToString();
             if (TempData["listaReservasActivas"] != null && TempData["listaTotalInsumos"] != null)
             {
@@ -30,8 +31,8 @@ namespace CanchasGambeta.Controllers
             }
             else
             {
-                vista.TotalCadaInsumo = AccesoBD.AD_Informe.obtenerTotalInsumosReservas(AccesoBD.AD_Informe.obtenerReservasActivas(DateTime.Now, DateTime.Now));
-                vista.ReservasActivas = AccesoBD.AD_Informe.obtenerReservasActivas(DateTime.Now, DateTime.Now);
+                vista.TotalCadaInsumo = AccesoBD.AD_Informe.ObtenerTotalInsumosReservas(AccesoBD.AD_Informe.ObtenerReservasActivas(DateTime.Now, DateTime.Now));
+                vista.ReservasActivas = AccesoBD.AD_Informe.ObtenerReservasActivas(DateTime.Now, DateTime.Now);
                 return View(vista);
             }
         }
@@ -44,8 +45,8 @@ namespace CanchasGambeta.Controllers
 
             if (fechaFin >= fechaInicio)
             {
-                List<ReservasActivas> listaReservasActivas = AccesoBD.AD_Informe.obtenerReservasActivas(fechaInicio, fechaFin);
-                List<Insumo> listaTotalInsumos = AccesoBD.AD_Informe.obtenerTotalInsumosReservas(AccesoBD.AD_Informe.obtenerReservasActivas(fechaInicio, fechaFin));
+                List<ReservasActivas> listaReservasActivas = AccesoBD.AD_Informe.ObtenerReservasActivas(fechaInicio, fechaFin);
+                List<Insumo> listaTotalInsumos = AccesoBD.AD_Informe.ObtenerTotalInsumosReservas(AccesoBD.AD_Informe.ObtenerReservasActivas(fechaInicio, fechaFin));
                 TempData["listaReservasActivas"] = listaReservasActivas;
                 TempData["listaTotalInsumos"] = listaTotalInsumos;
                 return RedirectToAction("ReservasActivas");
@@ -53,8 +54,8 @@ namespace CanchasGambeta.Controllers
             else
             {
                 TempData["fechaMayor"] = "La fecha de inicio no puede ser mayor que la fecha de fin";
-                List<ReservasActivas> listaReservasActivas = AccesoBD.AD_Informe.obtenerReservasActivas(DateTime.Today, DateTime.Today);
-                List<Insumo> listaTotalInsumos = AccesoBD.AD_Informe.obtenerTotalInsumosReservas(AccesoBD.AD_Informe.obtenerReservasActivas(DateTime.Today, DateTime.Today));
+                List<ReservasActivas> listaReservasActivas = AccesoBD.AD_Informe.ObtenerReservasActivas(DateTime.Today, DateTime.Today);
+                List<Insumo> listaTotalInsumos = AccesoBD.AD_Informe.ObtenerTotalInsumosReservas(AccesoBD.AD_Informe.ObtenerReservasActivas(DateTime.Today, DateTime.Today));
                 TempData["listaReservasActivas"] = listaReservasActivas;
                 TempData["listaTotalInsumos"] = listaTotalInsumos;
                 return RedirectToAction("ReservasActivas");
@@ -76,7 +77,7 @@ namespace CanchasGambeta.Controllers
             }
             else
             {
-                listaReservasCanceladas = AccesoBD.AD_Informe.obtenerReservasCanceladas(DateTime.Now, DateTime.Now);
+                listaReservasCanceladas = AccesoBD.AD_Informe.ObtenerReservasCanceladas(DateTime.Now, DateTime.Now);
                 return View(listaReservasCanceladas);
             }
         }
@@ -89,14 +90,14 @@ namespace CanchasGambeta.Controllers
 
             if (fechaFin >= fechaInicio)
             {
-                List<ReservasCanceladas> listaReservasCanceladas = AccesoBD.AD_Informe.obtenerReservasCanceladas(fechaInicio, fechaFin);
+                List<ReservasCanceladas> listaReservasCanceladas = AccesoBD.AD_Informe.ObtenerReservasCanceladas(fechaInicio, fechaFin);
                 TempData["listaReservasCanceladas"] = listaReservasCanceladas;
                 return RedirectToAction("ReservasCanceladas");
             }
             else
             {
                 TempData["fechaMayor"] = "La fecha de inicio no puede ser mayor que la fecha de fin";
-                List<ReservasCanceladas> listaReservasCanceladas = AccesoBD.AD_Informe.obtenerReservasCanceladas(DateTime.Today, DateTime.Today);
+                List<ReservasCanceladas> listaReservasCanceladas = AccesoBD.AD_Informe.ObtenerReservasCanceladas(DateTime.Today, DateTime.Today);
                 TempData["listaReservasCanceladas"] = listaReservasCanceladas;
                 return RedirectToAction("ReservasCanceladas");
             }
@@ -118,7 +119,7 @@ namespace CanchasGambeta.Controllers
             }
             else
             {
-                listaCanchasMasReservadas = AccesoBD.AD_Informe.obtenerCanchasMasReservadas(DateTime.Today, DateTime.Today);
+                listaCanchasMasReservadas = AccesoBD.AD_Informe.ObtenerCanchasMasReservadas(DateTime.Today, DateTime.Today);
                 return View(listaCanchasMasReservadas);
             }
         }
@@ -131,14 +132,14 @@ namespace CanchasGambeta.Controllers
 
             if (fechaFin >= fechaInicio)
             {
-                List<CanchasMasReservadasVM> listaCanchasMasReservadas = AccesoBD.AD_Informe.obtenerCanchasMasReservadas(fechaInicio, fechaFin);
+                List<CanchasMasReservadasVM> listaCanchasMasReservadas = AccesoBD.AD_Informe.ObtenerCanchasMasReservadas(fechaInicio, fechaFin);
                 TempData["canchasMasUtilizadas"] = listaCanchasMasReservadas;
                 return RedirectToAction("CanchasMasUtilizadas");
             }
             else
             {
                 TempData["fechaMayor"] = "La fecha de inicio no puede ser mayor que la fecha de fin"; ;
-                List<CanchasMasReservadasVM> listaCanchasMasReservadas = AccesoBD.AD_Informe.obtenerCanchasMasReservadas(DateTime.Today, DateTime.Today);
+                List<CanchasMasReservadasVM> listaCanchasMasReservadas = AccesoBD.AD_Informe.ObtenerCanchasMasReservadas(DateTime.Today, DateTime.Today);
                 TempData["canchasMasUtilizadas"] = listaCanchasMasReservadas;
                 return RedirectToAction("CanchasMasUtilizadas");
             }
@@ -160,7 +161,7 @@ namespace CanchasGambeta.Controllers
             }
             else
             {
-                listaClientesConMasReservas = AccesoBD.AD_Informe.obtenerClientesConMasReservas(DateTime.Today, DateTime.Today);
+                listaClientesConMasReservas = AccesoBD.AD_Informe.ObtenerClientesConMasReservas(DateTime.Today, DateTime.Today);
                 return View(listaClientesConMasReservas);
             }
         }
@@ -173,14 +174,14 @@ namespace CanchasGambeta.Controllers
 
             if (fechaFin >= fechaInicio)
             {
-                List<ClientesConMasReservas> listaClientesConMasReservas = AccesoBD.AD_Informe.obtenerClientesConMasReservas(fechaInicio, fechaFin);
+                List<ClientesConMasReservas> listaClientesConMasReservas = AccesoBD.AD_Informe.ObtenerClientesConMasReservas(fechaInicio, fechaFin);
                 TempData["clientesConMasReservas"] = listaClientesConMasReservas;
                 return RedirectToAction("clientesConMasReservas");
             }
             else
             {
                 TempData["fechaMayor"] = "La fecha de inicio no puede ser mayor que la fecha de fin";
-                List<ClientesConMasReservas> listaClientesConMasReservas = AccesoBD.AD_Informe.obtenerClientesConMasReservas(DateTime.Today, DateTime.Today);
+                List<ClientesConMasReservas> listaClientesConMasReservas = AccesoBD.AD_Informe.ObtenerClientesConMasReservas(DateTime.Today, DateTime.Today);
                 TempData["clientesConMasReservas"] = listaClientesConMasReservas;
                 return RedirectToAction("clientesConMasReservas");
             }
@@ -202,7 +203,7 @@ namespace CanchasGambeta.Controllers
             }
             else
             {
-                listaHorariosMasReservados = AccesoBD.AD_Informe.obtenerHorariosMasReservados(DateTime.Today, DateTime.Today);
+                listaHorariosMasReservados = AccesoBD.AD_Informe.ObtenerHorariosMasReservados(DateTime.Today, DateTime.Today);
                 return View(listaHorariosMasReservados);
             }
         }
@@ -215,14 +216,14 @@ namespace CanchasGambeta.Controllers
 
             if (fechaFin >= fechaInicio)
             {
-                List<HorariosMasReservados> listaHorariosMasReservados = AccesoBD.AD_Informe.obtenerHorariosMasReservados(fechaInicio, fechaFin);
+                List<HorariosMasReservados> listaHorariosMasReservados = AccesoBD.AD_Informe.ObtenerHorariosMasReservados(fechaInicio, fechaFin);
                 TempData["horariosMasReservados"] = listaHorariosMasReservados;
                 return RedirectToAction("HorariosMasReservados");
             }
             else
             {
                 TempData["fechaMayor"] = "La fecha de inicio no puede ser mayor que la fecha de fin";
-                List<HorariosMasReservados> listaHorariosMasReservados = AccesoBD.AD_Informe.obtenerHorariosMasReservados(DateTime.Today, DateTime.Today);
+                List<HorariosMasReservados> listaHorariosMasReservados = AccesoBD.AD_Informe.ObtenerHorariosMasReservados(DateTime.Today, DateTime.Today);
                 TempData["horariosMasReservados"] = listaHorariosMasReservados;
                 return RedirectToAction("HorariosMasReservados");
             }
@@ -244,7 +245,7 @@ namespace CanchasGambeta.Controllers
             }
             else
             {
-                listaInsumosConsumidos = AccesoBD.AD_Informe.obtenerInsumosConsumidosEntreFechas(DateTime.Now, DateTime.Now);
+                listaInsumosConsumidos = AccesoBD.AD_Informe.ObtenerInsumosConsumidosEntreFechas(DateTime.Now, DateTime.Now);
                 return View(listaInsumosConsumidos);
             }
         }
@@ -257,14 +258,14 @@ namespace CanchasGambeta.Controllers
 
             if (fechaFin >= fechaInicio)
             {
-                List<Insumo> listaInsumosConsumidos = AccesoBD.AD_Informe.obtenerInsumosConsumidosEntreFechas(fechaInicio, fechaFin);
+                List<Insumo> listaInsumosConsumidos = AccesoBD.AD_Informe.ObtenerInsumosConsumidosEntreFechas(fechaInicio, fechaFin);
                 TempData["listaInsumosConsumidos"] = listaInsumosConsumidos;
                 return RedirectToAction("InsumosMasConsumidos");
             }
             else
             {
                 TempData["fechaMayor"] = "La fecha de inicio no puede ser mayor que la fecha de fin";
-                List<Insumo> listaInsumosConsumidos = AccesoBD.AD_Informe.obtenerInsumosConsumidosEntreFechas(DateTime.Now, DateTime.Now);
+                List<Insumo> listaInsumosConsumidos = AccesoBD.AD_Informe.ObtenerInsumosConsumidosEntreFechas(DateTime.Now, DateTime.Now);
                 TempData["listaInsumosConsumidos"] = listaInsumosConsumidos;
                 return RedirectToAction("InsumosMasConsumidos");
             }
@@ -286,7 +287,7 @@ namespace CanchasGambeta.Controllers
             }
             else
             {
-                listaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotosEntreFechas(DateTime.Now, DateTime.Now);
+                listaInstrumentosRotos = AccesoBD.AD_Informe.ObtenerInstrumentosRotosEntreFechas(DateTime.Now, DateTime.Now);
                 return View(listaInstrumentosRotos);
             }
         }
@@ -299,14 +300,14 @@ namespace CanchasGambeta.Controllers
 
             if (fechaFin >= fechaInicio)
             {
-                List<InstrumentoRotoVM> listaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotosEntreFechas(fechaInicio, fechaFin);
+                List<InstrumentoRotoVM> listaInstrumentosRotos = AccesoBD.AD_Informe.ObtenerInstrumentosRotosEntreFechas(fechaInicio, fechaFin);
                 TempData["listaInstrumentosRotos"] = listaInstrumentosRotos;
                 return RedirectToAction("InstrumentosRotos");
             }
             else
             {
                 TempData["fechaMayor"] = "La fecha de inicio no puede ser mayor que la fecha de fin";
-                List<InstrumentoRotoVM> listaInstrumentosRotos = AccesoBD.AD_Informe.obtenerInstrumentosRotosEntreFechas(DateTime.Now, DateTime.Now);
+                List<InstrumentoRotoVM> listaInstrumentosRotos = AccesoBD.AD_Informe.ObtenerInstrumentosRotosEntreFechas(DateTime.Now, DateTime.Now);
                 TempData["listaInstrumentosRotos"] = listaInstrumentosRotos;
                 return RedirectToAction("InstrumentosRotos");
             }

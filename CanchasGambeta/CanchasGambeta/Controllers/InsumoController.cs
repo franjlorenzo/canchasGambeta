@@ -13,7 +13,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            List<Insumo> listaInsumo = AccesoBD.AD_Insumo.obtenerTop10InsumosMenosStock();
+            List<Insumo> listaInsumo = AccesoBD.AD_Insumo.ObtenerTop10InsumosMenosStock();
             if (TempData["nombreInsumo"] != null) ViewBag.nombreInsumo = TempData["nombreInsumo"].ToString();
             if (TempData["buscarInsumoAnterior"] != null) ViewBag.nombreInsumo = TempData["buscarInsumoAnterior"].ToString();
             if (TempData["ErrorEliminarInsumo"] != null) ViewBag.ErrorEliminarInsumo = TempData["ErrorEliminarInsumo"].ToString();
@@ -43,7 +43,7 @@ namespace CanchasGambeta.Controllers
 
             if (buscarInsumo != null)
             {
-                TempData["listaInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(buscarInsumo);
+                TempData["listaInsumos"] = AccesoBD.AD_Insumo.ObtenerInsumosPorNombre(buscarInsumo);
                 if (buscarInsumo == "MostrarTodosLosInsumos") return RedirectToAction("MisInsumos");
                 else
                 {
@@ -60,7 +60,7 @@ namespace CanchasGambeta.Controllers
             {
                 TempData["buscarInsumoAnterior"] = Request["buscarInsumoAnterior"];
                 TempData["ErrorBuscarInsumo"] = "Debe proporcionar una letra o palabra para buscar un insumo";
-                TempData["listaInsumos"] = AccesoBD.AD_Insumo.obtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
+                TempData["listaInsumos"] = AccesoBD.AD_Insumo.ObtenerInsumosPorNombre(Request["buscarInsumoAnterior"]);
                 return RedirectToAction("MisInsumos");
             }
         }
@@ -81,7 +81,7 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Insumo.nuevoInsumo(nuevoInsumo);
+                bool resultado = AccesoBD.AD_Insumo.NuevoInsumo(nuevoInsumo);
                 if (resultado) return RedirectToAction("MisInsumos", "Insumo");
                 else
                 {
@@ -97,7 +97,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            Insumo insumo = AccesoBD.AD_Insumo.obtenerInsumoPorId(idInsumo);
+            Insumo insumo = AccesoBD.AD_Insumo.ObtenerInsumoPorId(idInsumo);
             return View(insumo);
         }
 
@@ -109,12 +109,12 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Insumo.modificarInsumo(insumoModificado);
+                bool resultado = AccesoBD.AD_Insumo.ModificarInsumo(insumoModificado);
                 if (resultado) return RedirectToAction("MisInsumos", "Insumo");
                 else
                 {
                     ViewBag.ErrorModificarInsumo = "Ocurrió un error al modificar el insumo. Inténtelo nuevamente.";
-                    Insumo insumo = AccesoBD.AD_Insumo.obtenerInsumoPorId(insumoModificado.idInsumo);
+                    Insumo insumo = AccesoBD.AD_Insumo.ObtenerInsumoPorId(insumoModificado.idInsumo);
                     return View(insumo);
                 }
             }
@@ -131,7 +131,7 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Insumo.eliminarInsumo(idInsumo);
+                bool resultado = AccesoBD.AD_Insumo.EliminarInsumo(idInsumo);
                 if (resultado) return RedirectToAction("MisInsumos", "Insumo");
                 else
                 {

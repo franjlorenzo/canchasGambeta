@@ -17,7 +17,7 @@ namespace CanchasGambeta.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Usuario.nuevoUsuario(usuario);
+                bool resultado = AccesoBD.AD_Usuario.NuevoUsuario(usuario);
                 if (resultado)
                 {
                     using (Canchas_GambetaEntities db = new Canchas_GambetaEntities())

@@ -11,7 +11,7 @@ namespace CanchasGambeta.AccesoBD
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
 
-        public static bool nuevoEquipo(string nombre)
+        public static bool NuevoEquipo(string nombre)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -43,7 +43,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static int obtenerEquipo(string nombreEquipo)
+        public static int ObtenerEquipo(string nombreEquipo)
         {
             int idEquiponuevo = 0;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -81,7 +81,7 @@ namespace CanchasGambeta.AccesoBD
             return idEquiponuevo;
         }
 
-        public static bool existeEquipo(string nombreEquipo)
+        public static bool ExisteEquipo(string nombreEquipo)
         {
             bool resultado = false;
             List<string> listaNombres = new List<string>();
@@ -129,7 +129,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool insertarEquipoEnUsuario(string nombreEquipo)
+        public static bool InsertarEquipoEnUsuario(string nombreEquipo)
         {
             bool resultado = false;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -141,7 +141,7 @@ namespace CanchasGambeta.AccesoBD
                 string consultaInsertarEquipoUsuario = @"update Usuario set equipo = @idEquipo
                                                        where idUsuario = @idUsuario";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@idEquipo", obtenerEquipo(nombreEquipo));
+                comando.Parameters.AddWithValue("@idEquipo", ObtenerEquipo(nombreEquipo));
                 comando.Parameters.AddWithValue("@idUsuario", sesion.idUsuario);
 
                 comando.CommandType = System.Data.CommandType.Text;
@@ -163,7 +163,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<MailEquipoVM> obtenerMailsEquipo(int? idEquipo)
+        public static List<MailEquipoVM> ObtenerMailsEquipo(int? idEquipo)
         {
             List<MailEquipoVM> lista = new List<MailEquipoVM>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -209,7 +209,7 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
-        public static int obtenerEquiporPorId()
+        public static int ObtenerEquiporPorId()
         {
             int idEquipo = 0;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -242,7 +242,7 @@ namespace CanchasGambeta.AccesoBD
             return idEquipo;
         }
 
-        public static string obtenerNombreEquipo()
+        public static string ObtenerNombreEquipo()
         {
             string nombreEquipo = "";
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -276,7 +276,7 @@ namespace CanchasGambeta.AccesoBD
             return nombreEquipo;
         }
 
-        public static bool agregarNuevoIntegrante(string email)
+        public static bool AgregarNuevoIntegrante(string email)
         {
             bool resultado = false;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -285,11 +285,11 @@ namespace CanchasGambeta.AccesoBD
 
             try
             {
-                if (existeEmail(email))
+                if (ExisteEmail(email))
                 {
                     string consultaInsertMailEnEquipo = @"insert into EquipoMails (email, equipo) values (@email, @equipo)";
                     comando.Parameters.Clear();
-                    comando.Parameters.AddWithValue("@email", obtenerIdEmail(email));
+                    comando.Parameters.AddWithValue("@email", ObtenerIdEmail(email));
                     comando.Parameters.AddWithValue("@equipo", sesion.equipo);
 
                     comando.CommandType = System.Data.CommandType.Text;
@@ -315,7 +315,7 @@ namespace CanchasGambeta.AccesoBD
 
                     string consultaInsertMailEnEquipo = @"insert into EquipoMails (email, equipo) values (@email, @equipo)";
                     comando.Parameters.Clear();
-                    comando.Parameters.AddWithValue("@email", obtenerIdEmail(email));
+                    comando.Parameters.AddWithValue("@email", ObtenerIdEmail(email));
                     comando.Parameters.AddWithValue("@equipo", sesion.equipo);
 
                     comando.CommandText = consultaInsertMailEnEquipo;
@@ -335,7 +335,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool existeEmail(string email)
+        public static bool ExisteEmail(string email)
         {
             bool resultado = false;
             List<string> listaEmails = new List<string>();
@@ -376,7 +376,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool existeIntegranteEnEquipo(string nuevoIntegranteEmail)
+        public static bool ExisteIntegranteEnEquipo(string nuevoIntegranteEmail)
         {
             bool existe = false;
             List<string> listaEmailsEnEquipo = new List<string>();
@@ -426,7 +426,7 @@ namespace CanchasGambeta.AccesoBD
             return existe;
         }
 
-        public static int obtenerIdEmail(string email)
+        public static int ObtenerIdEmail(string email)
         {
             int idEmail = 0;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -458,7 +458,7 @@ namespace CanchasGambeta.AccesoBD
             return idEmail;
         }
 
-        public static bool modificarIntegrante(Email email)
+        public static bool ModificarIntegrante(Email email)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -494,7 +494,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool eliminarIntegrante(Email email)
+        public static bool EliminarIntegrante(Email email)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -532,7 +532,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool eliminarEquipo(int idEquipo)
+        public static bool EliminarEquipo(int idEquipo)
         {
             bool resultado = false;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -611,7 +611,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static Equipo obtenerEquipoUsuario(int? idEquipo)
+        public static Equipo ObtenerEquipoUsuario(int? idEquipo)
         {
             Equipo nuevo = new Equipo();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -650,7 +650,7 @@ namespace CanchasGambeta.AccesoBD
             return nuevo;
         }
 
-        public static bool cambiarNombreEquipo(string nombreEquipo)
+        public static bool CambiarNombreEquipo(string nombreEquipo)
         {
             bool resultado = false;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -663,7 +663,7 @@ namespace CanchasGambeta.AccesoBD
                                     where idEquipo = @idEquipo";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("@nombreEquipo", nombreEquipo);
-                comando.Parameters.AddWithValue("@idEquipo", obtenerEquiporPorId());
+                comando.Parameters.AddWithValue("@idEquipo", ObtenerEquiporPorId());
 
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = consulta;

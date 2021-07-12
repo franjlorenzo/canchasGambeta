@@ -12,7 +12,7 @@ namespace CanchasGambeta.AccesoBD
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
 
-        public static List<TablaPedido> obtenerTodosLosPedidos()
+        public static List<TablaPedido> ObtenerTodosLosPedidos()
         {
             List<TablaPedido> lista = new List<TablaPedido>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -43,7 +43,7 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.Telefono = lector["telefono"].ToString();
                         auxiliar.Empresa = lector["empresa"].ToString();
                         auxiliar.Estado = bool.Parse(lector["estado"].ToString());
-                        auxiliar.PedidosPendientes = obtenerPedidosPendientes();
+                        auxiliar.PedidosPendientes = ObtenerPedidosPendientes();
                         lista.Add(auxiliar);
                     }
                 }
@@ -59,7 +59,7 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
-        public static List<Proveedor> obtenerTodosLosProveedores()
+        public static List<Proveedor> ObtenerTodosLosProveedores()
         {
             List<Proveedor> lista = new List<Proveedor>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -101,7 +101,7 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
-        public static List<TablaProveedores> obtenerTodosLosProveedoresTabla()
+        public static List<TablaProveedores> ObtenerTodosLosProveedoresTabla()
         {
             List<TablaProveedores> lista = new List<TablaProveedores>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -143,7 +143,7 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
-        public static bool nuevoPedido(NuevoPedido nuevoPedido)
+        public static bool NuevoPedido(NuevoPedido nuevoPedido)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -171,7 +171,7 @@ namespace CanchasGambeta.AccesoBD
                 foreach (var lista in nuevoPedido.InsumosPedido)
                 {
                     comando.Parameters.Clear();
-                    comando.Parameters.AddWithValue("@pedido", obtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha, nuevoPedido.Descripcion));
+                    comando.Parameters.AddWithValue("@pedido", ObtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha, nuevoPedido.Descripcion));
                     comando.Parameters.AddWithValue("@insumo", lista.IdInsumo);
                     comando.Parameters.AddWithValue("@cantidadPedida", lista.Cantidad);
                     comando.ExecuteNonQuery();
@@ -190,7 +190,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool concretarUnPedido(ConcretarPedido concretarPedido)
+        public static bool ConcretarUnPedido(ConcretarPedido concretarPedido)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -249,7 +249,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<InsumosAPedir> obtenerInsumosDelPedido(int idPedido)
+        public static List<InsumosAPedir> ObtenerInsumosDelPedido(int idPedido)
         {
             List<InsumosAPedir> insumosEnElPedido = new List<InsumosAPedir>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -293,7 +293,7 @@ namespace CanchasGambeta.AccesoBD
             return insumosEnElPedido;
         }
 
-        public static bool modificarPedido(int idPedido, List<InsumosAPedir> insumosAPedir)
+        public static bool ModificarPedido(int idPedido, List<InsumosAPedir> insumosAPedir)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -326,7 +326,7 @@ namespace CanchasGambeta.AccesoBD
 
                 string consultaUpdateDescripcion = @"update Pedido set descripcion = @descripcion where idPedido = @idPedido";
                 comando.Parameters.Clear();
-                comando.Parameters.AddWithValue("@descripcion", armarDescripcionPedido(insumosAPedir));
+                comando.Parameters.AddWithValue("@descripcion", ArmarDescripcionPedido(insumosAPedir));
                 comando.Parameters.AddWithValue("@idPedido", idPedido);
 
                 comando.CommandText = consultaUpdateDescripcion;
@@ -345,7 +345,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool eliminarPedido(int idPedido)
+        public static bool EliminarPedido(int idPedido)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -380,7 +380,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<TablaPedido> obtenerPedidosPendientes()
+        public static List<TablaPedido> ObtenerPedidosPendientes()
         {
             List<TablaPedido> lista = new List<TablaPedido>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -418,7 +418,7 @@ namespace CanchasGambeta.AccesoBD
             return lista;
         }
 
-        public static Proveedor obtenerProveedorPorId(int idProveedor)
+        public static Proveedor ObtenerProveedorPorId(int idProveedor)
         {
             Proveedor proveedor = new Proveedor();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -460,7 +460,7 @@ namespace CanchasGambeta.AccesoBD
             return proveedor;
         }
 
-        public static bool nuevoProveedor(NuevoProveedor nuevoProveedor)
+        public static bool NuevoProveedor(NuevoProveedor nuevoProveedor)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -494,7 +494,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool pedidosSinConcretar(int idProveedor)
+        public static bool PedidosSinConcretar(int idProveedor)
         {
             bool resultado = true;
             List<Pedido> pedidosAProveedor = new List<Pedido>();
@@ -545,7 +545,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static NuevoPedido obtenerPedidoPorId(int idPedido)
+        public static NuevoPedido ObtenerPedidoPorId(int idPedido)
         {
             NuevoPedido pedido = new NuevoPedido();
             pedido.InsumosPedido = new List<InsumosAPedir>();
@@ -587,7 +587,7 @@ namespace CanchasGambeta.AccesoBD
             return pedido;
         }
 
-        public static bool modificarProveedor(Proveedor proveedor)
+        public static bool ModificarProveedor(Proveedor proveedor)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -626,7 +626,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool eliminarProveedor(int idProveedor)
+        public static bool EliminarProveedor(int idProveedor)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -663,18 +663,18 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static void enviarMailAProveedor(NuevoPedido nuevoPedido, int tipoMensaje, List<InsumosAPedir> listaInsumosActualizados, NuevoPedido pedidoSinModificar, NuevoPedido pedidoEliminado)
+        public static void EnviarMailAProveedor(NuevoPedido nuevoPedido, int tipoMensaje, List<InsumosAPedir> listaInsumosActualizados, NuevoPedido pedidoSinModificar, NuevoPedido pedidoEliminado)
         {
             SmtpClient smtpClient = new SmtpClient();
 
             Proveedor proveedor = null;
             if (nuevoPedido != null)
             {
-                nuevoPedido.IdPedido = obtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha, nuevoPedido.Descripcion);
-                proveedor = obtenerProveedorPorId(nuevoPedido.IdProveedor);
+                nuevoPedido.IdPedido = ObtenerIdPedidoPorAtributos(nuevoPedido.IdProveedor, nuevoPedido.Fecha, nuevoPedido.Descripcion);
+                proveedor = ObtenerProveedorPorId(nuevoPedido.IdProveedor);
             }
-            if (pedidoSinModificar != null) proveedor = obtenerProveedorPorId(pedidoSinModificar.IdProveedor);
-            if (pedidoEliminado != null) proveedor = obtenerProveedorPorId(pedidoEliminado.IdProveedor);
+            if (pedidoSinModificar != null) proveedor = ObtenerProveedorPorId(pedidoSinModificar.IdProveedor);
+            if (pedidoEliminado != null) proveedor = ObtenerProveedorPorId(pedidoEliminado.IdProveedor);
 
             string mensaje = "";
             string titulo = "";
@@ -689,7 +689,7 @@ namespace CanchasGambeta.AccesoBD
             }
             else if (tipoMensaje == 2) //Update Pedido
             {
-                string descripcion = armarDescripcionPedido(listaInsumosActualizados);
+                string descripcion = ArmarDescripcionPedido(listaInsumosActualizados);
                 mensaje = $"Hola {proveedor.nombreCompleto}. Canchas Gambeta le informa que se han realizado modificaciones en el pedido N°{pedidoSinModificar.IdPedido}\n" +
                           $"El pedido antes de modificarse era:\n" +
                           $"{pedidoSinModificar.Descripcion}\n" +
@@ -709,7 +709,7 @@ namespace CanchasGambeta.AccesoBD
             smtpClient.Send("canchasgambeta@gmail.com", proveedor.email, titulo, mensaje);
         }
 
-        public static int obtenerIdPedidoPorAtributos(int idProveedor, DateTime fecha, string descripcion)
+        public static int ObtenerIdPedidoPorAtributos(int idProveedor, DateTime fecha, string descripcion)
         {
             int idPedido = 0;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -752,7 +752,7 @@ namespace CanchasGambeta.AccesoBD
             return idPedido;
         }
 
-        public static List<InsumosAPedir> armarListaInsumosSeleccionados(List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo, [Optional] List<int> listaStockInsumo)
+        public static List<InsumosAPedir> ArmarListaInsumosSeleccionados(List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo, [Optional] List<int> listaStockInsumo)
         {
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
 
@@ -769,7 +769,7 @@ namespace CanchasGambeta.AccesoBD
             return listaInsumosAPedir;
         }
 
-        public static string armarDescripcionPedido(List<InsumosAPedir> listaInsumosAPedir)
+        public static string ArmarDescripcionPedido(List<InsumosAPedir> listaInsumosAPedir)
         {
             string descripcion = "";
 
@@ -781,7 +781,7 @@ namespace CanchasGambeta.AccesoBD
             return descripcion;
         }
 
-        public static ConcretarPedido obtenerDatosPedidoAConcretar(int idPedido)
+        public static ConcretarPedido ObtenerDatosPedidoAConcretar(int idPedido)
         {
             ConcretarPedido pedidoAConcretar = new ConcretarPedido();
             pedidoAConcretar.FechaRecibido = DateTime.Now;
@@ -868,7 +868,7 @@ namespace CanchasGambeta.AccesoBD
             return pedidoAConcretar;
         }
 
-        public static DetallePedidoConcretado obtenerDetallePedidoPorId(int idPedido)
+        public static DetallePedidoConcretado ObtenerDetallePedidoPorId(int idPedido)
         {
             DetallePedidoConcretado detallePedido = new DetallePedidoConcretado();
             detallePedido.ListaInsumosPedidosrecibidos = new List<InsumosPedidosRecibidos>();

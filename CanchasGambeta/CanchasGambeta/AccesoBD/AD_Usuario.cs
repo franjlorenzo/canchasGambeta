@@ -9,7 +9,7 @@ namespace CanchasGambeta.AccesoBD
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
 
-        public static bool nuevoUsuario(Usuario usuario)
+        public static bool NuevoUsuario(Usuario usuario)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -44,7 +44,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static Usuario obtenerUsuario(int idUsuario)
+        public static Usuario ObtenerUsuario(int idUsuario)
         {
             Usuario resultado = new Usuario();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -88,7 +88,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool actualizarUsuario(Usuario usuario)
+        public static bool ActualizarUsuario(Usuario usuario)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -127,7 +127,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool existeEmailUsuario(string email)
+        public static bool ExisteEmailUsuario(string email)
         {
             bool resultado = false;
             List<string> listaEmails = new List<string>();

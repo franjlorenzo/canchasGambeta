@@ -10,7 +10,7 @@ namespace CanchasGambeta.AccesoBD
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
 
-        public static List<InstrumentoDisponible> obtenerInstrumentosDisponibles()
+        public static List<InstrumentoDisponible> ObtenerInstrumentosDisponibles()
         {
             List<InstrumentoDisponible> listaInstrumentosDisponibles = new List<InstrumentoDisponible>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -52,7 +52,7 @@ namespace CanchasGambeta.AccesoBD
             return listaInstrumentosDisponibles;
         }
 
-        public static bool nuevoInstrumento(InstrumentoDisponible nuevoInstrumento)
+        public static bool NuevoInstrumento(InstrumentoDisponible nuevoInstrumento)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -86,7 +86,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool nuevoElementoRoto(int idInstrumento)
+        public static bool NuevoElementoRoto(int idInstrumento)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -126,7 +126,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<InstrumentoRotoVM> obtenerInstrumentosRotos()
+        public static List<InstrumentoRotoVM> ObtenerInstrumentosRotos()
         {
             List<InstrumentoRotoVM> listaInstrumentosRotos = new List<InstrumentoRotoVM>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -169,7 +169,7 @@ namespace CanchasGambeta.AccesoBD
             return listaInstrumentosRotos;
         }
 
-        public static bool eliminarInstrumentoRoto(int idInstrumento)
+        public static bool EliminarInstrumentoRoto(int idInstrumento)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -208,7 +208,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static InstrumentoRotoVM obtenerInstrumentoRotoPorId(int idInstrumentoRoto)
+        public static InstrumentoRotoVM ObtenerInstrumentoRotoPorId(int idInstrumentoRoto)
         {
             InstrumentoRotoVM instrumento = new InstrumentoRotoVM();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -251,7 +251,7 @@ namespace CanchasGambeta.AccesoBD
             return instrumento;
         }
 
-        public static bool instrumentoRepuesto(InstrumentoRotoVM instrumento, string nombreIntrumentoRotoAnterior)
+        public static bool InstrumentoRepuesto(InstrumentoRotoVM instrumento, string nombreIntrumentoRotoAnterior)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);

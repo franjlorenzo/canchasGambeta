@@ -11,7 +11,7 @@ namespace CanchasGambeta.AccesoBD
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
 
-        public static List<ReservasActivas> obtenerReservasActivas(DateTime fechaInicio, DateTime fechaFin)
+        public static List<ReservasActivas> ObtenerReservasActivas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<ReservasActivas> listaReservas = new List<ReservasActivas>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -48,7 +48,7 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.Fecha = DateTime.Parse(lector["fecha"].ToString());
                         auxiliar.ServicioAsador = bool.Parse(lector["servicioAsador"].ToString());
                         auxiliar.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
-                        auxiliar.ListaInsumosReserva = AD_Reserva.obtenerInsumosDeLaReserva(auxiliar.IdReserva);
+                        auxiliar.ListaInsumosReserva = AD_Reserva.ObtenerInsumosDeLaReserva(auxiliar.IdReserva);
                         listaReservas.Add(auxiliar);
                     }
                 }
@@ -64,7 +64,7 @@ namespace CanchasGambeta.AccesoBD
             return listaReservas;
         }
 
-        public static List<Insumo> obtenerTotalInsumosReservas(List<ReservasActivas> listaReservas)
+        public static List<Insumo> ObtenerTotalInsumosReservas(List<ReservasActivas> listaReservas)
         {
             List<Insumo> listaTotalInsumos = new List<Insumo>();
 
@@ -92,7 +92,7 @@ namespace CanchasGambeta.AccesoBD
             return listaTotalInsumos;
         }
 
-        public static List<ReservasActivas> obtenerReservasActivasDelCliente(int idUsuario)
+        public static List<ReservasActivas> ObtenerReservasActivasDelCliente(int idUsuario)
         {
             List<ReservasActivas> listaReservas = new List<ReservasActivas>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -128,7 +128,7 @@ namespace CanchasGambeta.AccesoBD
                         auxiliar.Fecha = DateTime.Parse(lector["fecha"].ToString());
                         auxiliar.ServicioAsador = bool.Parse(lector["servicioAsador"].ToString());
                         auxiliar.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
-                        auxiliar.ListaInsumosReserva = AD_Reserva.obtenerInsumosDeLaReserva(auxiliar.IdReserva);
+                        auxiliar.ListaInsumosReserva = AD_Reserva.ObtenerInsumosDeLaReserva(auxiliar.IdReserva);
                         listaReservas.Add(auxiliar);
                     }
                 }
@@ -144,7 +144,7 @@ namespace CanchasGambeta.AccesoBD
             return listaReservas;
         }
 
-        public static List<ReservasCanceladas> obtenerReservasCanceladas(DateTime fechaInicio, DateTime fechaFin)
+        public static List<ReservasCanceladas> ObtenerReservasCanceladas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<ReservasCanceladas> listaReservas = new List<ReservasCanceladas>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -195,7 +195,7 @@ namespace CanchasGambeta.AccesoBD
             return listaReservas;
         }
 
-        public static List<CanchasMasReservadasVM> obtenerCanchasMasReservadas(DateTime fechaInicio, DateTime fechaFin)
+        public static List<CanchasMasReservadasVM> ObtenerCanchasMasReservadas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<CanchasMasReservadasVM> listaCanchasMasReservadas = new List<CanchasMasReservadasVM>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -241,7 +241,7 @@ namespace CanchasGambeta.AccesoBD
             return listaCanchasMasReservadas;
         }
 
-        public static List<ClientesConMasReservas> obtenerClientesConMasReservas(DateTime fechaInicio, DateTime fechaFin)
+        public static List<ClientesConMasReservas> ObtenerClientesConMasReservas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<ClientesConMasReservas> listaClientesConMasReservas = new List<ClientesConMasReservas>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -289,7 +289,7 @@ namespace CanchasGambeta.AccesoBD
             return listaClientesConMasReservas;
         }
 
-        public static List<HorariosMasReservados> obtenerHorariosMasReservados(DateTime fechaInicio, DateTime fechaFin)
+        public static List<HorariosMasReservados> ObtenerHorariosMasReservados(DateTime fechaInicio, DateTime fechaFin)
         {
             List<HorariosMasReservados> listaHorariosMasReservados = new List<HorariosMasReservados>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -336,7 +336,7 @@ namespace CanchasGambeta.AccesoBD
             return listaHorariosMasReservados;
         }
 
-        public static List<Insumo> obtenerInsumosConsumidosEntreFechas(DateTime fechaInicio, DateTime fechaFin)
+        public static List<Insumo> ObtenerInsumosConsumidosEntreFechas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<Insumo> listaInsumosConsumidos = new List<Insumo>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -384,7 +384,7 @@ namespace CanchasGambeta.AccesoBD
             return listaInsumosConsumidos;
         }
 
-        public static List<InstrumentoRotoVM> obtenerInstrumentosRotosEntreFechas(DateTime fechaInicio, DateTime fechaFin)
+        public static List<InstrumentoRotoVM> ObtenerInstrumentosRotosEntreFechas(DateTime fechaInicio, DateTime fechaFin)
         {
             List<InstrumentoRotoVM> listaInstrumentosRotos = new List<InstrumentoRotoVM>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);

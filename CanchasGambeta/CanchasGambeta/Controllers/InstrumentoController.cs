@@ -18,7 +18,7 @@ namespace CanchasGambeta.Controllers
             if (TempData["ErrorInsertInstrumentoRoto"] != null) ViewBag.ErrorInsertInstrumentoRoto = TempData["ErrorInsertInstrumentoRoto"].ToString();
             if (TempData["ErrorEliminarInstrumentoRoto"] != null) ViewBag.ErrorEliminarInstrumentoRoto = TempData["ErrorEliminarInstrumentoRoto"].ToString();
 
-            return View(new VistaInstrumentos { TablaInstrumentosDisponibles = AccesoBD.AD_Instrumento.obtenerInstrumentosDisponibles(), TablaInstrumentosRotos = AccesoBD.AD_Instrumento.obtenerInstrumentosRotos(), InstrumentoNuevo = new InstrumentoDisponible() });
+            return View(new VistaInstrumentos { TablaInstrumentosDisponibles = AccesoBD.AD_Instrumento.ObtenerInstrumentosDisponibles(), TablaInstrumentosRotos = AccesoBD.AD_Instrumento.ObtenerInstrumentosRotos(), InstrumentoNuevo = new InstrumentoDisponible() });
         }
 
         [HttpPost]
@@ -29,7 +29,7 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Instrumento.nuevoInstrumento(nuevoInstrumento);
+                bool resultado = AccesoBD.AD_Instrumento.NuevoInstrumento(nuevoInstrumento);
                 if (resultado) return RedirectToAction("InstrumentosDisponibles", "Instrumento");
                 else
                 {
@@ -48,7 +48,7 @@ namespace CanchasGambeta.Controllers
 
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Instrumento.nuevoElementoRoto(idInstrumento);
+                bool resultado = AccesoBD.AD_Instrumento.NuevoElementoRoto(idInstrumento);
                 if (resultado) return RedirectToAction("InstrumentosDisponibles", "Instrumento");
                 else
                 {
@@ -64,7 +64,7 @@ namespace CanchasGambeta.Controllers
             var sesion = (Usuario)HttpContext.Session["User"];
             if (sesion == null) return RedirectToAction("LogIn", "LogIn");
 
-            InstrumentoRotoVM instrumentoRoto = AccesoBD.AD_Instrumento.obtenerInstrumentoRotoPorId(idInstrumentoRoto);
+            InstrumentoRotoVM instrumentoRoto = AccesoBD.AD_Instrumento.ObtenerInstrumentoRotoPorId(idInstrumentoRoto);
             return View(instrumentoRoto);
         }
 
@@ -78,7 +78,7 @@ namespace CanchasGambeta.Controllers
             InstrumentoRotoVM instrumento = new InstrumentoRotoVM(IdInstrumentoRoto, Instrumento, FechaRotura, IdInstrumentoDisponible, estado);
             if (ModelState.IsValid)
             {
-                bool resultado = AccesoBD.AD_Instrumento.instrumentoRepuesto(instrumento, nombreInstrumentoAnterior);
+                bool resultado = AccesoBD.AD_Instrumento.InstrumentoRepuesto(instrumento, nombreInstrumentoAnterior);
                 if (resultado) return RedirectToAction("InstrumentosDisponibles", "Instrumento");
                 else
                 {

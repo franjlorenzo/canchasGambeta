@@ -14,7 +14,7 @@ namespace CanchasGambeta.AccesoBD
     {
         public static string cadenaConexion = System.Configuration.ConfigurationManager.AppSettings["cadenaBD"].ToString();
 
-        public static bool nuevaReserva(NuevaReservaVM reservaVM)
+        public static bool NuevaReserva(NuevaReservaVM reservaVM)
         {
             bool resultado = false;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -53,7 +53,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<TablaReservaVM> obtenerReservasDelCliente()
+        public static List<TablaReservaVM> ObtenerReservasDelCliente()
         {
             List<TablaReservaVM> listaReservasDelCliente = new List<TablaReservaVM>();
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -108,7 +108,7 @@ namespace CanchasGambeta.AccesoBD
             return listaReservasDelCliente;
         }
 
-        public static int obtenerReservaPorAtributos(int cancha, int horario, DateTime fecha)
+        public static int ObtenerReservaPorAtributos(int cancha, int horario, DateTime fecha)
         {
             int idReserva = 0;
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
@@ -147,7 +147,7 @@ namespace CanchasGambeta.AccesoBD
             return idReserva;
         }
 
-        public static bool insertReservaInsumo(NuevaReservaVM reservaVM, List<InsumosAPedir> insumosSeleccionados)
+        public static bool InsertReservaInsumo(NuevaReservaVM reservaVM, List<InsumosAPedir> insumosSeleccionados)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -195,7 +195,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<Insumo> obtenerInsumosDeLaReserva(int idReserva)
+        public static List<Insumo> ObtenerInsumosDeLaReserva(int idReserva)
         {
             List<Insumo> listaInsumosEnReserva = new List<Insumo>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -242,7 +242,7 @@ namespace CanchasGambeta.AccesoBD
             return listaInsumosEnReserva;
         }
 
-        public static ActualizarReservaVM obtenerReservaPorId(int idReserva)
+        public static ActualizarReservaVM ObtenerReservaPorId(int idReserva)
         {
             ActualizarReservaVM datosReserva = new ActualizarReservaVM();
             datosReserva.ListaInsumosEnLaReserva = new List<InsumosAPedir>();
@@ -280,7 +280,7 @@ namespace CanchasGambeta.AccesoBD
                         datosReserva.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
                         datosReserva.NombreCliente = lector["nombreCompleto"].ToString();
                         datosReserva.TipoCancha = lector["tipoCancha"].ToString();
-                        datosReserva.ListaInsumosEnLaReserva = obtenerInsumosDeLaReservaActualizar(idReserva);
+                        datosReserva.ListaInsumosEnLaReserva = ObtenerInsumosDeLaReservaActualizar(idReserva);
                     }
                 }
                 lector.Close();
@@ -296,7 +296,7 @@ namespace CanchasGambeta.AccesoBD
             return datosReserva;
         }
 
-        public static bool modificarReserva(ActualizarReservaVM actualizarReservaVM)
+        public static bool ModificarReserva(ActualizarReservaVM actualizarReservaVM)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -338,7 +338,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool eliminarReserva(int idReserva)
+        public static bool EliminarReserva(int idReserva)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -362,7 +362,7 @@ namespace CanchasGambeta.AccesoBD
                                                             where reserva = @idReserva and insumo = @idInsumo";
                 string consultaSumarStockInsumo = @"update Insumo set stock = stock + @cantidad
                                                     where idInsumo = @idInsumo";
-                List<Insumo> insumosEnReserva = obtenerInsumosDeLaReserva(idReserva);
+                List<Insumo> insumosEnReserva = ObtenerInsumosDeLaReserva(idReserva);
 
                 comando.CommandText = consultaEliminarInsumosDeReserva;
 
@@ -404,7 +404,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static List<SelectListItem> obtenerHorariosCancha(DateTime fecha, int idCancha)
+        public static List<SelectListItem> ObtenerHorariosCancha(DateTime fecha, int idCancha)
         {
             List<Horario> listaHorario = new List<Horario>();
             List<SelectListItem> listaHorariosCancha = new List<SelectListItem>();
@@ -461,7 +461,7 @@ namespace CanchasGambeta.AccesoBD
             return listaHorariosCancha;
         }
 
-        public static bool insertHorarioReservas(int idReserva, int idHorario)
+        public static bool InsertHorarioReservas(int idReserva, int idHorario)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -493,7 +493,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static DatosReserva obtenerDatosReserva(int idReserva)
+        public static DatosReserva ObtenerDatosReserva(int idReserva)
         {
             DatosReserva reserva = new DatosReserva();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -538,7 +538,7 @@ namespace CanchasGambeta.AccesoBD
             return reserva;
         }
 
-        public static List<InsumosAPedir> obtenerInsumosDeLaReservaActualizar(int idReserva)
+        public static List<InsumosAPedir> ObtenerInsumosDeLaReservaActualizar(int idReserva)
         {
             List<InsumosAPedir> listaInsumosEnReserva = new List<InsumosAPedir>();
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -585,13 +585,13 @@ namespace CanchasGambeta.AccesoBD
             return listaInsumosEnReserva;
         }
 
-        public static void enviarMailsReserva(int idReserva, int tipoMensaje, [Optional] DatosReserva datosReservaEliminada, [Optional] ActualizarReservaVM reservaSinModificacion)
+        public static void EnviarMailsReserva(int idReserva, int tipoMensaje, [Optional] DatosReserva datosReservaEliminada, [Optional] ActualizarReservaVM reservaSinModificacion)
         {
             SmtpClient smtpClient = new SmtpClient();
             Usuario sesion = (Usuario)HttpContext.Current.Session["User"];
             DatosReserva reservaCliente = null;
-            if (datosReservaEliminada == null) reservaCliente = obtenerDatosReserva(idReserva);
-            List<MailEquipoVM> listaIntegrantesEquipo = AD_Equipo.obtenerMailsEquipo(sesion.equipo);
+            if (datosReservaEliminada == null) reservaCliente = ObtenerDatosReserva(idReserva);
+            List<MailEquipoVM> listaIntegrantesEquipo = AD_Equipo.ObtenerMailsEquipo(sesion.equipo);
             string mensaje = "";
             string insumos = "";
             string titulo = "";
@@ -600,10 +600,10 @@ namespace CanchasGambeta.AccesoBD
 
             if (tipoMensaje == 1) //Nueva reserva
             {
-                List<Insumo> insumosReservados = obtenerInsumosDeLaReserva(idReserva);
+                List<Insumo> insumosReservados = ObtenerInsumosDeLaReserva(idReserva);
                 if (insumosReservados.Count != 0)
                 {
-                    insumos = descripcionInsumosSeleccionados(insumosReservados);
+                    insumos = DescripcionInsumosSeleccionados(insumosReservados);
                     mensaje = $"Hola, su compañero de equipo hizo una reserva para el día {reservaCliente.Fecha} a las {reservaCliente.Horario} en la cancha {reservaCliente.TipoCancha}.\n\n" +
                               $"Además reservó los siguientes insumos:\n\n" +
                               $"{insumos}";
@@ -615,10 +615,10 @@ namespace CanchasGambeta.AccesoBD
             {
                 if (reservaCliente.ServicioAsador == true) servicioAsador = "Contratado";
                 if (reservaCliente.ServicioInstrumentos == true) servicioInstrumentos = "Contratado";
-                List<Insumo> insumosEnReserva = obtenerInsumosDeLaReserva(idReserva);
+                List<Insumo> insumosEnReserva = ObtenerInsumosDeLaReserva(idReserva);
                 if (insumosEnReserva.Count != 0)
                 {
-                    insumos = descripcionInsumosSeleccionados(insumosEnReserva);
+                    insumos = DescripcionInsumosSeleccionados(insumosEnReserva);
 
                     mensaje = $"Hola de nuevo! su compañero de equipo hizo modificaciones en la reserva:\n\n" +
                               $"Día: {reservaCliente.Fecha}\n" +
@@ -644,9 +644,9 @@ namespace CanchasGambeta.AccesoBD
             {
                 if (reservaCliente.ServicioAsador == true) servicioAsador = "Contratado";
                 if (reservaCliente.ServicioInstrumentos == true) servicioInstrumentos = "Contratado";
-                List<Insumo> listaInsumosEnReserva = obtenerInsumosDeLaReserva(idReserva);
-                insumos = descripcionInsumosSeleccionados(listaInsumosEnReserva);
-                string insumosAnteriores = descripcionInsumosSeleccionados(null, reservaSinModificacion.ListaInsumosEnLaReserva);
+                List<Insumo> listaInsumosEnReserva = ObtenerInsumosDeLaReserva(idReserva);
+                insumos = DescripcionInsumosSeleccionados(listaInsumosEnReserva);
+                string insumosAnteriores = DescripcionInsumosSeleccionados(null, reservaSinModificacion.ListaInsumosEnLaReserva);
                 mensaje = $"Hola de nuevo! su compañero de equipo hizo una modificación de la reserva:\n\n" +
                           $"Día: {reservaCliente.Fecha}\n" +
                           $"Horario: {reservaCliente.Horario}\n" +
@@ -669,7 +669,7 @@ namespace CanchasGambeta.AccesoBD
             }
         }
 
-        private static string descripcionInsumosSeleccionados([Optional] List<Insumo> insumosReservados, [Optional] List<InsumosAPedir> insumosActualizados)
+        private static string DescripcionInsumosSeleccionados([Optional] List<Insumo> insumosReservados, [Optional] List<InsumosAPedir> insumosActualizados)
         {
             string insumos = "";
 
@@ -691,7 +691,7 @@ namespace CanchasGambeta.AccesoBD
             }
         }
 
-        public static List<InsumosAPedir> armarListaInsumosSeleccionados(List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo)
+        public static List<InsumosAPedir> ArmarListaInsumosSeleccionados(List<int> listaIdInsumo, List<string> listaNombreInsumo, List<int> cantidadInsumo)
         {
             List<InsumosAPedir> listaInsumosAPedir = new List<InsumosAPedir>();
 
@@ -707,14 +707,14 @@ namespace CanchasGambeta.AccesoBD
             return listaInsumosAPedir;
         }
 
-        public static bool modificarInsumosDeLaReserva(int idReserva, List<InsumosAPedir> listaInsumosAPedir)
+        public static bool ModificarInsumosDeLaReserva(int idReserva, List<InsumosAPedir> listaInsumosAPedir)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
             SqlCommand comando = new SqlCommand();
 
             ActualizarReservaVM reservaSinModificacion = new ActualizarReservaVM();
-            reservaSinModificacion.ListaInsumosEnLaReserva = obtenerInsumosDeLaReservaActualizar(idReserva);
+            reservaSinModificacion.ListaInsumosEnLaReserva = ObtenerInsumosDeLaReservaActualizar(idReserva);
 
             try
             {
@@ -776,7 +776,7 @@ namespace CanchasGambeta.AccesoBD
             return resultado;
         }
 
-        public static bool eliminarInsumosReserva(int idReserva)
+        public static bool EliminarInsumosReserva(int idReserva)
         {
             bool resultado = false;
             SqlConnection conexion = new SqlConnection(cadenaConexion);
@@ -785,7 +785,7 @@ namespace CanchasGambeta.AccesoBD
             try
             {
                 ActualizarReservaVM reservaSinModificacion = new ActualizarReservaVM();
-                reservaSinModificacion.ListaInsumosEnLaReserva = obtenerInsumosDeLaReservaActualizar(idReserva);
+                reservaSinModificacion.ListaInsumosEnLaReserva = ObtenerInsumosDeLaReservaActualizar(idReserva);
 
                 string consultaEliminarInsumosReserva = @"delete from ReservaInsumos where reserva = @idReserva";
                 comando.Parameters.Clear();
@@ -808,6 +808,39 @@ namespace CanchasGambeta.AccesoBD
                     comando.Parameters.AddWithValue("@idInsumo", item.IdInsumo);
                     comando.ExecuteNonQuery();
                 }
+
+                resultado = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return resultado;
+        }
+
+        public static bool ConcretarReserva(int idReserva)
+        {
+            bool resultado = false;
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consultaConcretarReserva = @"update Reserva set estado = @estado where idReserva = @idReserva";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@idReserva", idReserva);
+                comando.Parameters.AddWithValue("@estado", 2);
+
+                comando.CommandType = System.Data.CommandType.Text;
+                comando.CommandText = consultaConcretarReserva;
+
+                conexion.Open();
+                comando.Connection = conexion;
+                comando.ExecuteNonQuery();
 
                 resultado = true;
             }

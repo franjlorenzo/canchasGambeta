@@ -112,6 +112,24 @@ namespace CanchasGambeta.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public ActionResult ConcretarReserva()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult ModificarInsumosReservaConcretar()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult ReservarInsumosConcretar()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
         //------------------------------------PEDIDOS-----------------------------------------
         public ActionResult MisPedidos()
         {
