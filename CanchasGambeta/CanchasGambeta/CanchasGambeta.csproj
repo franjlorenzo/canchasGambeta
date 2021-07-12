@@ -359,6 +359,7 @@
     <Content Include="Views\Reserva\ConcretarReserva.cshtml" />
     <Content Include="Views\Reserva\ModificarInsumosReservaConcretar.cshtml" />
     <Content Include="Views\Reserva\ReservarInsumosConcretar.cshtml" />
+    <Content Include="Views\Informe\ReservasConcretadas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

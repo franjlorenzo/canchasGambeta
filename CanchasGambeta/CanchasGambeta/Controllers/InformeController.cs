@@ -9,7 +9,7 @@ namespace CanchasGambeta.Controllers
     public class InformeController : Controller
     {
         // GET: Informe
-        //--------------------------------------RESERVAS ACTIVAS Y CANCELADAS-----------------------------------------------
+        //--------------------------------------RESERVAS ACTIVAS, CANCELADAS Y CONCRETADAS-----------------------------------------------
         public ActionResult ReservasActivas()
         {
             var sesion = (Usuario)HttpContext.Session["User"];
@@ -116,6 +116,55 @@ namespace CanchasGambeta.Controllers
                 List<ReservasCanceladas> listaReservasCanceladas = AccesoBD.AD_Informe.ObtenerReservasCanceladas(DateTime.Today, DateTime.Today);
                 TempData["listaReservasCanceladas"] = listaReservasCanceladas;
                 return RedirectToAction("ReservasCanceladas");
+            }
+        }
+
+        public ActionResult ReservasConcretadas()
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
+            _ = new List<TablaReservaVM>();
+            List<TablaReservaVM> listaReservasConcretadas;
+            if (TempData["fechaMayor"] != null) ViewBag.fechaMayor = TempData["fechaMayor"].ToString();
+            if (TempData["listaReservasConcretadas"] != null)
+            {
+                listaReservasConcretadas = (List<TablaReservaVM>)TempData["listaReservasConcretadas"];
+                return View(listaReservasConcretadas);
+            }
+            else
+            {
+                listaReservasConcretadas = AccesoBD.AD_Informe.ObtenerReservasConcretadas(DateTime.Now, DateTime.Now);
+                return View(listaReservasConcretadas);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ReservasConcretadas(DateTime fechaInicio, DateTime fechaFin)
+        {
+            var sesion = (Usuario)HttpContext.Session["User"];
+            if (sesion == null)
+            {
+                TempData["SesionCaducada"] = "La sesión finalizó, ingrese nuevamente";
+                return RedirectToAction("LogIn", "LogIn");
+            }
+
+            if (fechaFin >= fechaInicio)
+            {
+                List<TablaReservaVM> listaReservasConcretadas = AccesoBD.AD_Informe.ObtenerReservasConcretadas(fechaInicio, fechaFin);
+                TempData["listaReservasConcretadas"] = listaReservasConcretadas;
+                return RedirectToAction("ReservasConcretadas");
+            }
+            else
+            {
+                TempData["fechaMayor"] = "La fecha de inicio no puede ser mayor que la fecha de fin";
+                List<TablaReservaVM> listaReservasConcretadas = AccesoBD.AD_Informe.ObtenerReservasConcretadas(DateTime.Today, DateTime.Today);
+                TempData["listaReservasConcretadas"] = listaReservasConcretadas;
+                return RedirectToAction("ReservasConcretadas");
             }
         }
 

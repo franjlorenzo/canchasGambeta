@@ -17,6 +17,7 @@ namespace CanchasGambeta.ViewModels
         private bool servicioInstrumento;
         private int estado;
         private List<Insumo> listaInsumosEnReserva;
+        private string nombreCompleto;
 
         public int IdReserva { get => idReserva; set => idReserva = value; }
         public int IdHorario { get => idHorario; set => idHorario = value; }
@@ -28,6 +29,7 @@ namespace CanchasGambeta.ViewModels
         public DateTime? Fecha { get => fecha; set => fecha = value; }
         public int Estado { get => estado; set => estado = value; }
         public List<Insumo> ListaInsumosEnReserva { get => listaInsumosEnReserva; set => listaInsumosEnReserva = value; }
+        public string NombreCompleto { get => nombreCompleto; set => nombreCompleto = value; }
     }
 
     public class ActualizarReservaVM

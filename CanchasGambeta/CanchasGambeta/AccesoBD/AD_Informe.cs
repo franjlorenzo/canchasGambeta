@@ -428,5 +428,58 @@ namespace CanchasGambeta.AccesoBD
             }
             return listaInstrumentosRotos;
         }
+
+        public static List<TablaReservaVM> ObtenerReservasConcretadas(DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<TablaReservaVM> listaReservasConcretadas = new List<TablaReservaVM>();
+            SqlConnection conexion = new SqlConnection(cadenaConexion);
+            SqlCommand comando = new SqlCommand();
+
+            try
+            {
+                string consulta = @"select idReserva, fecha, ho.horario, tipoCancha, servicioAsador, servicioInstrumentos, nombreCompleto
+                                    from Reserva r join Horario ho on ho.idHorario = r.horario
+                                         join Cancha c on c.idCancha = r.cancha
+                                         join Usuario u on u.idUsuario = r.cliente
+                                    where fecha between CAST(@fechaInicio AS date) and CAST(@fechaFin AS date) and estado = 2
+                                    order by 2, 3";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                comando.Parameters.AddWithValue("@fechaFin", fechaFin);
+
+                comando.CommandType = CommandType.Text;
+                comando.CommandText = consulta;
+
+                conexion.Open();
+                comando.Connection = conexion;
+
+                SqlDataReader lector = comando.ExecuteReader();
+                if (lector != null)
+                {
+                    while (lector.Read())
+                    {
+                        TablaReservaVM auxiliar = new TablaReservaVM();
+                        auxiliar.IdReserva = int.Parse(lector["idReserva"].ToString());
+                        auxiliar.Fecha = DateTime.Parse(lector["fecha"].ToString());
+                        auxiliar.NombreCompleto = lector["nombreCompleto"].ToString();
+                        auxiliar.Horario = lector["horario"].ToString();
+                        auxiliar.Cancha = lector["tipoCancha"].ToString();                       
+                        auxiliar.ServicioAsador = bool.Parse(lector["servicioAsador"].ToString());
+                        auxiliar.ServicioInstrumento = bool.Parse(lector["servicioInstrumentos"].ToString());
+                        auxiliar.ListaInsumosEnReserva = AD_Reserva.ObtenerInsumosDeLaReserva(auxiliar.IdReserva);
+                        listaReservasConcretadas.Add(auxiliar);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return listaReservasConcretadas;
+        }
     }
 }

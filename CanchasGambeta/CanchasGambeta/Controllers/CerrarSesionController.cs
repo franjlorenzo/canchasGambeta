@@ -216,6 +216,12 @@ namespace CanchasGambeta.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public ActionResult ReservasConcretadas()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
         //------------------------------------Términos y condiciones/Ayuda-----------------------------------------
 
         public ActionResult TerminosYCondiciones()
